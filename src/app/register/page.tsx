@@ -6,6 +6,8 @@ import ImageUpload from '@/components/ImageUpload'
 import { supabase } from '@/lib/supabase'
 import { FamilyFormData, ClassType } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export default function RegisterPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)

@@ -6,6 +6,8 @@ import ImageUpload from '@/components/ImageUpload'
 import { supabase } from '@/lib/supabase'
 import { Family, FamilyFormData, ClassType } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export default function EditFamilyPage() {
   const router = useRouter()
   const params = useParams()

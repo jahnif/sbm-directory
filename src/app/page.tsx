@@ -8,6 +8,8 @@ import FamilyCard from '@/components/FamilyCard'
 import FamilyTableRow from '@/components/FamilyTableRow'
 import SearchAndFilters from '@/components/SearchAndFilters'
 
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   const [families, setFamilies] = useState<Family[]>([])
   const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([])
