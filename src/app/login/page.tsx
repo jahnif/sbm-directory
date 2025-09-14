@@ -18,12 +18,20 @@ export default function LoginPage() {
 
     const sitePassword = process.env.NEXT_PUBLIC_SITE_PASSWORD
     
+    // Debug logging (remove in production)
+    console.log('Entered password:', password)
+    console.log('Expected password:', sitePassword)
+    console.log('Environment variables:', { 
+      url: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20) + '...', 
+      hasPassword: !!sitePassword 
+    })
+    
     if (password === sitePassword) {
       // Set cookie and redirect
       document.cookie = `site-access=${password}; path=/; max-age=${60 * 60 * 24 * 30}` // 30 days
       router.push('/')
     } else {
-      setError('Incorrect password. Please try again.')
+      setError(`Incorrect password. Please try again.${!sitePassword ? ' (Environment variable not loaded)' : ''}`)
     }
     
     setIsLoading(false)
