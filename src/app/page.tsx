@@ -1,103 +1,227 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import { Family, ClassType } from '@/types'
+import FamilyCard from '@/components/FamilyCard'
+import FamilyTableRow from '@/components/FamilyTableRow'
+import SearchAndFilters from '@/components/SearchAndFilters'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [families, setFamilies] = useState<Family[]>([])
+  const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table')
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('')
+  const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all')
+  const [connectionsFilter, setConnectionsFilter] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    loadFamilies()
+  }, [])
+
+  useEffect(() => {
+    filterFamilies()
+  }, [families, searchTerm, classFilter, connectionsFilter])
+
+  const loadFamilies = async () => {
+    try {
+      const { data: familiesData, error: familiesError } = await supabase
+        .from('families')
+        .select('*')
+        .order('family_name')
+
+      if (familiesError) throw familiesError
+
+      const { data: adultsData, error: adultsError } = await supabase
+        .from('adults')
+        .select('*')
+
+      if (adultsError) throw adultsError
+
+      const { data: childrenData, error: childrenError } = await supabase
+        .from('children')
+        .select('*')
+
+      if (childrenError) throw childrenError
+
+      const familiesWithMembers: Family[] = familiesData.map(family => ({
+        ...family,
+        adults: adultsData.filter(adult => adult.family_id === family.id),
+        children: childrenData.filter(child => child.family_id === family.id)
+      }))
+
+      setFamilies(familiesWithMembers)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load families')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filterFamilies = () => {
+    let filtered = families
+
+    // Search filter
+    if (searchTerm) {
+      const search = searchTerm.toLowerCase()
+      filtered = filtered.filter(family => 
+        family.family_name.toLowerCase().includes(search) ||
+        family.description.toLowerCase().includes(search) ||
+        family.adults.some(adult => 
+          adult.name.toLowerCase().includes(search) ||
+          adult.industry?.toLowerCase().includes(search) ||
+          adult.job_title?.toLowerCase().includes(search)
+        ) ||
+        family.children.some(child => 
+          child.name.toLowerCase().includes(search)
+        )
+      )
+    }
+
+    // Class filter
+    if (classFilter !== 'all') {
+      filtered = filtered.filter(family =>
+        family.children.some(child => child.class === classFilter)
+      )
+    }
+
+    // Connections filter
+    if (connectionsFilter) {
+      filtered = filtered.filter(family =>
+        family.adults.some(adult => adult.interested_in_connections)
+      )
+    }
+
+    setFilteredFamilies(filtered)
+  }
+
+  // Responsive view mode based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setViewMode(window.innerWidth < 1024 ? 'cards' : 'table')
+    }
+
+    handleResize() // Set initial value
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading families...</p>
         </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error: {error}</p>
+          <button
+            onClick={loadFamilies}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                SBM Family Directory
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Connect with other families in our Montessori community
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                href="/register"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+              >
+                Add Your Family
+              </Link>
+              <Link
+                href="/admin"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium"
+              >
+                Admin
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Search and Filters */}
+        <SearchAndFilters
+          onSearchChange={setSearchTerm}
+          onClassFilter={setClassFilter}
+          onConnectionsFilter={setConnectionsFilter}
+          currentSearch={searchTerm}
+          currentClassFilter={classFilter}
+          currentConnectionsFilter={connectionsFilter}
+        />
+
+        {/* Results Summary */}
+        <div className="mb-6">
+          <p className="text-gray-600">
+            Showing {filteredFamilies.length} of {families.length} families
+          </p>
+        </div>
+
+        {/* Directory Display */}
+        {filteredFamilies.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg mb-4">
+              {families.length === 0 ? 'No families have been added yet.' : 'No families match your filters.'}
+            </p>
+            {families.length === 0 && (
+              <Link
+                href="/register"
+                className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+              >
+                Be the first to add your family!
+              </Link>
+            )}
+          </div>
+        ) : viewMode === 'table' ? (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Family Directory</h2>
+            </div>
+            <div className="divide-y divide-gray-200">
+              {filteredFamilies.map((family) => (
+                <FamilyTableRow key={family.id} family={family} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredFamilies.map((family) => (
+              <FamilyCard key={family.id} family={family} />
+            ))}
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
