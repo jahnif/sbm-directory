@@ -1,77 +1,33 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import { supabase } from '@/lib/supabase'
-import { Family, FamilyFormData, ClassType } from '@/types'
+import { FamilyFormData, ClassType } from '@/types'
 
-export default function EditFamilyPage() {
+export default function RegisterPage() {
   const router = useRouter()
-  const params = useParams()
-  const familyId = params.id as string
-  
-  const [loading, setLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [family, setFamily] = useState<Family | null>(null)
   
   const [formData, setFormData] = useState<FamilyFormData>({
     family_name: '',
     description: '',
-    adults: [],
-    children: []
+    adults: [{ 
+      name: '', 
+      image_url: null, 
+      industry: null, 
+      job_title: null, 
+      interested_in_connections: false, 
+      connection_types: null 
+    }],
+    children: [{ 
+      name: '', 
+      image_url: null, 
+      class: 'Pegasus' as ClassType 
+    }]
   })
-
-  useEffect(() => {
-    if (familyId) {
-      loadFamily()
-    }
-  }, [familyId]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const loadFamily = async () => {
-    try {
-      const { data: familyData, error: familyError } = await supabase
-        .from('families')
-        .select('*')
-        .eq('id', familyId)
-        .single()
-
-      if (familyError) throw familyError
-
-      const { data: adultsData, error: adultsError } = await supabase
-        .from('adults')
-        .select('*')
-        .eq('family_id', familyId)
-
-      if (adultsError) throw adultsError
-
-      const { data: childrenData, error: childrenError } = await supabase
-        .from('children')
-        .select('*')
-        .eq('family_id', familyId)
-
-      if (childrenError) throw childrenError
-
-      const loadedFamily: Family = {
-        ...familyData,
-        adults: adultsData || [],
-        children: childrenData || []
-      }
-
-      setFamily(loadedFamily)
-      setFormData({
-        family_name: loadedFamily.family_name,
-        description: loadedFamily.description,
-        adults: loadedFamily.adults.map(({ id, family_id, created_at, ...adult }) => adult),
-        children: loadedFamily.children.map(({ id, family_id, created_at, ...child }) => child)
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load family')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const addAdult = () => {
     setFormData(prev => ({
@@ -140,27 +96,23 @@ export default function EditFamilyPage() {
     setError(null)
 
     try {
-      // Update family
-      const { error: familyError } = await supabase
+      // Insert family
+      const { data: family, error: familyError } = await supabase
         .from('families')
-        .update({
+        .insert([{
           family_name: formData.family_name,
-          description: formData.description,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', familyId)
+          description: formData.description
+        }])
+        .select()
+        .single()
 
       if (familyError) throw familyError
 
-      // Delete existing adults and children
-      await supabase.from('adults').delete().eq('family_id', familyId)
-      await supabase.from('children').delete().eq('family_id', familyId)
-
-      // Insert new adults
+      // Insert adults
       const adultsToInsert = formData.adults
         .filter(adult => adult.name.trim())
         .map(adult => ({
-          family_id: familyId,
+          family_id: family.id,
           ...adult
         }))
 
@@ -172,11 +124,11 @@ export default function EditFamilyPage() {
         if (adultsError) throw adultsError
       }
 
-      // Insert new children
+      // Insert children
       const childrenToInsert = formData.children
         .filter(child => child.name.trim())
         .map(child => ({
-          family_id: familyId,
+          family_id: family.id,
           ...child
         }))
 
@@ -188,7 +140,7 @@ export default function EditFamilyPage() {
         if (childrenError) throw childrenError
       }
 
-      router.push('/admin')
+      router.push('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
@@ -196,46 +148,11 @@ export default function EditFamilyPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading family...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!family) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Family not found</p>
-          <button
-            onClick={() => router.push('/admin')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Back to Admin
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Edit Family</h1>
-            <button
-              onClick={() => router.push('/admin')}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Add Your Family</h1>
           
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Family Information */}
@@ -465,7 +382,7 @@ export default function EditFamilyPage() {
             <div className="flex justify-end space-x-4">
               <button
                 type="button"
-                onClick={() => router.push('/admin')}
+                onClick={() => router.push('/')}
                 className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
               >
                 Cancel
@@ -475,7 +392,7 @@ export default function EditFamilyPage() {
                 disabled={isSubmitting}
                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Saving Changes...' : 'Save Changes'}
+                {isSubmitting ? 'Adding Family...' : 'Add Family'}
               </button>
             </div>
           </form>

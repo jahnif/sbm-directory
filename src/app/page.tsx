@@ -26,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     filterFamilies()
-  }, [families, searchTerm, classFilter, connectionsFilter])
+  }, [families, searchTerm, classFilter, connectionsFilter]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadFamilies = async () => {
     try {
