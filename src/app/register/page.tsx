@@ -159,10 +159,10 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Family Information */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-800">Family Information</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Family Information</h2>
               
               <div>
-                <label htmlFor="family_name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="family_name" className="block text-sm font-medium text-gray-900 mb-1">
                   Family Name *
                 </label>
                 <input
@@ -176,7 +176,7 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-900 mb-1">
                   Family Description *
                 </label>
                 <textarea
@@ -194,7 +194,7 @@ export default function RegisterPage() {
             {/* Adults */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800">Adults</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Adults</h2>
                 <button
                   type="button"
                   onClick={addAdult}
@@ -207,7 +207,7 @@ export default function RegisterPage() {
               {formData.adults.map((adult, index) => (
                 <div key={index} className="border rounded-lg p-4 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-medium text-gray-700">Adult {index + 1}</h3>
+                    <h3 className="font-medium text-gray-900">Adult {index + 1}</h3>
                     {formData.adults.length > 1 && (
                       <button
                         type="button"
@@ -221,7 +221,7 @@ export default function RegisterPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Name *
                       </label>
                       <input
@@ -234,7 +234,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Photo
                       </label>
                       <ImageUpload
@@ -245,7 +245,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Industry
                       </label>
                       <input
@@ -257,7 +257,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Job Title
                       </label>
                       <input
@@ -285,7 +285,7 @@ export default function RegisterPage() {
 
                     {adult.interested_in_connections && (
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-900 mb-1">
                           What kind of professional connections are you interested in?
                         </label>
                         <textarea
@@ -332,7 +332,7 @@ export default function RegisterPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Name *
                       </label>
                       <input
@@ -345,7 +345,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Class *
                       </label>
                       <select
@@ -361,7 +361,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">
                         Photo
                       </label>
                       <ImageUpload

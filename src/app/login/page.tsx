@@ -44,7 +44,7 @@ export default function LoginPage() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             SBM Family Directory
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-800">
             Please enter the access password to continue
           </p>
         </div>
