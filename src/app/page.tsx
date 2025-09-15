@@ -83,7 +83,7 @@ export default function Home() {
   // Responsive view mode based on screen size
   useEffect(() => {
     const handleResize = () => {
-      setViewMode(window.innerWidth < 1024 ? 'cards' : 'table');
+      setViewMode(window.innerWidth < 1024 ? 'table' : 'table');
     };
 
     handleResize(); // Set initial value
@@ -123,21 +123,21 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="flex justify-between items-center flex-col lg:flex-row gap-4">
+            <div className="lg:justify-start justify-start flex flex-col text-center lg:text-left">
               <h1 className="text-3xl font-bold text-gray-900">SBM Family Directory</h1>
               <p className="text-gray-700 mt-1">Connect with other families in our Montessori community</p>
             </div>
             <div className="flex gap-3">
               <Link
                 href="/register"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium text-center"
               >
                 Add Your Family
               </Link>
               <Link
                 href="/admin"
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium text-center"
               >
                 Admin
               </Link>
@@ -181,12 +181,12 @@ export default function Home() {
         ) : viewMode === 'table' ? (
           <div className="bg-white rounded-lg shadow-xl/5">
             {/* Sticky Headers */}
-            <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+            <div className="sticky top-0 z-10 bg-white border-b border-gray-200 hidden lg:block">
               <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-6 px-6 py-3 text-sm font-light text-gray-900 text-center">
                 <div className="">Family Name</div>
                 <div className="">Adults</div>
                 <div className="">Children</div>
-                <div className="">Description</div>
+                <div className="">About</div>
               </div>
             </div>
             <div className="divide-y divide-gray-200">
@@ -219,14 +219,15 @@ export default function Home() {
 // TODO - Add Spanish version and ability to switch
 // TODO - Add contact info for networking?
 // TODO - Remove non-networking spouses in filter?
+// TODO - Add animations to filter changes
 
 // DONE - Add visual summary of family members with small circles under family name?
-// TODO - Fix styling of cards - OR move to grid view
-// TODO - Add Lynx class
+// DONE - Fix styling of cards - OR move to grid view
+// DONE - Add Lynx class
 // DONE - Fix filter in responsive view: Class dropdown and interested on the same line and remove extra whitespace
-// TODO - Update form to move "add" buttons below fields
-// TODO - Remove borders and backgrounds from form
+// DONE - Update form to move "add" buttons below fields
+// DONE - Remove borders and backgrounds from form
 // TODO - Add SBM logo to header
 // TODO - Add SBM color scheme
-// TODO - Fix responsiveness of header, buttons
-// TODO - Add animations to filter changes
+// TODO - Move filter under the directory title?
+// DONE - Fix responsiveness of header, buttons

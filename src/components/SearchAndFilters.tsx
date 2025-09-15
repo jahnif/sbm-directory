@@ -53,6 +53,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
           >
             <option value="all">All Classes</option>
             <option value="Pegasus">Pegasus</option>
+            <option value="Lynx">Lynx</option>
             <option value="Orion">Orion</option>
             <option value="Andromeda">Andromeda</option>
           </select>

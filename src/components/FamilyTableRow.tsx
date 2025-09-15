@@ -20,11 +20,13 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
   return (
     <div className="border-b border-gray-200 py-6 hover:bg-gray-50">
-      <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6">
+      <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6">
         {/* Family Name */}
         <div className="flex flex-col">
-          <h3 className="font-semibold text-gray-900 text-lg">{family.family_name} Family</h3>
-          <div className="flex mt-2">
+          <div className="lg:hidden text-xs text-color-gray-400 text-center mb-1">Family Name</div>
+          <h3 className="font-semibold text-gray-900 lg:text-lg text-2xl text-center lg:text-left">{family.family_name} Family</h3>
+
+          <div className="flex mt-2 mx-auto lg:mx-0 mb-6">
             {family.adults.map((adult) => (
               <Image
                 src={adult.image_url}
@@ -48,7 +50,8 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
         {/* Adults */}
         <div className="">
-          <div className="flex flex-col flex-wrap gap-4 mb-4">
+          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">Adults</div>
+          <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {family.adults.map((adult) => (
               <div
                 key={adult.id}
@@ -109,8 +112,10 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
         </div>
 
         {/* Children */}
-        <div className=" flex flex-wrap gap-3 items-center justify-center">
-          <div className="">
+        <div className="flex flex-wrap gap-3 flex-col items-center justify-center">
+          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">Children</div>
+
+          <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {family.children.map((child) => (
               <div
                 key={child.id}
@@ -145,6 +150,8 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
         {/* Description */}
         <div className="">
+          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">About</div>
+
           <div className="text-sm text-gray-800 leading-relaxed">
             <p>{isExpanded || !shouldTruncate ? family.description : truncateText(family.description)}</p>
             {shouldTruncate && (
