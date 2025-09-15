@@ -14,9 +14,12 @@ interface SearchAndFiltersProps {
 export default function SearchAndFilters({ onSearchChange, onClassFilter, onConnectionsFilter, currentSearch, currentClassFilter, currentConnectionsFilter }: SearchAndFiltersProps) {
   return (
     <div className="rounded-lg p-6 mb-6">
-      <div className="flex flex-col lg:flex-row gap-4 lg:items-center">
+      <div className="w-full text-xl mb-2 mx-auto text-center text-gray-500">Filters</div>
+
+      <div className="flex flex-wrap lg:flex-row gap-2 lg:items-center justify-center">
         {/* Search */}
-        <div className="flex-1 bg-white">
+        {/* <div className="lg:flex-5/12 md:flex-1 grow min-w-xl"> */}
+        <div className="lg:basis-3/5 basis-full grow">
           <label
             htmlFor="search"
             className="sr-only"
@@ -29,12 +32,13 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             placeholder="Search families, names, descriptions..."
             value={currentSearch}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 "
+            className="w-full px-4 py-2 border bg-white border-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 "
           />
         </div>
 
         {/* Class Filter */}
-        <div className="flex-shrink-0 bg-white">
+        {/* <div className="flex-1/12"> */}
+        <div className="lg:basis-1/8">
           <label
             htmlFor="class-filter"
             className="sr-only"
@@ -45,7 +49,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             id="class-filter"
             value={currentClassFilter}
             onChange={(e) => onClassFilter(e.target.value as ClassType | 'all')}
-            className="px-4 py-2 border border-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-100 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="all">All Classes</option>
             <option value="Pegasus">Pegasus</option>
@@ -55,7 +59,8 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
         </div>
 
         {/* Connections Filter */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        {/* <div className="flex items-center gap-2 flex-4/12"> */}
+        <div className="flex items-center gap-2 lg:basis-1/5 h-10">
           <input
             type="checkbox"
             id="connections-filter"
@@ -67,7 +72,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             htmlFor="connections-filter"
             className="text-sm font-medium text-gray-900"
           >
-            🤝 Interested in professional connections
+            🤝 Professional Opportunities
           </label>
         </div>
 
@@ -81,7 +86,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             }}
             className="flex-shrink-0 px-4 py-2 text-sm text-gray-900 hover:text-gray-700 border border-gray-200 rounded-md hover:bg-gray-50 bg-white"
           >
-            Clear All
+            Clear All Filters
           </button>
         )}
       </div>

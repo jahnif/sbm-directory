@@ -22,8 +22,28 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
     <div className="border-b border-gray-200 py-6 hover:bg-gray-50">
       <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6">
         {/* Family Name */}
-        <div className="">
+        <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900 text-lg">{family.family_name} Family</h3>
+          <div className="flex mt-2">
+            {family.adults.map((adult) => (
+              <Image
+                src={adult.image_url}
+                alt={adult.name}
+                width={20}
+                height={20}
+                className="object-cover w-10 h-10 rounded-full mr-[-8px]"
+              />
+            ))}
+            {family.children.map((child) => (
+              <Image
+                src={child.image_url}
+                alt={child.name}
+                width={20}
+                height={20}
+                className="object-cover w-10 h-10 rounded-full mr-[-1em]"
+              />
+            ))}
+          </div>
         </div>
 
         {/* Adults */}

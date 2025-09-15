@@ -218,11 +218,15 @@ export default function Home() {
 // TODO - Add hometown
 // TODO - Add Spanish version and ability to switch
 // TODO - Add contact info for networking?
-// TODO - Fix filter in responsive view: Class dropdown and interested on the samle line and remove extra whitespace
-// TODO - Fix styling of cards
 // TODO - Remove non-networking spouses in filter?
+
+// DONE - Add visual summary of family members with small circles under family name?
+// TODO - Fix styling of cards - OR move to grid view
+// TODO - Add Lynx class
+// DONE - Fix filter in responsive view: Class dropdown and interested on the same line and remove extra whitespace
 // TODO - Update form to move "add" buttons below fields
 // TODO - Remove borders and backgrounds from form
 // TODO - Add SBM logo to header
 // TODO - Add SBM color scheme
 // TODO - Fix responsiveness of header, buttons
+// TODO - Add animations to filter changes
