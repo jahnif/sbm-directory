@@ -23,7 +23,7 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
       <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6">
         {/* Family Name */}
         <div className="flex flex-col">
-          <div className="lg:hidden text-xs text-color-gray-400 text-center mb-1">Family Name</div>
+          <div className="lg:hidden text-xs text-gray-500 text-center mb-1">Family Name</div>
           <h3 className="font-semibold text-gray-900 lg:text-lg text-2xl text-center lg:text-left">{family.family_name} Family</h3>
 
           <div className="flex mt-2 mx-auto lg:mx-0 mb-6">
@@ -50,7 +50,7 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
         {/* Adults */}
         <div className="">
-          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">Adults</div>
+          <div className="lg:hidden text-sm text-gray-500 text-center mb-4">Adults</div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {family.adults.map((adult) => (
               <div
@@ -113,7 +113,7 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
         {/* Children */}
         <div className="flex flex-wrap gap-3 flex-col items-center justify-center">
-          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">Children</div>
+          <div className="lg:hidden text-sm text-gray-500 text-center mb-4">Children</div>
 
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {family.children.map((child) => (
@@ -150,9 +150,9 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
         {/* Description */}
         <div className="">
-          <div className="lg:hidden text-sm text-color-gray-400 text-center mb-4">About</div>
+          <div className="lg:hidden text-sm text-gray-500 text-center mb-4">About</div>
 
-          <div className="text-sm text-gray-800 leading-relaxed">
+          <div className="text-sm text-gray-800 leading-relaxed text-center lg:text-left">
             <p>{isExpanded || !shouldTruncate ? family.description : truncateText(family.description)}</p>
             {shouldTruncate && (
               <button
