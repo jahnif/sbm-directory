@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
                 <li>Profile photographs (optional)</li>
                 <li>Professional information (job titles, industries)</li>
                 <li>Professional networking preferences and interests</li>
-                <li>Children's names and class assignments</li>
+                <li>Children&apos;s names and class assignments</li>
                 <li>Family descriptions and contact preferences</li>
               </ul>
             </section>
@@ -63,7 +63,7 @@ export default function PrivacyPolicyPage() {
                 <li>Display family information in the community directory</li>
                 <li>Enable families to connect with each other</li>
                 <li>Facilitate professional networking within the community</li>
-                <li>Organize families by children's class assignments</li>
+                <li>Organize families by children&apos;s class assignments</li>
               </ul>
             </section>
 
@@ -106,10 +106,10 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Children's Data</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Children&apos;s Data</h2>
               <p className="text-gray-900 leading-relaxed">
-                We only process children's data (names, photos, class information) with explicit parental consent. 
-                Parents can request deletion of their children's data at any time.
+                We only process children&apos;s data (names, photos, class information) with explicit parental consent. 
+                Parents can request deletion of their children&apos;s data at any time.
               </p>
             </section>
 

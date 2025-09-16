@@ -32,24 +32,45 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
           <h3 className="font-semibold text-gray-900 lg:text-lg text-2xl text-center lg:text-left">{family.family_name} Family</h3>
 
           <div className="flex mt-2 mx-auto lg:mx-0 mb-6">
-            {displayedAdults.map((adult) => (
-              <Image
-                src={adult.image_url}
-                alt={adult.name}
-                width={20}
-                height={20}
-                className="object-cover w-10 h-10 rounded-full mr-[-8px]"
-              />
-            ))}
-            {family.children.map((child) => (
-              <Image
-                src={child.image_url}
-                alt={child.name}
-                width={20}
-                height={20}
-                className="object-cover w-10 h-10 rounded-full mr-[-1em]"
-              />
-            ))}
+            {displayedAdults.map((adult) => {
+              return adult.image_url ? (
+                <Image
+                  key={adult.id}
+                  src={adult.image_url}
+                  alt={adult.name}
+                  width={20}
+                  height={20}
+                  className="object-cover w-10 h-10 rounded-full mr-[-1em]"
+                />
+              ) : (
+                <div
+                  key={adult.id}
+                  className="bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium text-lg w-11 h-11 rounded-full mr-[-1em]"
+                >
+                  {adult.name.charAt(0).toUpperCase()}
+                </div>
+              );
+            })}
+
+            {family.children.map((child) => {
+              return child.image_url ? (
+                <Image
+                  key={child.id}
+                  src={child.image_url}
+                  alt={child.name}
+                  width={20}
+                  height={20}
+                  className="object-cover w-10 h-10 rounded-full mr-[-1em]"
+                />
+              ) : (
+                <div
+                  key={child.id}
+                  className="bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-medium text-lg w-11 h-11 rounded-full mr-[-1em]"
+                >
+                  {child.name.charAt(0).toUpperCase()}
+                </div>
+              );
+            })}
           </div>
         </div>
 

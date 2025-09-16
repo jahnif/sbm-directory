@@ -66,8 +66,8 @@ export default function EditFamilyPage() {
       setFormData({
         family_name: loadedFamily.family_name,
         description: loadedFamily.description,
-        adults: loadedFamily.adults.map(({ id, family_id, created_at, ...adult }) => adult),
-        children: loadedFamily.children.map(({ id, family_id, created_at, ...child }) => child)
+        adults: loadedFamily.adults.map(({ id: _id, family_id: _family_id, created_at: _created_at, ...adult }) => adult),
+        children: loadedFamily.children.map(({ id: _id, family_id: _family_id, created_at: _created_at, ...child }) => child)
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load family')

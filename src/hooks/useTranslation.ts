@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useLocale } from '@/components/LanguageToggle'
 
-type Messages = Record<string, any>
+type Messages = Record<string, unknown>
 
 export function useTranslation() {
   const locale = useLocale()

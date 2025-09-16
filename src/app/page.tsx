@@ -224,6 +224,7 @@ export default function Home() {
 
 // DONE - Add hometown
 // TODO - Add Spanish version and ability to switch
+// TODO - Add translation to form and submitted form content
 // TODO - Add contact info for networking?
 // DONE - Remove non-networking spouses in filter?
 // TODO - Add animations to filter changes
