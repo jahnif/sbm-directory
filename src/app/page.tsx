@@ -9,6 +9,7 @@ import FamilyTableRow from '@/components/FamilyTableRow';
 import SearchAndFilters from '@/components/SearchAndFilters';
 import LanguageToggle from '@/components/LanguageToggle';
 import { useTranslation } from '@/hooks/useTranslation';
+import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
@@ -124,13 +125,16 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sbm-background">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-white shadow-sm border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center flex-col lg:flex-row gap-4">
             <div className="lg:justify-start justify-start flex flex-col text-center lg:text-left">
-              <h1 className="text-3xl font-bold text-gray-900">{t('header.title')}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">{t('header.title')}</h1>
+              {/* <h1 className="text-2xl font-bold text-gray-900">
+                <span className="font-extralight">Second Body Montessori</span> Family Directory
+              </h1> */}
               <p className="text-gray-700 mt-1">{t('header.subtitle')}</p>
             </div>
             <div className="flex gap-3">
@@ -152,21 +156,27 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search and Filters */}
-        <SearchAndFilters
-          onSearchChange={setSearchTerm}
-          onClassFilter={setClassFilter}
-          onConnectionsFilter={setConnectionsFilter}
-          currentSearch={searchTerm}
-          currentClassFilter={classFilter}
-          currentConnectionsFilter={connectionsFilter}
-        />
-
+      <main className="max-w-7xl mx-auto px-4 pb-8">
         {/* Results Summary */}
         <div className="mb-6 mt-12 text-center">
+          <img
+            src="/logo-second-body-montessori.png"
+            alt="Second Body Montessori Logo"
+            className="mb-2 max-w-[400px] text-center mx-auto"
+          />
           <p className="text-3xl font-black pb-1">{t('directory.title')}</p>
+
           <p className="text-gray-800">{t('directory.showing', { count: filteredFamilies.length.toString(), total: families.length.toString() })}</p>
+
+          {/* Search and Filters */}
+          <SearchAndFilters
+            onSearchChange={setSearchTerm}
+            onClassFilter={setClassFilter}
+            onConnectionsFilter={setConnectionsFilter}
+            currentSearch={searchTerm}
+            currentClassFilter={classFilter}
+            currentConnectionsFilter={connectionsFilter}
+          />
         </div>
 
         {/* Directory Display */}
@@ -235,8 +245,8 @@ export default function Home() {
 // DONE - Fix filter in responsive view: Class dropdown and interested on the same line and remove extra whitespace
 // DONE - Update form to move "add" buttons below fields
 // DONE - Remove borders and backgrounds from form
-// TODO - Add SBM logo to header
+// DONE - Add SBM logo to header
 // TODO - Add SBM color scheme
-// TODO - Move filter under the directory title?
-// TODO - Fix build errors
+// DONE - Move filter under the directory title?
+// DONE - Fix build errors
 // DONE - Fix responsiveness of header, buttons

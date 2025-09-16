@@ -160,7 +160,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-sbm-background py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center mx-auto">Add Your Family</h1>
@@ -326,7 +326,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
               ))}
-              <div className="flex justify-end items-center">
+              <div className="flex justify-start items-center">
                 <button
                   type="button"
                   onClick={addAdult}
@@ -397,7 +397,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
               ))}
-              <div className="flex justify-end items-center">
+              <div className="flex justify-start items-center">
                 <button
                   type="button"
                   onClick={addChild}

@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react'
 
 export default function GDPRConsent() {
   const [showBanner, setShowBanner] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     // Check if user has already given consent
     const consent = localStorage.getItem('gdpr-consent')
     if (!consent) {
@@ -25,7 +27,7 @@ export default function GDPRConsent() {
     setShowBanner(false)
   }
 
-  if (!showBanner) return null
+  if (!mounted || !showBanner) return null
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">

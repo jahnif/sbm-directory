@@ -13,7 +13,7 @@
     "required": "Required"
   },
   "header": {
-    "title": "SBM Family Directory",
+    "title": "Second Body Montessori Family Directory",
     "subtitle": "Connect with other families in our Montessori community",
     "addFamily": "Add Your Family",
     "admin": "Admin"
@@ -116,7 +116,7 @@
   },
   "classes": {
     "Pegasus": "Pegasus",
-    "Lynx": "Lynx", 
+    "Lynx": "Lynx",
     "Orion": "Orion",
     "Andromeda": "Andromeda"
   }
