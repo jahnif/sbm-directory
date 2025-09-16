@@ -238,4 +238,5 @@ export default function Home() {
 // TODO - Add SBM logo to header
 // TODO - Add SBM color scheme
 // TODO - Move filter under the directory title?
+// TODO - Fix build errors
 // DONE - Fix responsiveness of header, buttons
