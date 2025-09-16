@@ -66,8 +66,10 @@ export default function EditFamilyPage() {
       setFormData({
         family_name: loadedFamily.family_name,
         description: loadedFamily.description,
-        adults: loadedFamily.adults.map(({ id: _, family_id: __, created_at: ___, ...adult }) => adult),
-        children: loadedFamily.children.map(({ id: _, family_id: __, created_at: ___, ...child }) => child)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        adults: loadedFamily.adults.map(({ id, family_id, created_at, ...adult }) => adult),
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        children: loadedFamily.children.map(({ id, family_id, created_at, ...child }) => child)
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load family')
