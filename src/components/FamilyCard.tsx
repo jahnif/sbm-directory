@@ -1,11 +1,17 @@
 import Image from 'next/image'
 import { Family } from '@/types'
+import { getCountryDisplay } from '@/components/CountrySelector'
 
 interface FamilyCardProps {
   family: Family
+  showNetworkingOnly?: boolean
 }
 
-export default function FamilyCard({ family }: FamilyCardProps) {
+export default function FamilyCard({ family, showNetworkingOnly = false }: FamilyCardProps) {
+  // Filter adults based on networking filter
+  const displayedAdults = showNetworkingOnly 
+    ? family.adults.filter(adult => adult.interested_in_connections)
+    : family.adults;
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">
@@ -16,7 +22,7 @@ export default function FamilyCard({ family }: FamilyCardProps) {
       <div className="mb-6">
         <h4 className="text-sm font-medium text-gray-900 mb-3">Adults</h4>
         <div className="grid grid-cols-2 gap-4">
-          {family.adults.map((adult) => (
+          {displayedAdults.map((adult) => (
             <div key={adult.id} className="text-center">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2">
                 {adult.image_url ? (
@@ -39,6 +45,11 @@ export default function FamilyCard({ family }: FamilyCardProps) {
               )}
               {adult.industry && (
                 <p className="text-xs text-gray-700">{adult.industry}</p>
+              )}
+              {(adult.country || adult.city) && (
+                <p className="text-xs text-gray-700">
+                  {adult.country && getCountryDisplay(adult.country)} {adult.city}
+                </p>
               )}
               {adult.interested_in_connections && (
                 <div className="mt-1 space-y-1">

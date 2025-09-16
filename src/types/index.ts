@@ -17,6 +17,8 @@ export interface Adult {
   job_title: string | null
   interested_in_connections: boolean
   connection_types: string | null
+  country: string | null
+  city: string | null
   created_at: string
 }
 
@@ -25,11 +27,11 @@ export interface Child {
   family_id: string
   name: string
   image_url: string | null
-  class: 'Pegasus' | 'Orion' | 'Andromeda'
+  class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
   created_at: string
 }
 
-export type ClassType = 'Pegasus' | 'Orion' | 'Andromeda'
+export type ClassType = 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
 
 export interface FamilyFormData {
   family_name: string

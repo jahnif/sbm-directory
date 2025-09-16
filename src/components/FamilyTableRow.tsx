@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Family } from '@/types';
+import { getCountryDisplay } from '@/components/CountrySelector';
 
 interface FamilyTableRowProps {
   family: Family;
+  showNetworkingOnly?: boolean;
 }
 
-export default function FamilyTableRow({ family }: FamilyTableRowProps) {
+export default function FamilyTableRow({ family, showNetworkingOnly = false }: FamilyTableRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const truncateText = (text: string, limit: number = 150) => {
@@ -18,16 +20,19 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
 
   const shouldTruncate = family.description.length > 150;
 
+  // Filter adults based on networking filter
+  const displayedAdults = showNetworkingOnly ? family.adults.filter((adult) => adult.interested_in_connections) : family.adults;
+
   return (
     <div className="border-b border-gray-200 py-6 hover:bg-gray-50">
-      <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6">
+      <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6 py-2">
         {/* Family Name */}
         <div className="flex flex-col">
           <div className="lg:hidden text-xs text-gray-500 text-center mb-1">Family Name</div>
           <h3 className="font-semibold text-gray-900 lg:text-lg text-2xl text-center lg:text-left">{family.family_name} Family</h3>
 
           <div className="flex mt-2 mx-auto lg:mx-0 mb-6">
-            {family.adults.map((adult) => (
+            {displayedAdults.map((adult) => (
               <Image
                 src={adult.image_url}
                 alt={adult.name}
@@ -52,7 +57,7 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
         <div className="">
           <div className="lg:hidden text-sm text-gray-500 text-center mb-4">Adults</div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
-            {family.adults.map((adult) => (
+            {displayedAdults.map((adult) => (
               <div
                 key={adult.id}
                 className="flex"
@@ -91,6 +96,11 @@ export default function FamilyTableRow({ family }: FamilyTableRowProps) {
                       title={adult.industry}
                     >
                       {adult.industry}
+                    </p>
+                  )}
+                  {(adult.country || adult.city) && (
+                    <p className="text-xs text-gray-700">
+                      {adult.country && getCountryDisplay(adult.country)} {adult.country}, {adult.city}
                     </p>
                   )}
                   {adult.interested_in_connections && (

@@ -7,10 +7,13 @@ import { Family, ClassType } from '@/types';
 import FamilyCard from '@/components/FamilyCard';
 import FamilyTableRow from '@/components/FamilyTableRow';
 import SearchAndFilters from '@/components/SearchAndFilters';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export const dynamic = 'force-dynamic';
 
 export default function Home() {
+  const { t } = useTranslation();
   const [families, setFamilies] = useState<Family[]>([]);
   const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +67,7 @@ export default function Home() {
     // Search filter
     if (searchTerm) {
       const search = searchTerm.toLowerCase();
-      filtered = filtered.filter((family) => family.family_name.toLowerCase().includes(search) || family.description.toLowerCase().includes(search) || family.adults.some((adult) => adult.name.toLowerCase().includes(search) || adult.industry?.toLowerCase().includes(search) || adult.job_title?.toLowerCase().includes(search)) || family.children.some((child) => child.name.toLowerCase().includes(search)));
+      filtered = filtered.filter((family) => family.family_name.toLowerCase().includes(search) || family.description.toLowerCase().includes(search) || family.adults.some((adult) => adult.name.toLowerCase().includes(search) || adult.industry?.toLowerCase().includes(search) || adult.job_title?.toLowerCase().includes(search) || adult.city?.toLowerCase().includes(search) || adult.country?.toLowerCase().includes(search)) || family.children.some((child) => child.name.toLowerCase().includes(search)));
     }
 
     // Class filter
@@ -96,7 +99,7 @@ export default function Home() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading families...</p>
+          <p className="text-gray-600">{t('admin.loadingFamilies')}</p>
         </div>
       </div>
     );
@@ -106,7 +109,9 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Error: {error}</p>
+          <p className="text-red-600 mb-4">
+            {t('common.error')}: {error}
+          </p>
           <button
             onClick={loadFamilies}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -125,21 +130,22 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center flex-col lg:flex-row gap-4">
             <div className="lg:justify-start justify-start flex flex-col text-center lg:text-left">
-              <h1 className="text-3xl font-bold text-gray-900">SBM Family Directory</h1>
-              <p className="text-gray-700 mt-1">Connect with other families in our Montessori community</p>
+              <h1 className="text-3xl font-bold text-gray-900">{t('header.title')}</h1>
+              <p className="text-gray-700 mt-1">{t('header.subtitle')}</p>
             </div>
             <div className="flex gap-3">
+              <LanguageToggle />
               <Link
                 href="/register"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium text-center"
               >
-                Add Your Family
+                {t('header.addFamily')}
               </Link>
               <Link
                 href="/admin"
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium text-center"
               >
-                Admin
+                {t('header.admin')}
               </Link>
             </div>
           </div>
@@ -159,22 +165,20 @@ export default function Home() {
 
         {/* Results Summary */}
         <div className="mb-6 mt-12 text-center">
-          <p className="text-3xl font-black pb-1">Family Directory</p>
-          <p className="text-gray-800">
-            Showing {filteredFamilies.length} of {families.length} families
-          </p>
+          <p className="text-3xl font-black pb-1">{t('directory.title')}</p>
+          <p className="text-gray-800">{t('directory.showing', { count: filteredFamilies.length.toString(), total: families.length.toString() })}</p>
         </div>
 
         {/* Directory Display */}
         {filteredFamilies.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-lg font-bold mb-4">{families.length === 0 ? 'No families have been added yet.' : 'No families match your filters.'}</p>
+            <p className="text-lg font-bold mb-4">{families.length === 0 ? t('directory.noFamilies') : t('directory.noMatches')}</p>
             {families.length === 0 && (
               <Link
                 href="/register"
                 className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
               >
-                Be the first to add your family!
+                {t('directory.beFirst')}
               </Link>
             )}
           </div>
@@ -182,11 +186,12 @@ export default function Home() {
           <div className="bg-white rounded-lg shadow-xl/5">
             {/* Sticky Headers */}
             <div className="sticky top-0 z-10 bg-white border-b border-gray-200 hidden lg:block">
-              <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-6 px-6 py-3 text-sm font-light text-gray-900 text-center">
-                <div className="">Family Name</div>
-                <div className="">Adults</div>
-                <div className="">Children</div>
-                <div className="">About</div>
+              <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6 py-2 text-sm text-center">
+                {/* <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-6 px-6 py-3 text-sm font-light text-gray-900 text-center"> */}
+                <div className="">{t('family.familyName')}</div>
+                <div className="">{t('family.adults')}</div>
+                <div className="">{t('family.children')}</div>
+                <div className="">{t('family.about')}</div>
               </div>
             </div>
             <div className="divide-y divide-gray-200">
@@ -194,6 +199,7 @@ export default function Home() {
                 <FamilyTableRow
                   key={family.id}
                   family={family}
+                  showNetworkingOnly={connectionsFilter}
                 />
               ))}
             </div>
@@ -204,6 +210,7 @@ export default function Home() {
               <FamilyCard
                 key={family.id}
                 family={family}
+                showNetworkingOnly={connectionsFilter}
               />
             ))}
           </div>
@@ -215,10 +222,10 @@ export default function Home() {
 
 // Task slist
 
-// TODO - Add hometown
+// DONE - Add hometown
 // TODO - Add Spanish version and ability to switch
 // TODO - Add contact info for networking?
-// TODO - Remove non-networking spouses in filter?
+// DONE - Remove non-networking spouses in filter?
 // TODO - Add animations to filter changes
 
 // DONE - Add visual summary of family members with small circles under family name?

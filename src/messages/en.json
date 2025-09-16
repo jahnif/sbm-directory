@@ -1,0 +1,123 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "remove": "Remove",
+    "search": "Search",
+    "clear": "Clear",
+    "required": "Required"
+  },
+  "header": {
+    "title": "SBM Family Directory",
+    "subtitle": "Connect with other families in our Montessori community",
+    "addFamily": "Add Your Family",
+    "admin": "Admin"
+  },
+  "directory": {
+    "title": "Family Directory",
+    "showing": "Showing {count} of {total} families",
+    "noFamilies": "No families have been added yet.",
+    "noMatches": "No families match your filters.",
+    "beFirst": "Be the first to add your family!"
+  },
+  "filters": {
+    "title": "Filters",
+    "searchPlaceholder": "Search families, names, descriptions...",
+    "allClasses": "All Classes",
+    "networkingOnly": "🤝 Networking Adults Only",
+    "clearFilters": "Clear All Filters"
+  },
+  "family": {
+    "familyName": "Family Name",
+    "adults": "Adults",
+    "children": "Children",
+    "about": "About",
+    "readMore": "Read more",
+    "showLess": "Show less"
+  },
+  "forms": {
+    "familyInfo": "Family Information",
+    "familyName": "Family Name",
+    "familyDescription": "Family Description",
+    "familyDescriptionPlaceholder": "Tell us about your family...",
+    "requiredIndicator": "*indicates required field",
+    "name": "Name",
+    "photo": "Photo",
+    "addPhoto": "Add photo",
+    "industry": "Industry",
+    "jobTitle": "Job Title",
+    "countryOrigin": "Country of Origin",
+    "selectCountry": "Select country",
+    "city": "City",
+    "cityPlaceholder": "e.g., New York, Madrid",
+    "interestedConnections": "Interested in professional connections",
+    "connectionTypes": "What kind of professional connections are you interested in?",
+    "connectionTypesPlaceholder": "e.g., Other parents in tech, small business owners, freelancers...",
+    "class": "Class",
+    "addAdult": "Add Adult",
+    "addChild": "Add Child",
+    "adult": "Adult",
+    "child": "Child"
+  },
+  "register": {
+    "title": "Add Your Family",
+    "submitting": "Adding Family...",
+    "submit": "Add Family"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "subtitle": "Manage family directory entries",
+    "backToDirectory": "Back to Directory",
+    "allFamilies": "All Families",
+    "familyNotFound": "Family not found",
+    "backToAdmin": "Back to Admin",
+    "loadingFamilies": "Loading families...",
+    "editFamily": "Edit Family",
+    "savingChanges": "Saving Changes...",
+    "saveChanges": "Save Changes",
+    "confirmDelete": "Confirm Delete?"
+  },
+  "login": {
+    "title": "SBM Family Directory",
+    "subtitle": "Please enter the access password to continue",
+    "passwordPlaceholder": "Enter password",
+    "verifying": "Verifying...",
+    "accessDirectory": "Access Directory"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "backToDirectory": "← Back to Directory",
+    "lastUpdated": "Last updated:",
+    "dataController": "Data Controller",
+    "dataWeCollect": "Data We Collect",
+    "legalBasis": "Legal Basis for Processing",
+    "howWeUse": "How We Use Your Data",
+    "dataSharing": "Data Sharing",
+    "yourRights": "Your Rights",
+    "dataRetention": "Data Retention",
+    "dataSecurity": "Data Security",
+    "childrenData": "Children's Data",
+    "contact": "Contact & Complaints",
+    "updateInfo": "Need to update or delete your information?",
+    "useAdminPanel": "Use the admin panel",
+    "contactAdmin": "or contact school administration."
+  },
+  "gdpr": {
+    "title": "Privacy & Data Processing Notice",
+    "description": "We process personal data including names, photos, and professional information to operate this family directory. By using this service, you consent to data processing according to our privacy policy. You have the right to access, correct, or delete your data at any time.",
+    "readPolicy": "Read our full Privacy Policy",
+    "reject": "Reject",
+    "accept": "Accept & Continue"
+  },
+  "classes": {
+    "Pegasus": "Pegasus",
+    "Lynx": "Lynx", 
+    "Orion": "Orion",
+    "Andromeda": "Andromeda"
+  }
+}

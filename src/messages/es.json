@@ -1,0 +1,123 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "required": "Requerido"
+  },
+  "header": {
+    "title": "Directorio de Familias SBM",
+    "subtitle": "Conecta con otras familias en nuestra comunidad Montessori",
+    "addFamily": "Agregar Tu Familia",
+    "admin": "Admin"
+  },
+  "directory": {
+    "title": "Directorio de Familias",
+    "showing": "Mostrando {count} de {total} familias",
+    "noFamilies": "Aún no se han agregado familias.",
+    "noMatches": "Ninguna familia coincide con tus filtros.",
+    "beFirst": "¡Sé el primero en agregar tu familia!"
+  },
+  "filters": {
+    "title": "Filtros",
+    "searchPlaceholder": "Buscar familias, nombres, descripciones...",
+    "allClasses": "Todas las Clases",
+    "networkingOnly": "🤝 Solo Adultos de Networking",
+    "clearFilters": "Limpiar Todos los Filtros"
+  },
+  "family": {
+    "familyName": "Nombre de Familia",
+    "adults": "Adultos",
+    "children": "Niños",
+    "about": "Acerca de",
+    "readMore": "Leer más",
+    "showLess": "Mostrar menos"
+  },
+  "forms": {
+    "familyInfo": "Información de la Familia",
+    "familyName": "Nombre de la Familia",
+    "familyDescription": "Descripción de la Familia",
+    "familyDescriptionPlaceholder": "Cuéntanos sobre tu familia...",
+    "requiredIndicator": "*indica campo requerido",
+    "name": "Nombre",
+    "photo": "Foto",
+    "addPhoto": "Agregar foto",
+    "industry": "Industria",
+    "jobTitle": "Título del Trabajo",
+    "countryOrigin": "País de Origen",
+    "selectCountry": "Seleccionar país",
+    "city": "Ciudad",
+    "cityPlaceholder": "ej., Nueva York, Madrid",
+    "interestedConnections": "Interesado en conexiones profesionales",
+    "connectionTypes": "¿Qué tipo de conexiones profesionales te interesan?",
+    "connectionTypesPlaceholder": "ej., Otros padres en tecnología, pequeños empresarios, freelancers...",
+    "class": "Clase",
+    "addAdult": "Agregar Adulto",
+    "addChild": "Agregar Niño",
+    "adult": "Adulto",
+    "child": "Niño"
+  },
+  "register": {
+    "title": "Agregar Tu Familia",
+    "submitting": "Agregando Familia...",
+    "submit": "Agregar Familia"
+  },
+  "admin": {
+    "title": "Panel de Admin",
+    "subtitle": "Gestionar entradas del directorio de familias",
+    "backToDirectory": "Volver al Directorio",
+    "allFamilies": "Todas las Familias",
+    "familyNotFound": "Familia no encontrada",
+    "backToAdmin": "Volver a Admin",
+    "loadingFamilies": "Cargando familias...",
+    "editFamily": "Editar Familia",
+    "savingChanges": "Guardando Cambios...",
+    "saveChanges": "Guardar Cambios",
+    "confirmDelete": "¿Confirmar Eliminar?"
+  },
+  "login": {
+    "title": "Directorio de Familias SBM",
+    "subtitle": "Por favor ingresa la contraseña de acceso para continuar",
+    "passwordPlaceholder": "Ingresar contraseña",
+    "verifying": "Verificando...",
+    "accessDirectory": "Acceder al Directorio"
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "backToDirectory": "← Volver al Directorio",
+    "lastUpdated": "Última actualización:",
+    "dataController": "Controlador de Datos",
+    "dataWeCollect": "Datos que Recopilamos",
+    "legalBasis": "Base Legal para el Procesamiento",
+    "howWeUse": "Cómo Usamos Tus Datos",
+    "dataSharing": "Compartir Datos",
+    "yourRights": "Tus Derechos",
+    "dataRetention": "Retención de Datos",
+    "dataSecurity": "Seguridad de Datos",
+    "childrenData": "Datos de Niños",
+    "contact": "Contacto y Quejas",
+    "updateInfo": "¿Necesitas actualizar o eliminar tu información?",
+    "useAdminPanel": "Usa el panel de admin",
+    "contactAdmin": "o contacta la administración escolar."
+  },
+  "gdpr": {
+    "title": "Aviso de Privacidad y Procesamiento de Datos",
+    "description": "Procesamos datos personales incluyendo nombres, fotos e información profesional para operar este directorio familiar. Al usar este servicio, consientes al procesamiento de datos según nuestra política de privacidad. Tienes derecho a acceder, corregir o eliminar tus datos en cualquier momento.",
+    "readPolicy": "Lee nuestra Política de Privacidad completa",
+    "reject": "Rechazar",
+    "accept": "Aceptar y Continuar"
+  },
+  "classes": {
+    "Pegasus": "Pegasus",
+    "Lynx": "Lynx",
+    "Orion": "Orion", 
+    "Andromeda": "Andromeda"
+  }
+}
