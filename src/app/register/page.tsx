@@ -25,6 +25,8 @@ export default function RegisterPage() {
         job_title: null,
         interested_in_connections: false,
         connection_types: null,
+        country: null,
+        city: null,
       },
     ],
     children: [
