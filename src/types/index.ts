@@ -2,6 +2,9 @@ export interface Family {
   id: string
   family_name: string
   description: string
+  family_name_es?: string | null
+  description_es?: string | null
+  original_language: 'en' | 'es'
   created_at: string
   updated_at: string
   adults: Adult[]
@@ -12,11 +15,15 @@ export interface Adult {
   id: string
   family_id: string
   name: string
+  name_es?: string | null
   image_url: string | null
   industry: string | null
   job_title: string | null
   interested_in_connections: boolean
   connection_types: string | null
+  email?: string | null
+  whatsapp_number?: string | null
+  show_contact_in_networking: boolean
   country: string | null
   city: string | null
   created_at: string
@@ -26,6 +33,7 @@ export interface Child {
   id: string
   family_id: string
   name: string
+  name_es?: string | null
   image_url: string | null
   class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
   created_at: string
@@ -36,6 +44,18 @@ export type ClassType = 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
 export interface FamilyFormData {
   family_name: string
   description: string
+  original_language: 'en' | 'es'
   adults: Omit<Adult, 'id' | 'family_id' | 'created_at'>[]
   children: Omit<Child, 'id' | 'family_id' | 'created_at'>[]
+}
+
+export interface TranslationRequest {
+  text: string
+  source_lang: 'en' | 'es'
+  target_lang: 'en' | 'es'
+}
+
+export interface TranslationResponse {
+  translated_text: string
+  detected_source_lang?: string
 }

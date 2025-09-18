@@ -6,10 +6,14 @@ import ImageUpload from '@/components/ImageUpload';
 import CountrySelector from '@/components/CountrySelector';
 import { supabase } from '@/lib/supabase';
 import { FamilyFormData, ClassType } from '@/types';
+import { translateFamilyData, detectLanguage } from '@/lib/translation';
+import PageHeader from '@/components/PageHeader';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export const dynamic = 'force-dynamic';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,6 +21,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState<FamilyFormData>({
     family_name: '',
     description: '',
+    original_language: 'en',
     adults: [
       {
         name: '',
@@ -25,6 +30,9 @@ export default function RegisterPage() {
         job_title: null,
         interested_in_connections: false,
         connection_types: null,
+        email: null,
+        whatsapp_number: null,
+        show_contact_in_networking: false,
         country: null,
         city: null,
       },
@@ -50,6 +58,9 @@ export default function RegisterPage() {
           job_title: null,
           interested_in_connections: false,
           connection_types: null,
+          email: null,
+          whatsapp_number: null,
+          show_contact_in_networking: false,
           country: null,
           city: null,
         },
@@ -109,27 +120,68 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      // Insert family
-      const { data: family, error: familyError } = await supabase
-        .from('families')
-        .insert([
+      // Detect language and translate content
+      const detectedLanguage = detectLanguage(formData.family_name + ' ' + formData.description);
+      const originalLanguage = detectedLanguage;
+
+      // Translate family data if we have content to translate
+      let translatedData = null;
+      if (formData.family_name.trim() || formData.description.trim()) {
+        translatedData = await translateFamilyData(
           {
             family_name: formData.family_name,
             description: formData.description,
+            adults: formData.adults.filter((adult) => adult.name.trim()),
+            children: formData.children.filter((child) => child.name.trim()),
           },
-        ])
-        .select()
-        .single();
+          originalLanguage
+        );
+      }
+
+      // Insert family with translations
+      const familyInsert = {
+        family_name: formData.family_name,
+        description: formData.description,
+        original_language: originalLanguage,
+        ...(translatedData && {
+          family_name_es: originalLanguage === 'en' ? translatedData.family_name_translated : formData.family_name,
+          description_es: originalLanguage === 'en' ? translatedData.description_translated : formData.description,
+        }),
+      };
+
+      // If original language is Spanish, store English translations in the base fields
+      if (originalLanguage === 'es' && translatedData) {
+        familyInsert.family_name = translatedData.family_name_translated;
+        familyInsert.description = translatedData.description_translated;
+        familyInsert.family_name_es = formData.family_name;
+        familyInsert.description_es = formData.description;
+      }
+
+      const { data: family, error: familyError } = await supabase.from('families').insert([familyInsert]).select().single();
 
       if (familyError) throw familyError;
 
-      // Insert adults
+      // Insert adults with translations
       const adultsToInsert = formData.adults
         .filter((adult) => adult.name.trim())
-        .map((adult) => ({
-          family_id: family.id,
-          ...adult,
-        }));
+        .map((adult, index) => {
+          const adultData = {
+            family_id: family.id,
+            ...adult,
+          };
+
+          // Add translated name if available
+          if (translatedData && translatedData.adults_translated[index]) {
+            if (originalLanguage === 'en') {
+              adultData.name_es = translatedData.adults_translated[index].name_translated;
+            } else {
+              adultData.name = translatedData.adults_translated[index].name_translated;
+              adultData.name_es = adult.name;
+            }
+          }
+
+          return adultData;
+        });
 
       if (adultsToInsert.length > 0) {
         const { error: adultsError } = await supabase.from('adults').insert(adultsToInsert);
@@ -137,13 +189,27 @@ export default function RegisterPage() {
         if (adultsError) throw adultsError;
       }
 
-      // Insert children
+      // Insert children with translations
       const childrenToInsert = formData.children
         .filter((child) => child.name.trim())
-        .map((child) => ({
-          family_id: family.id,
-          ...child,
-        }));
+        .map((child, index) => {
+          const childData = {
+            family_id: family.id,
+            ...child,
+          };
+
+          // Add translated name if available
+          if (translatedData && translatedData.children_translated[index]) {
+            if (originalLanguage === 'en') {
+              childData.name_es = translatedData.children_translated[index].name_translated;
+            } else {
+              childData.name = translatedData.children_translated[index].name_translated;
+              childData.name_es = child.name;
+            }
+          }
+
+          return childData;
+        });
 
       if (childrenToInsert.length > 0) {
         const { error: childrenError } = await supabase.from('children').insert(childrenToInsert);
@@ -160,10 +226,17 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-sbm-background py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-sbm-background">
+      <PageHeader
+        title={t('register.title')}
+        backLink={{
+          href: '/',
+          label: t('privacy.backToDirectory')
+        }}
+      />
+
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center mx-auto">Add Your Family</h1>
 
           <form
             onSubmit={handleSubmit}
@@ -171,14 +244,14 @@ export default function RegisterPage() {
           >
             {/* Family Information */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900">Family Information</h2>
-              <div className="italic text-gray-400 text-sm">*indicates required field</div>
+              <h2 className="text-xl font-semibold text-gray-900">{t('forms.familyInfo')}</h2>
+              <div className="italic text-gray-400 text-sm">{t('forms.requiredIndicator')}</div>
               <div>
                 <label
                   htmlFor="family_name"
                   className="block text-sm font-medium text-gray-900 mb-1"
                 >
-                  Family Name *
+                  {t('forms.familyName')} *
                 </label>
                 <input
                   type="text"
@@ -195,7 +268,7 @@ export default function RegisterPage() {
                   htmlFor="description"
                   className="block text-sm font-medium text-gray-900 mb-1"
                 >
-                  Family Description *
+                  {t('forms.familyDescription')} *
                 </label>
                 <textarea
                   id="description"
@@ -204,14 +277,14 @@ export default function RegisterPage() {
                   value={formData.description}
                   onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Tell us about your family..."
+                  placeholder={t('forms.familyDescriptionPlaceholder')}
                 />
               </div>
             </div>
 
             {/* Adults */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900">Adults</h2>
+              <h2 className="text-xl font-semibold text-gray-900">{t('family.adults')}</h2>
 
               {formData.adults.map((adult, index) => (
                 <div
@@ -219,7 +292,7 @@ export default function RegisterPage() {
                   className="rounded-lg p-8 bg-gray-50/50"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-medium text-gray-900">Adult {index + 1}</h3>
+                    <h3 className="font-medium text-gray-900">{t('forms.adult')} {index + 1}</h3>
                     {formData.adults.length > 1 && (
                       <button
                         type="button"
@@ -294,6 +367,54 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
+                  {/* Contact Information Section */}
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-3">{t('forms.contactInfo')}</h4>
+                    <p className="text-xs text-gray-600 mb-4">{t('forms.contactInfoDescription')}</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.email')}</label>
+                        <input
+                          type="email"
+                          value={adult.email || ''}
+                          onChange={(e) => updateAdult(index, 'email', e.target.value || null)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder={t('forms.emailPlaceholder')}
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.whatsappNumber')}</label>
+                        <input
+                          type="tel"
+                          value={adult.whatsapp_number || ''}
+                          onChange={(e) => updateAdult(index, 'whatsapp_number', e.target.value || null)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder={t('forms.whatsappPlaceholder')}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={`show-contact-${index}`}
+                          checked={adult.show_contact_in_networking}
+                          onChange={(e) => updateAdult(index, 'show_contact_in_networking', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor={`show-contact-${index}`}
+                          className="ml-2 text-sm text-gray-700"
+                        >
+                          {t('forms.showContactInNetworking')}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="mt-4 space-y-3">
                     <div className="flex items-center">
                       <input
@@ -332,7 +453,7 @@ export default function RegisterPage() {
                   onClick={addAdult}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                 >
-                  Add Adult
+                  Add Another Adult
                 </button>
               </div>
             </div>
@@ -403,12 +524,34 @@ export default function RegisterPage() {
                   onClick={addChild}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                 >
-                  Add Child
+                  Add Another Child
                 </button>
               </div>
             </div>
 
             {error && <div className="text-red-600 bg-red-50 p-3 rounded-md">{error}</div>}
+
+            {/* Privacy and Data Usage Notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-blue-900 mb-3">{t('register.privacyNoticeTitle')}</h3>
+              <div className="text-sm text-blue-800 space-y-2">
+                <p>{t('register.translationServices')}</p>
+                <p>{t('register.informationDisplay')}</p>
+                <p>{t('register.contactInformation')}</p>
+                <p>
+                  {t('register.privacyPolicyLink')}
+                  {' '}
+                  <a
+                    href="/privacy-policy"
+                    target="_blank"
+                    className="text-blue-600 hover:text-blue-700 underline"
+                  >
+                    {t('privacy.title')}
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
 
             <hr className="border-gray-100 text-gray-100 m-10" />
 
@@ -418,14 +561,14 @@ export default function RegisterPage() {
                 onClick={() => router.push('/')}
                 className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Adding Family...' : 'Add Family'}
+                {isSubmitting ? t('register.submitting') : t('register.submit')}
               </button>
             </div>
           </form>

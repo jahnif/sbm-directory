@@ -38,7 +38,10 @@
     "children": "Children",
     "about": "About",
     "readMore": "Read more",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "showContactInfo": "Show Contact Information for Networking",
+    "hideContactInfo": "Hide Contact Information",
+    "networking": "Networking"
   },
   "forms": {
     "familyInfo": "Family Information",
@@ -55,6 +58,13 @@
     "selectCountry": "Select country",
     "city": "City",
     "cityPlaceholder": "e.g., New York, Madrid",
+    "contactInfo": "Contact Information (Optional)",
+    "contactInfoDescription": "Providing contact information allows other families to reach out for networking when you both choose to connect.",
+    "email": "Email",
+    "emailPlaceholder": "your.email@example.com",
+    "whatsappNumber": "WhatsApp Number",
+    "whatsappPlaceholder": "+1 234 567 8900",
+    "showContactInNetworking": "Allow my contact information to be visible when others view networking connections",
     "interestedConnections": "Interested in professional connections",
     "connectionTypes": "What kind of professional connections are you interested in?",
     "connectionTypesPlaceholder": "e.g., Other parents in tech, small business owners, freelancers...",
@@ -67,7 +77,12 @@
   "register": {
     "title": "Add Your Family",
     "submitting": "Adding Family...",
-    "submit": "Add Family"
+    "submit": "Add Family",
+    "privacyNoticeTitle": "Data Usage & Privacy Notice",
+    "translationServices": "Translation Services: Your family information will be automatically translated between English and Spanish using DeepL's translation service to make our directory accessible to all families.",
+    "informationDisplay": "Information Display: Your family name, description, and family member information will be visible to all members of the SBM community directory.",
+    "contactInformation": "Contact Information: Email addresses and WhatsApp numbers will only be shown to other families when you explicitly choose to reveal contact information for networking purposes.",
+    "privacyPolicyLink": "Privacy Policy: For complete details about how we collect, use, and protect your information, please review our Privacy Policy."
   },
   "admin": {
     "title": "Admin Panel",

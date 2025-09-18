@@ -9,7 +9,6 @@ import FamilyTableRow from '@/components/FamilyTableRow';
 import SearchAndFilters from '@/components/SearchAndFilters';
 import LanguageToggle from '@/components/LanguageToggle';
 import { useTranslation } from '@/hooks/useTranslation';
-import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
@@ -132,9 +131,6 @@ export default function Home() {
           <div className="flex justify-between items-center flex-col lg:flex-row gap-4">
             <div className="lg:justify-start justify-start flex flex-col text-center lg:text-left">
               <h1 className="text-2xl font-bold text-gray-900">{t('header.title')}</h1>
-              {/* <h1 className="text-2xl font-bold text-gray-900">
-                <span className="font-extralight">Second Body Montessori</span> Family Directory
-              </h1> */}
               <p className="text-gray-700 mt-1">{t('header.subtitle')}</p>
             </div>
             <div className="flex gap-3">
@@ -233,12 +229,16 @@ export default function Home() {
 // Task slist
 
 // DONE - Add hometown
-// TODO - Add Spanish version and ability to switch
-// TODO - Add translation to form and submitted form content
-// TODO - Add contact info for networking?
-// DONE - Remove non-networking spouses in filter?
+// DONE - Add Spanish version and ability to switch
+// DONE - Add translation to form and submitted form content
+// TODO - Add contact info for networking - not showing up in table content
+// DONE - Translated form submissions are in the database but are not showing up using the language toggle
+// DONE - Add  header and translation to 'add family' form
+// DONE - Edit 'edit' form - add header
+
 // TODO - Add animations to filter changes
 
+// DONE - Remove non-networking spouses in filter?
 // DONE - Add visual summary of family members with small circles under family name?
 // DONE - Fix styling of cards - OR move to grid view
 // DONE - Add Lynx class
@@ -246,7 +246,15 @@ export default function Home() {
 // DONE - Update form to move "add" buttons below fields
 // DONE - Remove borders and backgrounds from form
 // DONE - Add SBM logo to header
-// TODO - Add SBM color scheme
+// TODO - Add SBM color scheme to admin page
+// TODO - Fix header on Add Family form page
+// TODO - Not all fields are being translted on Add Family Page
+// TODO - Edit header on Edit Family form page
+// TODO - Some fields list the field name instead of the content
+// TODO - Add contact info to "Networking" button. Rename button "Networking - Show Contact Info" and expand to show info
+// TODO - Vertical align adults in the main table
+// DONE - Fix error upon family form submission
+// DONE - Fix language toggle description - language typte and flag
 // DONE - Move filter under the directory title?
 // DONE - Fix build errors
 // DONE - Fix responsiveness of header, buttons

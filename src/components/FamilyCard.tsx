@@ -1,6 +1,9 @@
 import Image from 'next/image'
+import { useState } from 'react'
 import { Family } from '@/types'
 import { getCountryDisplay } from '@/components/CountrySelector'
+import { getLocalizedFamily, hasNetworkingContact, getNetworkingContact } from '@/lib/localization'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface FamilyCardProps {
   family: Family
@@ -8,19 +11,28 @@ interface FamilyCardProps {
 }
 
 export default function FamilyCard({ family, showNetworkingOnly = false }: FamilyCardProps) {
+  const { t, locale } = useTranslation();
+  const [showContactInfo, setShowContactInfo] = useState(false);
+
+  // Get localized family data
+  const localizedFamily = getLocalizedFamily(family, locale);
+
   // Filter adults based on networking filter
-  const displayedAdults = showNetworkingOnly 
-    ? family.adults.filter(adult => adult.interested_in_connections)
-    : family.adults;
+  const displayedAdults = showNetworkingOnly
+    ? localizedFamily.adults.filter(adult => adult.interested_in_connections)
+    : localizedFamily.adults;
+
+  // Check if any adults have contact information that can be shared
+  const hasContactInfo = displayedAdults.some(adult => hasNetworkingContact(adult));
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">
-        {family.family_name}
+        {localizedFamily.family_name}
       </h3>
-      
+
       {/* Adults */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Adults</h4>
+        <h4 className="text-sm font-medium text-gray-900 mb-3">{t('family.adults')}</h4>
         <div className="grid grid-cols-2 gap-4">
           {displayedAdults.map((adult) => (
             <div key={adult.id} className="text-center">
@@ -54,13 +66,42 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
               {adult.interested_in_connections && (
                 <div className="mt-1 space-y-1">
                   <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">
-                    🤝 Networking
+                    🤝 {t('family.networking')}
                   </span>
                   {adult.connection_types && (
                     <p className="text-xs text-gray-800 leading-relaxed">
                       {adult.connection_types}
                     </p>
                   )}
+                  {/* Contact information - only shown when toggled and user has permitted */}
+                  {showContactInfo && hasNetworkingContact(adult) && (() => {
+                    const contactInfo = getNetworkingContact(adult);
+                    return contactInfo && (
+                      <div className="mt-2 space-y-1 pt-2 border-t border-gray-200">
+                        {contactInfo.email && (
+                          <div className="flex items-center gap-1 text-xs text-gray-700">
+                            <span>📧</span>
+                            <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600 underline">
+                              {contactInfo.email}
+                            </a>
+                          </div>
+                        )}
+                        {contactInfo.whatsapp_number && (
+                          <div className="flex items-center gap-1 text-xs text-gray-700">
+                            <span>📱</span>
+                            <a
+                              href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-green-600 underline"
+                            >
+                              {contactInfo.whatsapp_number}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
@@ -70,9 +111,9 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
 
       {/* Children */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Children</h4>
+        <h4 className="text-sm font-medium text-gray-900 mb-3">{t('family.children')}</h4>
         <div className="grid grid-cols-2 gap-4">
-          {family.children.map((child) => (
+          {localizedFamily.children.map((child) => (
             <div key={child.id} className="text-center">
               <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2">
                 {child.image_url ? (
@@ -103,11 +144,33 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
       </div>
 
       {/* Description */}
-      <div>
+      <div className="mb-4">
         <p className="text-sm text-gray-800 leading-relaxed">
-          {family.description}
+          {localizedFamily.description}
         </p>
       </div>
+
+      {/* Contact Information Toggle */}
+      {hasContactInfo && (
+        <div className="pt-4 border-t border-gray-100">
+          <button
+            onClick={() => setShowContactInfo(!showContactInfo)}
+            className="w-full px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
+          >
+            {showContactInfo ? (
+              <>
+                <span>🔒</span>
+                {t('family.hideContactInfo')}
+              </>
+            ) : (
+              <>
+                <span>🤝</span>
+                {t('family.showContactInfo')}
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

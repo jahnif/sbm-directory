@@ -44,8 +44,11 @@ export default function PrivacyPolicyPage() {
                 <li>Profile photographs (optional)</li>
                 <li>Professional information (job titles, industries)</li>
                 <li>Professional networking preferences and interests</li>
+                <li>Email addresses and WhatsApp numbers (optional, for networking purposes)</li>
+                <li>Contact sharing preferences and consent settings</li>
                 <li>Children&apos;s names and class assignments</li>
                 <li>Family descriptions and contact preferences</li>
+                <li>Language preferences and translated content</li>
               </ul>
             </section>
 
@@ -63,16 +66,49 @@ export default function PrivacyPolicyPage() {
                 <li>Display family information in the community directory</li>
                 <li>Enable families to connect with each other</li>
                 <li>Facilitate professional networking within the community</li>
+                <li>Provide contact information sharing for networking (only when explicitly consented)</li>
+                <li>Translate content between English and Spanish for accessibility</li>
                 <li>Organize families by children&apos;s class assignments</li>
               </ul>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Data Sharing</h2>
-              <p className="text-gray-900 leading-relaxed">
-                Your data is only shared with other families within the SBM Montessori School community who have 
-                access to this directory. We do not sell, rent, or share your data with third parties outside our community.
+              <p className="text-gray-900 leading-relaxed mb-4">
+                Your data is shared in the following ways:
               </p>
+              <ul className="list-disc pl-6 text-gray-900 space-y-2">
+                <li>Family directory information is visible to all members of the SBM Montessori School community</li>
+                <li>Contact information (email/WhatsApp) is only shared when you explicitly opt-in and other families choose to view it</li>
+                <li>We do not sell, rent, or share your data with third parties outside our community</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">5a. Translation Services</h2>
+              <p className="text-gray-900 leading-relaxed mb-4">
+                We use DeepL&apos;s translation service to automatically translate family information between English and Spanish:
+              </p>
+              <ul className="list-disc pl-6 text-gray-900 space-y-2">
+                <li>Your submitted text is sent to DeepL&apos;s secure API for translation</li>
+                <li>DeepL processes the data according to their privacy policy and GDPR compliance</li>
+                <li>Both original and translated versions are stored in our database</li>
+                <li>Translation helps make our directory accessible to Spanish and English-speaking families</li>
+                <li>You can review DeepL&apos;s privacy policy at: https://www.deepl.com/privacy</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">5b. Contact Information Sharing</h2>
+              <p className="text-gray-900 leading-relaxed mb-4">
+                Contact information sharing operates on a double opt-in system:
+              </p>
+              <ul className="list-disc pl-6 text-gray-900 space-y-2">
+                <li>You must opt-in to allow your contact information to be visible for networking</li>
+                <li>Other families must actively choose to view contact information by clicking &quot;Show Contact Information&quot;</li>
+                <li>This ensures contact sharing only happens when both parties explicitly consent</li>
+                <li>You can change your contact sharing preferences at any time</li>
+              </ul>
             </section>
 
             <section className="mb-8">

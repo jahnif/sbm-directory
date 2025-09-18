@@ -38,7 +38,10 @@
     "children": "Niños",
     "about": "Acerca de",
     "readMore": "Leer más",
-    "showLess": "Mostrar menos"
+    "showLess": "Mostrar menos",
+    "showContactInfo": "Mostrar Información de Contacto para Networking",
+    "hideContactInfo": "Ocultar Información de Contacto",
+    "networking": "Networking"
   },
   "forms": {
     "familyInfo": "Información de la Familia",
@@ -55,6 +58,13 @@
     "selectCountry": "Seleccionar país",
     "city": "Ciudad",
     "cityPlaceholder": "ej., Nueva York, Madrid",
+    "contactInfo": "Información de Contacto (Opcional)",
+    "contactInfoDescription": "Proporcionar información de contacto permite que otras familias se pongan en contacto para networking cuando ambas partes elijan conectarse.",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "tu.correo@ejemplo.com",
+    "whatsappNumber": "Número de WhatsApp",
+    "whatsappPlaceholder": "+1 234 567 8900",
+    "showContactInNetworking": "Permitir que mi información de contacto sea visible cuando otros vean conexiones de networking",
     "interestedConnections": "Interesado en conexiones profesionales",
     "connectionTypes": "¿Qué tipo de conexiones profesionales te interesan?",
     "connectionTypesPlaceholder": "ej., Otros padres en tecnología, pequeños empresarios, freelancers...",
@@ -67,7 +77,12 @@
   "register": {
     "title": "Agregar Tu Familia",
     "submitting": "Agregando Familia...",
-    "submit": "Agregar Familia"
+    "submit": "Agregar Familia",
+    "privacyNoticeTitle": "Aviso de Uso de Datos y Privacidad",
+    "translationServices": "Servicios de Traducción: Tu información familiar será traducida automáticamente entre inglés y español usando el servicio de traducción de DeepL para hacer nuestro directorio accesible a todas las familias.",
+    "informationDisplay": "Visualización de Información: El nombre de tu familia, descripción e información de los miembros será visible a todos los miembros del directorio de la comunidad SBM.",
+    "contactInformation": "Información de Contacto: Las direcciones de correo electrónico y números de WhatsApp solo se mostrarán a otras familias cuando elijas explícitamente revelar información de contacto para propósitos de networking.",
+    "privacyPolicyLink": "Política de Privacidad: Para detalles completos sobre cómo recopilamos, usamos y protegemos tu información, por favor revisa nuestra Política de Privacidad."
   },
   "admin": {
     "title": "Panel de Admin",

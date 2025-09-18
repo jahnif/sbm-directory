@@ -13,6 +13,9 @@ export type Database = {
           id: string
           family_name: string
           description: string
+          family_name_es: string | null
+          description_es: string | null
+          original_language: string
           created_at: string
           updated_at: string
         }
@@ -20,6 +23,9 @@ export type Database = {
           id?: string
           family_name: string
           description: string
+          family_name_es?: string | null
+          description_es?: string | null
+          original_language?: string
           created_at?: string
           updated_at?: string
         }
@@ -27,6 +33,9 @@ export type Database = {
           id?: string
           family_name?: string
           description?: string
+          family_name_es?: string | null
+          description_es?: string | null
+          original_language?: string
           updated_at?: string
         }
       }
@@ -35,33 +44,51 @@ export type Database = {
           id: string
           family_id: string
           name: string
+          name_es: string | null
           image_url: string | null
           industry: string | null
           job_title: string | null
           interested_in_connections: boolean
           connection_types: string | null
+          email: string | null
+          whatsapp_number: string | null
+          show_contact_in_networking: boolean
+          country: string | null
+          city: string | null
           created_at: string
         }
         Insert: {
           id?: string
           family_id: string
           name: string
+          name_es?: string | null
           image_url?: string | null
           industry?: string | null
           job_title?: string | null
           interested_in_connections?: boolean
           connection_types?: string | null
+          email?: string | null
+          whatsapp_number?: string | null
+          show_contact_in_networking?: boolean
+          country?: string | null
+          city?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           family_id?: string
           name?: string
+          name_es?: string | null
           image_url?: string | null
           industry?: string | null
           job_title?: string | null
           interested_in_connections?: boolean
           connection_types?: string | null
+          email?: string | null
+          whatsapp_number?: string | null
+          show_contact_in_networking?: boolean
+          country?: string | null
+          city?: string | null
         }
       }
       children: {
@@ -69,24 +96,27 @@ export type Database = {
           id: string
           family_id: string
           name: string
+          name_es: string | null
           image_url: string | null
-          class: 'Pegasus' | 'Orion' | 'Andromeda'
+          class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
           created_at: string
         }
         Insert: {
           id?: string
           family_id: string
           name: string
+          name_es?: string | null
           image_url?: string | null
-          class: 'Pegasus' | 'Orion' | 'Andromeda'
+          class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
           created_at?: string
         }
         Update: {
           id?: string
           family_id?: string
           name?: string
+          name_es?: string | null
           image_url?: string | null
-          class?: 'Pegasus' | 'Orion' | 'Andromeda'
+          class?: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
         }
       }
     }
