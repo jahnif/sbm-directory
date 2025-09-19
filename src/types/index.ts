@@ -21,6 +21,7 @@ export interface Adult {
   job_title: string | null
   interested_in_connections: boolean
   connection_types: string | null
+  connection_types_es?: string | null
   email?: string | null
   whatsapp_number?: string | null
   show_contact_in_networking: boolean

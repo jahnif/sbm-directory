@@ -131,8 +131,9 @@ export default function RegisterPage() {
           {
             family_name: formData.family_name,
             description: formData.description,
-            adults: formData.adults.filter((adult) => adult.name.trim()),
-            children: formData.children.filter((child) => child.name.trim()),
+            adults: formData.adults
+              .filter((adult) => adult.name.trim())
+              .map((adult) => ({ connection_types: adult.connection_types || undefined })),
           },
           originalLanguage
         );
@@ -161,7 +162,7 @@ export default function RegisterPage() {
 
       if (familyError) throw familyError;
 
-      // Insert adults with translations
+      // Insert adults with translations for connection_types only
       const adultsToInsert = formData.adults
         .filter((adult) => adult.name.trim())
         .map((adult, index) => {
@@ -170,13 +171,13 @@ export default function RegisterPage() {
             ...adult,
           };
 
-          // Add translated name if available
-          if (translatedData && translatedData.adults_translated[index]) {
+          // Add translated connection_types if available
+          if (translatedData && translatedData.adults_connection_types_translated[index]?.connection_types_translated) {
             if (originalLanguage === 'en') {
-              adultData.name_es = translatedData.adults_translated[index].name_translated;
+              adultData.connection_types_es = translatedData.adults_connection_types_translated[index].connection_types_translated;
             } else {
-              adultData.name = translatedData.adults_translated[index].name_translated;
-              adultData.name_es = adult.name;
+              adultData.connection_types = translatedData.adults_connection_types_translated[index].connection_types_translated;
+              adultData.connection_types_es = adult.connection_types;
             }
           }
 
@@ -189,27 +190,13 @@ export default function RegisterPage() {
         if (adultsError) throw adultsError;
       }
 
-      // Insert children with translations
+      // Insert children without translations (names stay as-is)
       const childrenToInsert = formData.children
         .filter((child) => child.name.trim())
-        .map((child, index) => {
-          const childData = {
-            family_id: family.id,
-            ...child,
-          };
-
-          // Add translated name if available
-          if (translatedData && translatedData.children_translated[index]) {
-            if (originalLanguage === 'en') {
-              childData.name_es = translatedData.children_translated[index].name_translated;
-            } else {
-              childData.name = translatedData.children_translated[index].name_translated;
-              childData.name_es = child.name;
-            }
-          }
-
-          return childData;
-        });
+        .map((child) => ({
+          family_id: family.id,
+          ...child,
+        }));
 
       if (childrenToInsert.length > 0) {
         const { error: childrenError } = await supabase.from('children').insert(childrenToInsert);

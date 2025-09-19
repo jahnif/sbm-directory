@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { Family, ClassType } from '@/types';
-import FamilyCard from '@/components/FamilyCard';
+// import FamilyCard from '@/components/FamilyCard';
 import FamilyTableRow from '@/components/FamilyTableRow';
 import SearchAndFilters from '@/components/SearchAndFilters';
 import LanguageToggle from '@/components/LanguageToggle';
@@ -161,9 +161,9 @@ export default function Home() {
             alt="Second Body Montessori Logo"
             className="mb-2 max-w-[400px] text-center mx-auto"
           />
-          <p className="text-3xl font-black pb-1">{t('directory.title')}</p>
+          <p className="text-3xl font-bold pb-1">{t('directory.title')}</p>
 
-          <p className="text-gray-800">{t('directory.showing', { count: filteredFamilies.length.toString(), total: families.length.toString() })}</p>
+          <p className="font-light p-6 m-8 bg-amber-100 rounded-2xl max-w-[900px] mx-auto">{t('directory.description')}</p>
 
           {/* Search and Filters */}
           <SearchAndFilters
@@ -174,6 +174,7 @@ export default function Home() {
             currentClassFilter={classFilter}
             currentConnectionsFilter={connectionsFilter}
           />
+          <p className="text-gray-800">{t('directory.showing', { count: filteredFamilies.length.toString(), total: families.length.toString() })}</p>
         </div>
 
         {/* Directory Display */}
@@ -201,10 +202,10 @@ export default function Home() {
                 <div className="">{t('family.about')}</div>
               </div>
             </div>
-            <div className="divide-y divide-gray-200">
-              {filteredFamilies.map((family) => (
+            <div className="divide-y divide-gray-200 family-list">
+              {filteredFamilies.map((family, index) => (
                 <FamilyTableRow
-                  key={family.id}
+                  key={`${family.id}-${searchTerm}-${classFilter}-${connectionsFilter}-${index}`}
                   family={family}
                   showNetworkingOnly={connectionsFilter}
                 />
@@ -212,15 +213,16 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredFamilies.map((family) => (
-              <FamilyCard
-                key={family.id}
-                family={family}
-                showNetworkingOnly={connectionsFilter}
-              />
-            ))}
-          </div>
+          // <div className="grid grid-cols-1 md:grid-cols-2 gap-6 family-list">
+          //   {filteredFamilies.map((family, index) => (
+          //     <FamilyCard
+          //       key={`${family.id}-${searchTerm}-${classFilter}-${connectionsFilter}-${index}`}
+          //       family={family}
+          //       showNetworkingOnly={connectionsFilter}
+          //     />
+          //   ))}
+          // </div>
+          <div></div>
         )}
       </main>
     </div>
@@ -237,7 +239,7 @@ export default function Home() {
 // DONE - Add  header and translation to 'add family' form
 // DONE - Edit 'edit' form - add header
 
-// TODO - Add animations to filter changes
+// DONE - Add animations to filter changes
 
 // DONE - Remove non-networking spouses in filter?
 // DONE - Add visual summary of family members with small circles under family name?
@@ -256,9 +258,10 @@ export default function Home() {
 // DONE - Add translation to Privacy page
 // DONE - Vertical align adults in the main table
 // DONE - Add favicon
-// TODO - Test Spanish form sumbission to ensure it's translated to English
+// DONE - Update global font
+// DONE - Test Spanish form sumbission to ensure it's translated to English
 // DONE - Add color scheme to Admin Panel page
-// TODO _ Add some text about purpose of the director and the optional opt-in nature of the directory
+// TODO - Add some text about purpose of the director and the optional opt-in nature of the directory
 // DONE - Fix error upon family form submission
 // DONE - Fix language toggle description - language typte and flag
 // DONE - Move filter under the directory title?

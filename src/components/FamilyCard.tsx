@@ -24,7 +24,7 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
 
   // hasContactInfo removed - no longer needed as contact functionality is integrated with networking tags
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-all duration-300 ease-in-out animate-fadeIn hover:shadow-md">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">
         {localizedFamily.family_name}
       </h3>

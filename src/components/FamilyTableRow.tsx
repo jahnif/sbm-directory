@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Family } from '@/types';
-import { getCountryDisplay } from '@/components/CountrySelector';
+import { getCountryDisplay, getCountryName } from '@/components/CountrySelector';
 import { getLocalizedFamily, hasNetworkingContact, getNetworkingContact } from '@/lib/localization';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -33,7 +33,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
   // hasContactInfo removed - no longer needed as contact functionality is integrated with networking tags
 
   return (
-    <div className="border-b border-gray-200 py-6 hover:bg-gray-50">
+    <div className="border-b border-gray-200 py-6 hover:bg-gray-50 transition-all duration-300 ease-in-out animate-fadeIn">
       <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6 py-2">
         {/* Family Name */}
         <div className="flex flex-col">
@@ -84,13 +84,13 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
         </div>
 
         {/* Adults */}
-        <div className="flex items-center">
+        <div className="flex flex-col items-center justify-center">
           <div className="lg:hidden text-sm text-gray-500 text-center mb-4">{t('family.adults')}</div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {displayedAdults.map((adult) => (
               <div
                 key={adult.id}
-                className="flex"
+                className="flex items-center"
               >
                 <div className="w-22 h-22 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
                   {adult.image_url ? (
@@ -130,7 +130,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                   )}
                   {(adult.country || adult.city) && (
                     <p className="text-xs text-gray-700">
-                      {adult.country && getCountryDisplay(adult.country)} {adult.country}, {adult.city}
+                      {adult.country && getCountryDisplay(adult.country)} {adult.country && getCountryName(adult.country)}, {adult.city}
                     </p>
                   )}
                   {adult.interested_in_connections && (
@@ -153,39 +153,43 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                         </p>
                       )}
                       {/* Contact Information Display - inline with networking section */}
-                      {showContactInfo && hasNetworkingContact(adult) && (() => {
-                        const contactInfo = getNetworkingContact(adult);
-                        return contactInfo && (
-                          <div className="mt-2 bg-blue-50 p-2 rounded-lg">
-                            <div className="space-y-1">
-                              {contactInfo.email && (
-                                <div className="flex items-center gap-2 text-xs text-gray-700">
-                                  <span>📧</span>
-                                  <a
-                                    href={`mailto:${contactInfo.email}`}
-                                    className="hover:text-blue-600 underline"
-                                  >
-                                    {contactInfo.email}
-                                  </a>
+                      {showContactInfo &&
+                        hasNetworkingContact(adult) &&
+                        (() => {
+                          const contactInfo = getNetworkingContact(adult);
+                          return (
+                            contactInfo && (
+                              <div className="mt-2 bg-blue-50 p-2 rounded-lg">
+                                <div className="space-y-1">
+                                  {contactInfo.email && (
+                                    <div className="flex items-center gap-2 text-xs text-gray-700">
+                                      <span>✉️</span>
+                                      <a
+                                        href={`mailto:${contactInfo.email}`}
+                                        className="hover:text-blue-600 underline"
+                                      >
+                                        Email: {contactInfo.email}
+                                      </a>
+                                    </div>
+                                  )}
+                                  {contactInfo.whatsapp_number && (
+                                    <div className="flex items-center gap-2 text-xs text-gray-700">
+                                      <span>📱</span>
+                                      <a
+                                        href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-green-600 underline"
+                                      >
+                                        WhatsApp: {contactInfo.whatsapp_number}
+                                      </a>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                              {contactInfo.whatsapp_number && (
-                                <div className="flex items-center gap-2 text-xs text-gray-700">
-                                  <span>📱</span>
-                                  <a
-                                    href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-green-600 underline"
-                                  >
-                                    {contactInfo.whatsapp_number}
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })()}
+                              </div>
+                            )
+                          );
+                        })()}
                     </div>
                   )}
                 </div>

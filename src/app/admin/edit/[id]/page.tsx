@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { Family, FamilyFormData, ClassType } from '@/types';
 import PageHeader from '@/components/PageHeader';
 import { useTranslation } from '@/hooks/useTranslation';
+import { detectLanguage, translateFamilyData } from '@/lib/translation';
 
 export const dynamic = 'force-dynamic';
 
@@ -152,14 +153,49 @@ export default function EditFamilyPage() {
     setError(null);
 
     try {
+      // Detect language and translate content
+      const detectedLanguage = detectLanguage(formData.family_name + ' ' + formData.description);
+      const originalLanguage = detectedLanguage;
+
+      // Translate family data if we have content to translate
+      let translatedData = null;
+      if (formData.family_name.trim() || formData.description.trim()) {
+        translatedData = await translateFamilyData(
+          {
+            family_name: formData.family_name,
+            description: formData.description,
+            adults: formData.adults
+              .filter((adult) => adult.name.trim())
+              .map((adult) => ({ connection_types: adult.connection_types || undefined })),
+          },
+          originalLanguage
+        );
+      }
+
+      // Prepare family update with translations
+      const familyUpdate = {
+        family_name: formData.family_name,
+        description: formData.description,
+        original_language: originalLanguage,
+        updated_at: new Date().toISOString(),
+        ...(translatedData && {
+          family_name_es: originalLanguage === 'en' ? translatedData.family_name_translated : formData.family_name,
+          description_es: originalLanguage === 'en' ? translatedData.description_translated : formData.description,
+        }),
+      };
+
+      // If original language is Spanish, store English translations in the base fields
+      if (originalLanguage === 'es' && translatedData) {
+        familyUpdate.family_name = translatedData.family_name_translated;
+        familyUpdate.description = translatedData.description_translated;
+        familyUpdate.family_name_es = formData.family_name;
+        familyUpdate.description_es = formData.description;
+      }
+
       // Update family
       const { error: familyError } = await supabase
         .from('families')
-        .update({
-          family_name: formData.family_name,
-          description: formData.description,
-          updated_at: new Date().toISOString(),
-        })
+        .update(familyUpdate)
         .eq('id', familyId);
 
       if (familyError) throw familyError;
@@ -168,13 +204,27 @@ export default function EditFamilyPage() {
       await supabase.from('adults').delete().eq('family_id', familyId);
       await supabase.from('children').delete().eq('family_id', familyId);
 
-      // Insert new adults
+      // Insert new adults with translations for connection_types only
       const adultsToInsert = formData.adults
         .filter((adult) => adult.name.trim())
-        .map((adult) => ({
-          family_id: familyId,
-          ...adult,
-        }));
+        .map((adult, index) => {
+          const adultData = {
+            family_id: familyId,
+            ...adult,
+          };
+
+          // Add translated connection_types if available
+          if (translatedData && translatedData.adults_connection_types_translated[index]?.connection_types_translated) {
+            if (originalLanguage === 'en') {
+              adultData.connection_types_es = translatedData.adults_connection_types_translated[index].connection_types_translated;
+            } else {
+              adultData.connection_types = translatedData.adults_connection_types_translated[index].connection_types_translated;
+              adultData.connection_types_es = adult.connection_types;
+            }
+          }
+
+          return adultData;
+        });
 
       if (adultsToInsert.length > 0) {
         const { error: adultsError } = await supabase.from('adults').insert(adultsToInsert);

@@ -44,15 +44,13 @@ export async function translateFamilyData(
   familyData: {
     family_name: string
     description: string
-    adults: Array<{ name: string }>
-    children: Array<{ name: string }>
+    adults: Array<{ connection_types?: string }>
   },
   sourceLang: 'en' | 'es'
 ): Promise<{
   family_name_translated: string
   description_translated: string
-  adults_translated: Array<{ name_translated: string }>
-  children_translated: Array<{ name_translated: string }>
+  adults_connection_types_translated: Array<{ connection_types_translated?: string }>
 }> {
   const targetLang = sourceLang === 'en' ? 'es' : 'en'
 
@@ -63,25 +61,19 @@ export async function translateFamilyData(
       translateText(familyData.description, sourceLang, targetLang)
     ])
 
-    // Translate adult names
-    const adultsTranslated = await Promise.all(
+    // Translate adult connection_types (professional interests) only
+    const adultsConnectionTypesTranslated = await Promise.all(
       familyData.adults.map(async (adult) => ({
-        name_translated: await translateText(adult.name, sourceLang, targetLang)
-      }))
-    )
-
-    // Translate children names
-    const childrenTranslated = await Promise.all(
-      familyData.children.map(async (child) => ({
-        name_translated: await translateText(child.name, sourceLang, targetLang)
+        connection_types_translated: adult.connection_types
+          ? await translateText(adult.connection_types, sourceLang, targetLang)
+          : undefined
       }))
     )
 
     return {
       family_name_translated: familyNameTranslated,
       description_translated: descriptionTranslated,
-      adults_translated: adultsTranslated,
-      children_translated: childrenTranslated
+      adults_connection_types_translated: adultsConnectionTypesTranslated
     }
   } catch (error) {
     console.error('Family data translation error:', error)
@@ -89,8 +81,9 @@ export async function translateFamilyData(
     return {
       family_name_translated: familyData.family_name,
       description_translated: familyData.description,
-      adults_translated: familyData.adults.map(adult => ({ name_translated: adult.name })),
-      children_translated: familyData.children.map(child => ({ name_translated: child.name }))
+      adults_connection_types_translated: familyData.adults.map(adult => ({
+        connection_types_translated: adult.connection_types
+      }))
     }
   }
 }
