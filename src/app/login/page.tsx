@@ -50,7 +50,7 @@ export default function LoginPage() {
             height={48}
           /> */}
           <img
-            src="/logo-second-body-montessori.png"
+            src="https://raw.githubusercontent.com/jahnif/sbm-yearbook/cc43c77db53342e987d44ee90845970c76072262/public/logo-second-body-montessori.png?token=GHSAT0AAAAAADK5MP2BKMM3N6PWMBEP2V6S2GNHBNQ"
             className="mb-6"
           />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Family Directory</h1>
