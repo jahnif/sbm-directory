@@ -99,7 +99,8 @@ export default function Home() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('admin.loadingFamilies')}</p>
+          {/* <p className="text-gray-600">{t('admin.loadingFamilies')}</p> */}
+          <p className="text-gray-600">{t('Loading Families...')}</p>
         </div>
       </div>
     );
@@ -231,7 +232,7 @@ export default function Home() {
 // DONE - Add hometown
 // DONE - Add Spanish version and ability to switch
 // DONE - Add translation to form and submitted form content
-// TODO - Add contact info for networking - not showing up in table content
+// DONE - Add contact info for networking - not showing up in table content
 // DONE - Translated form submissions are in the database but are not showing up using the language toggle
 // DONE - Add  header and translation to 'add family' form
 // DONE - Edit 'edit' form - add header
@@ -246,13 +247,18 @@ export default function Home() {
 // DONE - Update form to move "add" buttons below fields
 // DONE - Remove borders and backgrounds from form
 // DONE - Add SBM logo to header
-// TODO - Add SBM color scheme to admin page
-// TODO - Fix header on Add Family form page
-// TODO - Not all fields are being translted on Add Family Page
-// TODO - Edit header on Edit Family form page
-// TODO - Some fields list the field name instead of the content
-// TODO - Add contact info to "Networking" button. Rename button "Networking - Show Contact Info" and expand to show info
-// TODO - Vertical align adults in the main table
+// DONE - Add SBM color scheme to admin page
+// DONE - Fix header on Add Family form page
+// DONE - Not all fields are being translted on Add Family Page
+// DONE - Edit header on Edit Family form page
+// DONE - Some fields list the field name instead of the content
+// DONE - Add contact info to "Networking" button. Rename button "Networking - Show Contact Info" and expand to show info
+// DONE - Add translation to Privacy page
+// DONE - Vertical align adults in the main table
+// DONE - Add favicon
+// TODO - Test Spanish form sumbission to ensure it's translated to English
+// DONE - Add color scheme to Admin Panel page
+// TODO _ Add some text about purpose of the director and the optional opt-in nature of the directory
 // DONE - Fix error upon family form submission
 // DONE - Fix language toggle description - language typte and flag
 // DONE - Move filter under the directory title?

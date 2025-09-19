@@ -22,8 +22,7 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
     ? localizedFamily.adults.filter(adult => adult.interested_in_connections)
     : localizedFamily.adults;
 
-  // Check if any adults have contact information that can be shared
-  const hasContactInfo = displayedAdults.some(adult => hasNetworkingContact(adult));
+  // hasContactInfo removed - no longer needed as contact functionality is integrated with networking tags
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-4">
@@ -65,9 +64,18 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
               )}
               {adult.interested_in_connections && (
                 <div className="mt-1 space-y-1">
-                  <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">
-                    🤝 {t('family.networking')}
-                  </span>
+                  {hasNetworkingContact(adult) ? (
+                    <button
+                      onClick={() => setShowContactInfo(!showContactInfo)}
+                      className="inline-flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium transition-colors duration-200 cursor-pointer"
+                    >
+                      🤝 {showContactInfo ? t('family.hideContactInfo') : t('family.networkingShowContact')}
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">
+                      🤝 {t('family.networking')}
+                    </span>
+                  )}
                   {adult.connection_types && (
                     <p className="text-xs text-gray-800 leading-relaxed">
                       {adult.connection_types}
@@ -77,28 +85,30 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
                   {showContactInfo && hasNetworkingContact(adult) && (() => {
                     const contactInfo = getNetworkingContact(adult);
                     return contactInfo && (
-                      <div className="mt-2 space-y-1 pt-2 border-t border-gray-200">
-                        {contactInfo.email && (
-                          <div className="flex items-center gap-1 text-xs text-gray-700">
-                            <span>📧</span>
-                            <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600 underline">
-                              {contactInfo.email}
-                            </a>
-                          </div>
-                        )}
-                        {contactInfo.whatsapp_number && (
-                          <div className="flex items-center gap-1 text-xs text-gray-700">
-                            <span>📱</span>
-                            <a
-                              href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-green-600 underline"
-                            >
-                              {contactInfo.whatsapp_number}
-                            </a>
-                          </div>
-                        )}
+                      <div className="mt-2 bg-blue-50 p-2 rounded-lg">
+                        <div className="space-y-1">
+                          {contactInfo.email && (
+                            <div className="flex items-center gap-1 text-xs text-gray-700">
+                              <span>📧</span>
+                              <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600 underline">
+                                {contactInfo.email}
+                              </a>
+                            </div>
+                          )}
+                          {contactInfo.whatsapp_number && (
+                            <div className="flex items-center gap-1 text-xs text-gray-700">
+                              <span>📱</span>
+                              <a
+                                href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-green-600 underline"
+                              >
+                                {contactInfo.whatsapp_number}
+                              </a>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     );
                   })()}
@@ -150,27 +160,7 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
         </p>
       </div>
 
-      {/* Contact Information Toggle */}
-      {hasContactInfo && (
-        <div className="pt-4 border-t border-gray-100">
-          <button
-            onClick={() => setShowContactInfo(!showContactInfo)}
-            className="w-full px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
-          >
-            {showContactInfo ? (
-              <>
-                <span>🔒</span>
-                {t('family.hideContactInfo')}
-              </>
-            ) : (
-              <>
-                <span>🤝</span>
-                {t('family.showContactInfo')}
-              </>
-            )}
-          </button>
-        </div>
-      )}
+      {/* Contact Information Toggle removed - now integrated with networking tags above */}
     </div>
   )
 }

@@ -34,7 +34,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             placeholder={t('filters.searchPlaceholder')}
             value={currentSearch}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full px-4 py-2 border bg-white border-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 "
+            className="w-full px-4 py-2 border bg-white border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 "
           />
         </div>
 
@@ -51,7 +51,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
             id="class-filter"
             value={currentClassFilter}
             onChange={(e) => onClassFilter(e.target.value as ClassType | 'all')}
-            className="px-4 py-2 border border-gray-100 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-200 bg-white rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="all">{t('filters.allClasses')}</option>
             <option value="Pegasus">{t('classes.Pegasus')}</option>

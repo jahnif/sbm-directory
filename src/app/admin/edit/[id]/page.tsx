@@ -232,18 +232,17 @@ export default function EditFamilyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-sbm-background">
+    <div className="min-h-screen bg-sbm-background text-center">
       <PageHeader
         title={t('navigation.editFamily')}
         subtitle={t('forms.editFamilySubtitle')}
         backLink={{
           href: '/admin',
-          label: t('navigation.backToAdmin')
+          label: t('navigation.backToAdmin'),
         }}
       />
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow p-8">
-
           <form
             onSubmit={handleSubmit}
             className="space-y-8"
@@ -300,7 +299,9 @@ export default function EditFamilyPage() {
                   className="border rounded-lg p-4 bg-gray-50"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-medium text-gray-900">{t('forms.adult')} {index + 1}</h3>
+                    <h3 className="font-medium text-gray-900">
+                      {t('forms.adult')} {index + 1}
+                    </h3>
                     {formData.adults.length > 1 && (
                       <button
                         type="button"
@@ -472,7 +473,9 @@ export default function EditFamilyPage() {
                   className="border rounded-lg p-4 bg-gray-50"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-medium text-gray-700">{t('forms.child')} {index + 1}</h3>
+                    <h3 className="font-medium text-gray-700">
+                      {t('forms.child')} {index + 1}
+                    </h3>
                     {formData.children.length > 1 && (
                       <button
                         type="button"

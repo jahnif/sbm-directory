@@ -1,78 +1,68 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
-import { Family } from '@/types'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
+import { Family } from '@/types';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export default function AdminPage() {
-  const [families, setFamilies] = useState<Family[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [families, setFamilies] = useState<Family[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
-    loadFamilies()
-  }, [])
+    loadFamilies();
+  }, []);
 
   const loadFamilies = async () => {
     try {
-      const { data: familiesData, error: familiesError } = await supabase
-        .from('families')
-        .select('*')
-        .order('family_name')
+      const { data: familiesData, error: familiesError } = await supabase.from('families').select('*').order('family_name');
 
-      if (familiesError) throw familiesError
+      if (familiesError) throw familiesError;
 
-      const { data: adultsData, error: adultsError } = await supabase
-        .from('adults')
-        .select('*')
+      const { data: adultsData, error: adultsError } = await supabase.from('adults').select('*');
 
-      if (adultsError) throw adultsError
+      if (adultsError) throw adultsError;
 
-      const { data: childrenData, error: childrenError } = await supabase
-        .from('children')
-        .select('*')
+      const { data: childrenData, error: childrenError } = await supabase.from('children').select('*');
 
-      if (childrenError) throw childrenError
+      if (childrenError) throw childrenError;
 
-      const familiesWithMembers: Family[] = familiesData.map(family => ({
+      const familiesWithMembers: Family[] = familiesData.map((family) => ({
         ...family,
-        adults: adultsData.filter(adult => adult.family_id === family.id),
-        children: childrenData.filter(child => child.family_id === family.id)
-      }))
+        adults: adultsData.filter((adult) => adult.family_id === family.id),
+        children: childrenData.filter((child) => child.family_id === family.id),
+      }));
 
-      setFamilies(familiesWithMembers)
+      setFamilies(familiesWithMembers);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load families')
+      setError(err instanceof Error ? err.message : 'Failed to load families');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const deleteFamily = async (familyId: string) => {
     if (deleteConfirm !== familyId) {
-      setDeleteConfirm(familyId)
-      setTimeout(() => setDeleteConfirm(null), 5000) // Auto-cancel after 5 seconds
-      return
+      setDeleteConfirm(familyId);
+      setTimeout(() => setDeleteConfirm(null), 5000); // Auto-cancel after 5 seconds
+      return;
     }
 
     try {
-      const { error } = await supabase
-        .from('families')
-        .delete()
-        .eq('id', familyId)
+      const { error } = await supabase.from('families').delete().eq('id', familyId);
 
-      if (error) throw error
+      if (error) throw error;
 
-      setFamilies(families.filter(f => f.id !== familyId))
-      setDeleteConfirm(null)
+      setFamilies(families.filter((f) => f.id !== familyId));
+      setDeleteConfirm(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete family')
+      setError(err instanceof Error ? err.message : 'Failed to delete family');
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -82,7 +72,7 @@ export default function AdminPage() {
           <p className="text-gray-800">Loading families...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -98,11 +88,11 @@ export default function AdminPage() {
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sbm-background">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -135,78 +125,59 @@ export default function AdminPage() {
         ) : (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">
-                All Families ({families.length})
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900">All Families ({families.length})</h2>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Family Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Adults
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Children
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Created
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Family Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Adults</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Children</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Created</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {families.map((family) => (
-                    <tr key={family.id} className="hover:bg-gray-50">
+                    <tr
+                      key={family.id}
+                      className="hover:bg-gray-50"
+                    >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {family.family_name}
-                          </div>
-                          <div className="text-sm text-gray-700 max-w-xs truncate">
-                            {family.description}
-                          </div>
+                          <div className="text-sm font-bold text-gray-900">{family.family_name}</div>
+                          <div className="text-sm text-gray-700 max-w-xs truncate">{family.description}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {family.adults.map(adult => (
-                            <div key={adult.id} className="mb-1">
+                          {family.adults.map((adult) => (
+                            <div
+                              key={adult.id}
+                              className="mb-1"
+                            >
                               {adult.name}
-                              {adult.interested_in_connections && (
-                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                  🤝
-                                </span>
-                              )}
+                              {adult.interested_in_connections && <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">🤝</span>}
                             </div>
                           ))}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {family.children.map(child => (
-                            <div key={child.id} className="mb-1">
-                              {child.name} 
-                              <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                child.class === 'Pegasus' ? 'bg-red-100 text-red-800' :
-                                child.class === 'Orion' ? 'bg-blue-100 text-blue-800' :
-                                'bg-purple-100 text-purple-800'
-                              }`}>
-                                {child.class}
-                              </span>
+                          {family.children.map((child) => (
+                            <div
+                              key={child.id}
+                              className="mb-1"
+                            >
+                              {child.name}
+                              <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}>{child.class}</span>
                             </div>
                           ))}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                        {new Date(family.created_at).toLocaleDateString()}
-                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{new Date(family.created_at).toLocaleDateString()}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
                           <Link
@@ -217,11 +188,7 @@ export default function AdminPage() {
                           </Link>
                           <button
                             onClick={() => deleteFamily(family.id)}
-                            className={`${
-                              deleteConfirm === family.id
-                                ? 'text-red-800 bg-red-100 px-2 py-1 rounded'
-                                : 'text-red-600 hover:text-red-900'
-                            }`}
+                            className={`${deleteConfirm === family.id ? 'text-red-800 bg-red-100 px-2 py-1 rounded' : 'text-red-600 hover:text-red-900'}`}
                           >
                             {deleteConfirm === family.id ? 'Confirm Delete?' : 'Delete'}
                           </button>
@@ -236,5 +203,5 @@ export default function AdminPage() {
         )}
       </main>
     </div>
-  )
+  );
 }

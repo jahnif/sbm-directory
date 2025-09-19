@@ -299,14 +299,14 @@ export default function RegisterPage() {
                         onClick={() => removeAdult(index)}
                         className="text-red-600 hover:text-red-700 text-sm"
                       >
-                        Remove
+                        {t('forms.remove')}
                       </button>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Name *</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.name')} *</label>
                       <input
                         type="text"
                         required
@@ -317,16 +317,16 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Photo</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.photo')}</label>
                       <ImageUpload
                         onImageUploaded={(url) => updateAdult(index, 'image_url', url)}
                         currentImage={adult.image_url}
-                        placeholder="Add photo"
+                        placeholder={t('forms.addPhoto')}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Industry</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.industry')}</label>
                       <input
                         type="text"
                         value={adult.industry || ''}
@@ -336,7 +336,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Job Title</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.jobTitle')}</label>
                       <input
                         type="text"
                         value={adult.job_title || ''}
@@ -346,23 +346,23 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Country of Origin</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.countryOrigin')}</label>
                       <CountrySelector
                         value={adult.country}
                         onChange={(country) => updateAdult(index, 'country', country)}
-                        placeholder="Select country"
+                        placeholder={t('forms.selectCountry')}
                         className="w-full"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">City</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.city')}</label>
                       <input
                         type="text"
                         value={adult.city || ''}
                         onChange={(e) => updateAdult(index, 'city', e.target.value || null)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="e.g., New York, Madrid"
+                        placeholder={t('forms.cityPlaceholder')}
                       />
                     </div>
                   </div>
@@ -453,7 +453,7 @@ export default function RegisterPage() {
                   onClick={addAdult}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                 >
-                  Add Another Adult
+                  {t('forms.addAnotherAdult')}
                 </button>
               </div>
             </div>
@@ -475,14 +475,14 @@ export default function RegisterPage() {
                         onClick={() => removeChild(index)}
                         className="text-red-600 hover:text-red-700 text-sm"
                       >
-                        Remove
+                        {t('forms.remove')}
                       </button>
                     )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Name *</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.name')} *</label>
                       <input
                         type="text"
                         required
@@ -493,26 +493,26 @@ export default function RegisterPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Class *</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.class')} *</label>
                       <select
                         required
                         value={child.class}
                         onChange={(e) => updateChild(index, 'class', e.target.value as ClassType)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="Pegasus">Pegasus</option>
-                        <option value="Lynx">Lynx</option>
-                        <option value="Orion">Orion</option>
-                        <option value="Andromeda">Andromeda</option>
+                        <option value="Pegasus">{t('classes.Pegasus')}</option>
+                        <option value="Lynx">{t('classes.Lynx')}</option>
+                        <option value="Orion">{t('classes.Orion')}</option>
+                        <option value="Andromeda">{t('classes.Andromeda')}</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Photo</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.photo')}</label>
                       <ImageUpload
                         onImageUploaded={(url) => updateChild(index, 'image_url', url)}
                         currentImage={child.image_url}
-                        placeholder="Add photo"
+                        placeholder={t('forms.addPhoto')}
                       />
                     </div>
                   </div>
@@ -524,7 +524,7 @@ export default function RegisterPage() {
                   onClick={addChild}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
                 >
-                  Add Another Child
+                  {t('forms.addAnotherChild')}
                 </button>
               </div>
             </div>

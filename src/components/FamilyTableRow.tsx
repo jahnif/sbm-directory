@@ -28,12 +28,9 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
   const shouldTruncate = localizedFamily.description.length > 150;
 
   // Filter adults based on networking filter
-  const displayedAdults = showNetworkingOnly
-    ? localizedFamily.adults.filter((adult) => adult.interested_in_connections)
-    : localizedFamily.adults;
+  const displayedAdults = showNetworkingOnly ? localizedFamily.adults.filter((adult) => adult.interested_in_connections) : localizedFamily.adults;
 
-  // Check if any adults have contact information that can be shared
-  const hasContactInfo = displayedAdults.some(adult => hasNetworkingContact(adult));
+  // hasContactInfo removed - no longer needed as contact functionality is integrated with networking tags
 
   return (
     <div className="border-b border-gray-200 py-6 hover:bg-gray-50">
@@ -87,7 +84,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
         </div>
 
         {/* Adults */}
-        <div className="">
+        <div className="flex items-center">
           <div className="lg:hidden text-sm text-gray-500 text-center mb-4">{t('family.adults')}</div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {displayedAdults.map((adult) => (
@@ -139,13 +136,56 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                   {adult.interested_in_connections && (
                     <div className="mt-1 space-y-1">
                       <div className="flex items-center gap-1">
-                        <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">🤝 {t('family.networking')}</span>
+                        {hasNetworkingContact(adult) ? (
+                          <button
+                            onClick={() => setShowContactInfo(!showContactInfo)}
+                            className="inline-flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium transition-colors duration-200 cursor-pointer"
+                          >
+                            🤝 {showContactInfo ? t('family.hideContactInfo') : t('family.networkingShowContact')}
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">🤝 {t('family.networking')}</span>
+                        )}
                       </div>
                       {adult.connection_types && (
                         <p className="text-xs text-gray-800 leading-relaxed">
                           <span className="font-bold">Professional interests:</span> {adult.connection_types}
                         </p>
                       )}
+                      {/* Contact Information Display - inline with networking section */}
+                      {showContactInfo && hasNetworkingContact(adult) && (() => {
+                        const contactInfo = getNetworkingContact(adult);
+                        return contactInfo && (
+                          <div className="mt-2 bg-blue-50 p-2 rounded-lg">
+                            <div className="space-y-1">
+                              {contactInfo.email && (
+                                <div className="flex items-center gap-2 text-xs text-gray-700">
+                                  <span>📧</span>
+                                  <a
+                                    href={`mailto:${contactInfo.email}`}
+                                    className="hover:text-blue-600 underline"
+                                  >
+                                    {contactInfo.email}
+                                  </a>
+                                </div>
+                              )}
+                              {contactInfo.whatsapp_number && (
+                                <div className="flex items-center gap-2 text-xs text-gray-700">
+                                  <span>📱</span>
+                                  <a
+                                    href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-green-600 underline"
+                                  >
+                                    {contactInfo.whatsapp_number}
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
                 </div>
@@ -207,64 +247,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
             )}
           </div>
 
-          {/* Contact Information Toggle for Networking */}
-          {hasContactInfo && (
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <button
-                onClick={() => setShowContactInfo(!showContactInfo)}
-                className="w-full px-3 py-2 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200 rounded-md transition-colors duration-200 flex items-center justify-center gap-2"
-              >
-                {showContactInfo ? (
-                  <>
-                    <span>🔒</span>
-                    {t('family.hideContactInfo')}
-                  </>
-                ) : (
-                  <>
-                    <span>🤝</span>
-                    {t('family.showContactInfo')}
-                  </>
-                )}
-              </button>
-
-              {/* Contact Information Display */}
-              {showContactInfo && (
-                <div className="mt-3 space-y-2">
-                  {displayedAdults.map((adult) => {
-                    const contactInfo = getNetworkingContact(adult);
-                    return contactInfo && (
-                      <div key={adult.id} className="bg-blue-50 p-3 rounded-lg">
-                        <p className="text-xs font-semibold text-gray-900 mb-2">{adult.name}</p>
-                        <div className="space-y-1">
-                          {contactInfo.email && (
-                            <div className="flex items-center gap-2 text-xs text-gray-700">
-                              <span>📧</span>
-                              <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600 underline">
-                                {contactInfo.email}
-                              </a>
-                            </div>
-                          )}
-                          {contactInfo.whatsapp_number && (
-                            <div className="flex items-center gap-2 text-xs text-gray-700">
-                              <span>📱</span>
-                              <a
-                                href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-green-600 underline"
-                              >
-                                {contactInfo.whatsapp_number}
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
+          {/* Contact Information Toggle removed - now integrated with networking tags above */}
         </div>
       </div>
     </div>

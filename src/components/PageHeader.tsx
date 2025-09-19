@@ -14,13 +14,7 @@ interface PageHeaderProps {
   showLanguageToggle?: boolean;
 }
 
-export default function PageHeader({
-  title,
-  subtitle,
-  backLink,
-  showLanguageToggle = true
-}: PageHeaderProps) {
-
+export default function PageHeader({ title, subtitle, backLink, showLanguageToggle = true }: PageHeaderProps) {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-4xl mx-auto px-4 py-6">
@@ -31,14 +25,12 @@ export default function PageHeader({
                 href={backLink.href}
                 className="text-blue-600 hover:text-blue-700 font-medium"
               >
-                ← {backLink.label}
+                {backLink.label}
               </Link>
             )}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
-              {subtitle && (
-                <p className="text-gray-600 mt-1">{subtitle}</p>
-              )}
+              <h1 className="text-3xl font-bold text-gray-900 text-center">{title}</h1>
+              {subtitle && <p className="text-gray-600 mt-1">{subtitle}</p>}
             </div>
           </div>
 
