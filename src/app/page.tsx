@@ -261,9 +261,11 @@ export default function Home() {
 // DONE - Update global font
 // DONE - Test Spanish form sumbission to ensure it's translated to English
 // DONE - Add color scheme to Admin Panel page
-// TODO - Add some text about purpose of the director and the optional opt-in nature of the directory
+// DONE - Add some text about purpose of the director and the optional opt-in nature of the directory
 // DONE - Fix error upon family form submission
 // DONE - Fix language toggle description - language typte and flag
 // DONE - Move filter under the directory title?
 // DONE - Fix build errors
 // DONE - Fix responsiveness of header, buttons
+// DONE - Fix order of professional data in profiles
+// DONE - Length about field length

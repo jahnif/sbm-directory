@@ -20,12 +20,12 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
   // Get localized family data
   const localizedFamily = getLocalizedFamily(family, locale);
 
-  const truncateText = (text: string, limit: number = 150) => {
+  const truncateText = (text: string, limit: number = 250) => {
     if (text.length <= limit) return text;
     return text.substring(0, limit) + '...';
   };
 
-  const shouldTruncate = localizedFamily.description.length > 150;
+  const shouldTruncate = localizedFamily.description.length > 250;
 
   // Filter adults based on networking filter
   const displayedAdults = showNetworkingOnly ? localizedFamily.adults.filter((adult) => adult.interested_in_connections) : localizedFamily.adults;
@@ -112,29 +112,27 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                   >
                     {adult.name}
                   </p>
-                  {adult.job_title && (
-                    <p
-                      className="text-xs text-gray-800"
-                      title={adult.job_title}
-                    >
-                      {adult.job_title}
-                    </p>
-                  )}
-                  {adult.industry && (
-                    <p
-                      className="text-xs text-gray-700"
-                      title={adult.industry}
-                    >
-                      {adult.industry}
-                    </p>
-                  )}
+
                   {(adult.country || adult.city) && (
                     <p className="text-xs text-gray-700">
                       {adult.country && getCountryDisplay(adult.country)} {adult.country && getCountryName(adult.country)}, {adult.city}
                     </p>
                   )}
+                  {adult.job_title && (
+                    <p
+                      className="text-xs text-gray-800 mt-3"
+                      title={adult.job_title}
+                    >
+                      <span className="font-bold">Profession:</span> {adult.job_title}, {adult.industry}
+                    </p>
+                  )}
                   {adult.interested_in_connections && (
                     <div className="mt-1 space-y-1">
+                      {adult.connection_types && (
+                        <p className="text-xs text-gray-800 leading-relaxed">
+                          <span className="font-bold">Professional interests:</span> {adult.connection_types}
+                        </p>
+                      )}
                       <div className="flex items-center gap-1">
                         {hasNetworkingContact(adult) ? (
                           <button
@@ -147,11 +145,6 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                           <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">🤝 {t('family.networking')}</span>
                         )}
                       </div>
-                      {adult.connection_types && (
-                        <p className="text-xs text-gray-800 leading-relaxed">
-                          <span className="font-bold">Professional interests:</span> {adult.connection_types}
-                        </p>
-                      )}
                       {/* Contact Information Display - inline with networking section */}
                       {showContactInfo &&
                         hasNetworkingContact(adult) &&
