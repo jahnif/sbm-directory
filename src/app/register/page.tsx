@@ -131,9 +131,7 @@ export default function RegisterPage() {
           {
             family_name: formData.family_name,
             description: formData.description,
-            adults: formData.adults
-              .filter((adult) => adult.name.trim())
-              .map((adult) => ({ connection_types: adult.connection_types || undefined })),
+            adults: formData.adults.filter((adult) => adult.name.trim()).map((adult) => ({ connection_types: adult.connection_types || undefined })),
           },
           originalLanguage
         );
@@ -218,13 +216,12 @@ export default function RegisterPage() {
         title={t('register.title')}
         backLink={{
           href: '/',
-          label: t('privacy.backToDirectory')
+          label: t('privacy.backToDirectory'),
         }}
       />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow p-8">
-
           <form
             onSubmit={handleSubmit}
             className="space-y-8"
@@ -279,7 +276,9 @@ export default function RegisterPage() {
                   className="rounded-lg p-8 bg-gray-50/50"
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-medium text-gray-900">{t('forms.adult')} {index + 1}</h3>
+                    <h3 className="font-medium text-gray-900">
+                      {t('forms.adult')} {index + 1}
+                    </h3>
                     {formData.adults.length > 1 && (
                       <button
                         type="button"
@@ -526,8 +525,7 @@ export default function RegisterPage() {
                 <p>{t('register.informationDisplay')}</p>
                 <p>{t('register.contactInformation')}</p>
                 <p>
-                  {t('register.privacyPolicyLink')}
-                  {' '}
+                  {t('register.privacyPolicyLink')}{' '}
                   <a
                     href="/privacy-policy"
                     target="_blank"
@@ -564,3 +562,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+

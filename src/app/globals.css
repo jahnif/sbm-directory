@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --sbm-background: #fff8ed6d;
+  --sbm-background: rgba(255, 248, 237, 0.427);
   /* --sbm-background: #f4f4f470; */
   --sbm-text: #e27f38;
   --sbm-highlight: #d97706;
@@ -21,12 +21,6 @@
   --color-sbm-highlight: var(--sbm-highlight);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
@@ -35,6 +29,50 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: 'wdth' 100, 'YTLC' 500;
+  /* Safari-specific fixes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Safari-specific form element fixes */
+input, textarea, select, button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Force light mode only - no dark mode support */
+* {
+  color-scheme: light;
+}
+
+/* Fix Safari background color rendering */
+.bg-sbm-background {
+  background-color: var(--sbm-background) !important;
+}
+
+/* Safari mobile form field fixes */
+@supports (-webkit-touch-callout: none) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    color: #111827;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-color: #3b82f6;
+  }
 }
 
 /* Custom animations for family directory filtering */
