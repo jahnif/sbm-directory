@@ -269,3 +269,4 @@ export default function Home() {
 // DONE - Fix responsiveness of header, buttons
 // DONE - Fix order of professional data in profiles
 // DONE - Length about field length
+// DONE - Fix color inversion in Safari
