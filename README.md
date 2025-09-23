@@ -58,7 +58,7 @@ NEXT_PUBLIC_SITE_PASSWORD=your_chosen_password
 
 4. Set up Supabase database:
    - Create a new Supabase project
-   - Run the SQL commands from `supabase-setup.sql` in your Supabase SQL editor
+   - Run the SQL commands from `migrations/000_supabase-setup.sql` in your Supabase SQL editor
    - This will create the necessary tables, policies, and storage bucket
 
 5. Run the development server:
@@ -80,8 +80,9 @@ npm run dev
 
 The system supports three Montessori classes:
 - Pegasus
-- Orion  
+- Orion
 - Andromeda
+- Lynx
 
 ## Usage
 
