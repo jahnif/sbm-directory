@@ -134,17 +134,17 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-gray-900">{t('header.title')}</h1>
               <p className="text-gray-700 mt-1">{t('header.subtitle')}</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 text-sm">
               <LanguageToggle />
               <Link
                 href="/register"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium text-center"
+                className="px-4 py-2 flex items-center bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium text-center"
               >
                 {t('header.addFamily')}
               </Link>
               <Link
                 href="/admin"
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium text-center"
+                className="px-4 py-2 border flex items-center border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium text-center"
               >
                 {t('header.admin')}
               </Link>
@@ -159,7 +159,7 @@ export default function Home() {
           <img
             src="/logo-second-body-montessori.png"
             alt="Second Body Montessori Logo"
-            className="mb-2 max-w-[400px] text-center mx-auto"
+            className="mb-2 w-full max-w-[400px] text-center mx-auto"
           />
           <p className="text-3xl font-bold pb-1">{t('directory.title')}</p>
 

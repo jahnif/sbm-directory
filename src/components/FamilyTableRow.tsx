@@ -92,7 +92,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                 key={adult.id}
                 className="flex items-center"
               >
-                <div className="w-22 h-22 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
+                <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
                   {adult.image_url ? (
                     <Image
                       src={adult.image_url}
@@ -105,7 +105,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
                     <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium text-lg">{adult.name.charAt(0).toUpperCase()}</div>
                   )}
                 </div>
-                <div className="w-64 flex flex-col justify-center">
+                <div className="flex flex-col grow-1 justify-center">
                   <p
                     className="text-md text-gray-900 font-bold"
                     title={adult.name}
