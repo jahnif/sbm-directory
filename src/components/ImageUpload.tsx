@@ -1,75 +1,70 @@
-'use client'
+'use client';
 
-import { useState, useRef } from 'react'
-import Image from 'next/image'
-import { compressImage, validateImageFile, uploadImageToSupabase } from '@/lib/image-utils'
+import { useState, useRef } from 'react';
+import Image from 'next/image';
+import { compressImage, validateImageFile, uploadImageToSupabase } from '@/lib/image-utils';
 
 interface ImageUploadProps {
-  onImageUploaded: (url: string) => void
-  currentImage?: string | null
-  placeholder?: string
-  className?: string
+  onImageUploaded: (url: string) => void;
+  currentImage?: string | null;
+  placeholder?: string;
+  className?: string;
 }
 
-export default function ImageUpload({ 
-  onImageUploaded, 
-  currentImage, 
-  placeholder = "Upload image",
-  className = ""
-}: ImageUploadProps) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [preview, setPreview] = useState<string | null>(currentImage || null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+export default function ImageUpload({ onImageUploaded, currentImage, placeholder = 'Upload image', className = '' }: ImageUploadProps) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(currentImage || null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    setError(null)
+    setError(null);
 
     // Validate file
-    const validationError = validateImageFile(file)
+    const validationError = validateImageFile(file);
     if (validationError) {
-      setError(validationError)
-      return
+      setError(validationError);
+      return;
     }
 
-    setIsUploading(true)
+    setIsUploading(true);
 
     try {
       // Compress image
-      const compressedFile = await compressImage(file)
-      
+      const compressedFile = await compressImage(file);
+
       // Create preview
-      const previewUrl = URL.createObjectURL(compressedFile)
-      setPreview(previewUrl)
+      const previewUrl = URL.createObjectURL(compressedFile);
+      setPreview(previewUrl);
 
       // Upload to Supabase
-      const timestamp = Date.now()
-      const path = `${timestamp}-${compressedFile.name}`
-      const publicUrl = await uploadImageToSupabase(compressedFile, path)
-      
-      onImageUploaded(publicUrl)
+      const timestamp = Date.now();
+      const path = `${timestamp}-${compressedFile.name}`;
+      const publicUrl = await uploadImageToSupabase(compressedFile, path);
+
+      onImageUploaded(publicUrl);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed')
-      setPreview(currentImage || null)
+      setError(err instanceof Error ? err.message : 'Upload failed');
+      setPreview(currentImage || null);
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
     }
-  }
+  };
 
   const handleClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   const handleRemove = () => {
-    setPreview(null)
-    onImageUploaded('')
+    setPreview(null);
+    onImageUploaded('');
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = '';
     }
-  }
+  };
 
   return (
     <div className={`relative ${className}`}>
@@ -80,7 +75,7 @@ export default function ImageUpload({
         onChange={handleFileSelect}
         className="hidden"
       />
-      
+
       <div className="space-y-2">
         {preview ? (
           <div className="relative group">
@@ -111,8 +106,8 @@ export default function ImageUpload({
             {isUploading ? 'Uploading...' : placeholder}
           </button>
         )}
-        
-        {!preview && (
+
+        {/* {!preview && (
           <button
             type="button"
             onClick={handleClick}
@@ -121,12 +116,10 @@ export default function ImageUpload({
           >
             {isUploading ? 'Uploading...' : 'Choose file'}
           </button>
-        )}
+        )} */}
       </div>
 
-      {error && (
-        <p className="text-xs text-red-600 mt-1">{error}</p>
-      )}
+      {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
     </div>
-  )
+  );
 }
