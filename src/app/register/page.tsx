@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import CountrySelector from '@/components/CountrySelector'
+import LanguageSelector from '@/components/LanguageSelector'
 import { supabase } from '@/lib/supabase'
-import { FamilyFormData, ClassType } from '@/types'
+import { FamilyFormData, ClassType, LanguageSpoken } from '@/types'
 import { translateFamilyData, detectLanguage } from '@/lib/translation'
 import PageHeader from '@/components/PageHeader'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -36,6 +37,7 @@ export default function RegisterPage() {
         show_contact_in_networking: false,
         country: null,
         city: null,
+        languages_spoken: null,
       },
     ],
     children: [
@@ -65,6 +67,7 @@ export default function RegisterPage() {
           show_contact_in_networking: false,
           country: null,
           city: null,
+          languages_spoken: null,
         },
       ],
     }))
@@ -105,7 +108,7 @@ export default function RegisterPage() {
   const updateAdult = (
     index: number,
     field: string,
-    value: string | boolean | null,
+    value: string | boolean | null | LanguageSpoken[],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -456,6 +459,20 @@ export default function RegisterPage() {
                         placeholder={t('forms.cityPlaceholder')}
                       />
                     </div>
+                  </div>
+
+                  {/* Languages Spoken Section */}
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-900 mb-3">
+                      {t('forms.languagesSpoken')}
+                    </label>
+                    <LanguageSelector
+                      languages={adult.languages_spoken || []}
+                      onChange={(languages) =>
+                        updateAdult(index, 'languages_spoken', languages.length > 0 ? languages : null)
+                      }
+                      className="w-full"
+                    />
                   </div>
 
                   {/* Contact Information Section */}

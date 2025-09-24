@@ -11,6 +11,11 @@ export interface Family {
   children: Child[]
 }
 
+export interface LanguageSpoken {
+  language: string // Language code (e.g., 'en', 'es', 'fr') or name (e.g., 'English', 'Spanish')
+  proficiency: 'beginner' | 'intermediate' | 'fluent'
+}
+
 export interface Adult {
   id: string
   family_id: string
@@ -29,6 +34,8 @@ export interface Adult {
   show_contact_in_networking: boolean
   country: string | null
   city: string | null
+  languages_spoken: LanguageSpoken[] | null
+  languages_spoken_es?: LanguageSpoken[] | null
   created_at: string
 }
 

@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import CountrySelector from '@/components/CountrySelector'
+import LanguageSelector from '@/components/LanguageSelector'
 import { supabase } from '@/lib/supabase'
-import { Family, FamilyFormData, ClassType } from '@/types'
+import { Family, FamilyFormData, ClassType, LanguageSpoken } from '@/types'
 import PageHeader from '@/components/PageHeader'
 import { useTranslation } from '@/hooks/useTranslation'
 import { detectLanguage, translateFamilyData } from '@/lib/translation'
@@ -109,6 +110,7 @@ export default function EditFamilyPage() {
           connection_types: null,
           country: null,
           city: null,
+          languages_spoken: null,
           email: null,
           whatsapp_number: null,
           show_contact_in_networking: false,
@@ -152,7 +154,7 @@ export default function EditFamilyPage() {
   const updateAdult = (
     index: number,
     field: string,
-    value: string | boolean | null,
+    value: string | boolean | null | LanguageSpoken[],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -523,6 +525,20 @@ export default function EditFamilyPage() {
                         placeholder={t('forms.cityPlaceholder')}
                       />
                     </div>
+                  </div>
+
+                  {/* Languages Spoken Section */}
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      {t('forms.languagesSpoken')}
+                    </label>
+                    <LanguageSelector
+                      languages={adult.languages_spoken || []}
+                      onChange={(languages) =>
+                        updateAdult(index, 'languages_spoken', languages.length > 0 ? languages : null)
+                      }
+                      className="w-full"
+                    />
                   </div>
 
                   <div className="mt-4 space-y-3">

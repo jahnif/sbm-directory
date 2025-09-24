@@ -10,6 +10,7 @@ import {
   getNetworkingContact,
 } from '@/lib/localization'
 import { useTranslation } from '@/hooks/useTranslation'
+import { getLanguageName, getLanguageFlag, getProficiencyDots } from '@/components/LanguageSelector'
 
 interface FamilyTableRowProps {
   family: Family
@@ -133,6 +134,22 @@ export default function FamilyTableRow({
                       {adult.country && getCountryName(adult.country)},{' '}
                       {adult.city}
                     </p>
+                  )}
+                  {adult.languages_spoken && adult.languages_spoken.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {adult.languages_spoken.map((lang, langIndex) => (
+                        <span
+                          key={langIndex}
+                          className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium"
+                          title={`${getLanguageName(lang.language)} - ${lang.proficiency}`}
+                        >
+                          {getLanguageFlag(lang.language)} {getLanguageName(lang.language)}
+                          <span className="text-blue-600 font-mono text-xs">
+                            {getProficiencyDots(lang.proficiency)}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
                   )}
                   {adult.hobbies && (
                     <p

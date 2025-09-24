@@ -1,4 +1,4 @@
-import { TranslationRequest, TranslationResponse } from '@/types'
+import { TranslationRequest, TranslationResponse, LanguageSpoken } from '@/types'
 
 export async function translateText(
   text: string,
@@ -44,7 +44,7 @@ export async function translateFamilyData(
   familyData: {
     family_name: string
     description: string
-    adults: Array<{ connection_types?: string; hobbies?: string }>
+    adults: Array<{ connection_types?: string; hobbies?: string; languages_spoken?: LanguageSpoken[] | null }>
   },
   sourceLang: 'en' | 'es',
 ): Promise<{
