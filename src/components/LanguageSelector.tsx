@@ -1,6 +1,7 @@
 'use client'
 
 import { LanguageSpoken } from '@/types'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface Language {
   code: string
@@ -61,6 +62,7 @@ export default function LanguageSelector({
   onChange,
   className = '',
 }: LanguageSelectorProps) {
+  const { t } = useTranslation()
   const addLanguage = () => {
     onChange([...languages, { language: '', proficiency: 'beginner' }])
   }
@@ -86,7 +88,7 @@ export default function LanguageSelector({
               onChange={(e) => updateLanguage(index, 'language', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option value="">Select language</option>
+              <option value="">{t('languages.selectLanguage')}</option>
               {LANGUAGES.map((lang) => (
                 <option key={lang.code} value={lang.code}>
                   {lang.flag} {lang.name}
@@ -122,7 +124,7 @@ export default function LanguageSelector({
         onClick={addLanguage}
         className="w-full px-3 py-2 border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
       >
-        + Add Language
+        + {t('languages.addLanguage')}
       </button>
     </div>
   )

@@ -387,13 +387,13 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-900 mb-1">Personal Interests & Hobbies</label>
+                      <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.hobbies')}</label>
                       <textarea
                         value={adult.hobbies || ''}
                         onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
                         rows={2}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                        placeholder="e.g., Reading, hiking, photography, cooking, music..."
+                        placeholder={t('forms.hobbiesPlaceholder')}
                       />
                     </div>
 
@@ -431,7 +431,7 @@ export default function RegisterPage() {
 
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-900 mb-1">
-                        Country(s) of Origin
+                        {t('forms.countriesOrigin')}
                       </label>
                       <LocationSelector
                         locations={adult.locations || []}
@@ -547,15 +547,14 @@ export default function RegisterPage() {
                         htmlFor={`connections-${index}`}
                         className="ml-2 text-sm text-gray-700"
                       >
-                        Interested in professional connections
+                        {t('forms.interestedConnectionsLabel')}
                       </label>
                     </div>
 
                     {adult.interested_in_connections && (
                       <div>
                         <label className="block text-sm font-medium text-gray-900 mb-1">
-                          What kind of professional connections are you
-                          interested in?
+                          {t('forms.connectionTypesLabel')}
                         </label>
                         <textarea
                           value={adult.connection_types || ''}
@@ -568,7 +567,7 @@ export default function RegisterPage() {
                           }
                           rows={2}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                          placeholder="e.g., Other parents in tech, small business owners, freelancers..."
+                          placeholder={t('forms.connectionTypesPlaceholder')}
                         />
                       </div>
                     )}
@@ -588,7 +587,7 @@ export default function RegisterPage() {
 
             {/* Children */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-800">Children</h2>
+              <h2 className="text-xl font-semibold text-gray-800">{t('children.title')}</h2>
 
               {formData.children.map((child, index) => (
                 <div
@@ -597,7 +596,7 @@ export default function RegisterPage() {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-700">
-                      Child {index + 1}
+                      {t('forms.childNumber', { number: (index + 1).toString() })}
                     </h3>
                     {formData.children.length > 1 && (
                       <button

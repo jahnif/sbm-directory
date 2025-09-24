@@ -48,10 +48,13 @@ export default function FamilyTableRow({
         {/* Family Name */}
         <div className="flex flex-col">
           <div className="lg:hidden text-xs text-gray-500 text-center mb-1">
-            Family Name
+            {t('family.familyName')}
           </div>
           <h3 className="font-semibold text-gray-900 lg:text-lg text-2xl text-center lg:text-left">
-            {localizedFamily.family_name} Family
+            {locale === 'es'
+              ? `${t('family.familySuffix')} ${localizedFamily.family_name}`
+              : `${localizedFamily.family_name} ${t('family.familySuffix')}`
+            }
           </h3>
 
           <div className="flex mt-2 mx-auto lg:mx-0 mb-6">
@@ -104,7 +107,7 @@ export default function FamilyTableRow({
           </div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {displayedAdults.map((adult) => (
-              <div key={adult.id} className="flex items-start shrink-1 grow-1 basis-px">
+              <div key={adult.id} className="flex items-start shrink-1 grow-1 basis-px mb-3">
                 <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
                   {adult.image_url ? (
                     <Image
@@ -154,7 +157,7 @@ export default function FamilyTableRow({
                       className="text-xs text-gray-800 mt-3"
                       title={adult.hobbies}
                     >
-                      <span className="font-bold">Hobbies:</span> {adult.hobbies}
+                      <span className="font-bold">{t('family.hobbiesLabel')}:</span> {adult.hobbies}
                     </p>
                   )}
                   {adult.job_title && (
@@ -162,8 +165,8 @@ export default function FamilyTableRow({
                       className="text-xs text-gray-800 mt-3"
                       title={adult.job_title}
                     >
-                      <span className="font-bold">Profession:</span>{' '}
-                      {adult.job_title}, {adult.industry}
+                      <span className="font-bold">{t('family.professionLabel')}:</span>{' '}
+                      {adult.job_title}{adult.industry && `, ${adult.industry}`}
                     </p>
                   )}
                   {adult.interested_in_connections && (
@@ -171,7 +174,7 @@ export default function FamilyTableRow({
                       {adult.connection_types && (
                         <p className="text-xs text-gray-800 leading-relaxed">
                           <span className="font-bold">
-                            Professional interests:
+                            {t('family.professionalInterests')}:
                           </span>{' '}
                           {adult.connection_types}
                         </p>

@@ -1,6 +1,7 @@
 'use client'
 
 import { LocationInfo } from '@/types'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface Country {
   code: string
@@ -230,6 +231,7 @@ export default function LocationSelector({
   onChange,
   className = '',
 }: LocationSelectorProps) {
+  const { t } = useTranslation()
   const addLocation = () => {
     onChange([...locations, { country: '', city: '' }])
   }
@@ -255,7 +257,7 @@ export default function LocationSelector({
               onChange={(e) => updateLocation(index, 'country', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option value="">Select country</option>
+              <option value="">{t('locations.selectCountry')}</option>
               {COUNTRIES.map((country) => (
                 <option key={country.code} value={country.code}>
                   {country.flag} {country.name}
@@ -268,7 +270,7 @@ export default function LocationSelector({
               type="text"
               value={location.city}
               onChange={(e) => updateLocation(index, 'city', e.target.value)}
-              placeholder="Enter city"
+              placeholder={t('locations.enterCity')}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             />
           </div>
@@ -287,7 +289,7 @@ export default function LocationSelector({
         onClick={addLocation}
         className="w-full px-3 py-2 border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
       >
-        + Add Location
+        + {t('locations.addLocation')}
       </button>
     </div>
   )

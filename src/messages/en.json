@@ -43,7 +43,11 @@
     "showContactInfo": "Show Contact Information for Networking",
     "hideContactInfo": "Hide Contact Information",
     "networking": "Networking",
-    "networkingShowContact": "Networking - Show Contact"
+    "networkingShowContact": "Networking - Show Contact",
+    "professionalInterests": "Professional interests",
+    "hobbiesLabel": "Hobbies",
+    "professionLabel": "Profession",
+    "familySuffix": "Family"
   },
   "forms": {
     "familyInfo": "Family Information",
@@ -96,7 +100,19 @@
     "cancel": "Cancel",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
-    "editFamilySubtitle": "Update your family information"
+    "editFamilySubtitle": "Update your family information",
+    "hobbies": "Personal Interests & Hobbies",
+    "hobbiesPlaceholder": "e.g., Reading, hiking, photography, cooking, music...",
+    "countriesOrigin": "Country(s) of Origin",
+    "selectCountry": "Select country",
+    "enterCity": "Enter city",
+    "addLocation": "Add Location",
+    "selectLanguage": "Select language",
+    "addLanguage": "Add Language",
+    "interestedConnectionsLabel": "Interested in professional connections",
+    "connectionTypesLabel": "What kind of professional connections are you interested in?",
+    "connectionTypesPlaceholder": "e.g., Other parents in tech, small business owners, freelancers...",
+    "childNumber": "Child {number}"
   },
   "register": {
     "title": "Add Your Family",
@@ -213,5 +229,14 @@
   },
   "children": {
     "title": "Children"
+  },
+  "locations": {
+    "selectCountry": "Select country",
+    "enterCity": "Enter city",
+    "addLocation": "Add Location"
+  },
+  "languages": {
+    "selectLanguage": "Select language",
+    "addLanguage": "Add Language"
   }
 }
