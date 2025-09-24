@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { Family } from '@/types'
-import { getCountryDisplay } from '@/components/CountrySelector'
+import { getLocationDisplay } from '@/components/LocationSelector'
 import {
   getLocalizedFamily,
   hasNetworkingContact,
@@ -67,10 +67,9 @@ export default function FamilyCard({
               {adult.industry && (
                 <p className="text-xs text-gray-700">{adult.industry}</p>
               )}
-              {(adult.country || adult.city) && (
+              {adult.locations && adult.locations.length > 0 && (
                 <p className="text-xs text-gray-700">
-                  {adult.country && getCountryDisplay(adult.country)}{' '}
-                  {adult.city}
+                  {getLocationDisplay(adult.locations)}
                 </p>
               )}
               {adult.languages_spoken && adult.languages_spoken.length > 0 && (

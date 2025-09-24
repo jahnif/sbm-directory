@@ -1,5 +1,7 @@
 'use client'
 
+import { LocationInfo } from '@/types'
+
 interface Country {
   code: string
   name: string
@@ -217,57 +219,125 @@ const COUNTRIES: Country[] = [
   { code: 'VE', name: 'Venezuela', flag: '🇻🇪' },
 ].sort((a, b) => a.name.localeCompare(b.name))
 
-interface CountrySelectorProps {
-  value: string | null
-  onChange: (country: string | null) => void
-  placeholder?: string
+interface LocationSelectorProps {
+  locations: LocationInfo[]
+  onChange: (locations: LocationInfo[]) => void
   className?: string
 }
 
-export default function CountrySelector({
-  value,
+export default function LocationSelector({
+  locations,
   onChange,
-  placeholder = 'Select country',
   className = '',
-}: CountrySelectorProps) {
+}: LocationSelectorProps) {
+  const addLocation = () => {
+    onChange([...locations, { country: '', city: '' }])
+  }
+
+  const removeLocation = (index: number) => {
+    onChange(locations.filter((_, i) => i !== index))
+  }
+
+  const updateLocation = (index: number, field: keyof LocationInfo, value: string) => {
+    const updated = locations.map((location, i) =>
+      i === index ? { ...location, [field]: value } : location
+    )
+    onChange(updated)
+  }
+
   return (
-    <select
-      value={value || ''}
-      onChange={(e) => onChange(e.target.value || null)}
-      className={`px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${className}`}
-    >
-      <option value="">{placeholder}</option>
-      {COUNTRIES.map((country) => (
-        <option key={country.code} value={country.code}>
-          {country.flag} {country.name}
-        </option>
+    <div className={className}>
+      {locations.map((location, index) => (
+        <div key={index} className="flex gap-2 items-start mb-3">
+          <div className="flex-1">
+            <select
+              value={location.country}
+              onChange={(e) => updateLocation(index, 'country', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            >
+              <option value="">Select country</option>
+              {COUNTRIES.map((country) => (
+                <option key={country.code} value={country.code}>
+                  {country.flag} {country.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex-1">
+            <input
+              type="text"
+              value={location.city}
+              onChange={(e) => updateLocation(index, 'city', e.target.value)}
+              placeholder="Enter city"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => removeLocation(index)}
+            className="px-3 py-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+          >
+            ✕
+          </button>
+        </div>
       ))}
-    </select>
+
+      <button
+        type="button"
+        onClick={addLocation}
+        className="w-full px-3 py-2 border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
+      >
+        + Add Location
+      </button>
+    </div>
   )
 }
 
-export function getCountryDisplay(countryCode: string | null): string {
-  if (!countryCode) return ''
-  const country = COUNTRIES.find((c) => c.code === countryCode)
-  return country ? country.flag : ''
+// Helper functions for displaying locations
+export function getLocationDisplay(locations: LocationInfo[] | null): string {
+  if (!locations || locations.length === 0) return ''
+  return locations
+    .filter(loc => loc.country || loc.city)
+    .map(location => {
+      const country = COUNTRIES.find(c => c.code === location.country)
+      const flag = country ? country.flag : ''
+      const countryName = country ? country.name : ''
+      const city = location.city
+
+      // Build the display string
+      if (countryName && city) {
+        return `${flag} ${countryName}, ${city}`
+      } else if (countryName) {
+        return `${flag} ${countryName}`
+      } else if (city) {
+        return city
+      }
+      return ''
+    })
+    .filter(Boolean)
+    .join(' | ')
 }
 
-export function getCountryName(countryCode: string | null): string {
-  if (!countryCode) return ''
-  const country = COUNTRIES.find((c) => c.code === countryCode)
-  return country ? country.name : ''
-}
-
-export function getMultipleCountriesDisplay(countryCodes: string[] | null): string {
-  if (!countryCodes || countryCodes.length === 0) return ''
-  return countryCodes
-    .map(code => getCountryDisplay(code))
+export function getLocationCountryDisplay(locations: LocationInfo[] | null): string {
+  if (!locations || locations.length === 0) return ''
+  return locations
+    .filter(loc => loc.country)
+    .map(location => {
+      const country = COUNTRIES.find(c => c.code === location.country)
+      return country ? country.flag : ''
+    })
     .join(' ')
 }
 
-export function getMultipleCountriesNames(countryCodes: string[] | null): string {
-  if (!countryCodes || countryCodes.length === 0) return ''
-  return countryCodes
-    .map(code => getCountryName(code))
-    .join(', ')
+export function getLocationNames(locations: LocationInfo[] | null): string {
+  if (!locations || locations.length === 0) return ''
+  return locations
+    .filter(loc => loc.country || loc.city)
+    .map(location => {
+      const country = COUNTRIES.find(c => c.code === location.country)
+      const countryName = country ? country.name : ''
+      const parts = [countryName, location.city].filter(Boolean)
+      return parts.join(', ')
+    })
+    .join('; ')
 }

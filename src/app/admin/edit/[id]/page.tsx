@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
-import CountrySelector from '@/components/CountrySelector'
+import LocationSelector from '@/components/LocationSelector'
 import LanguageSelector from '@/components/LanguageSelector'
 import { supabase } from '@/lib/supabase'
-import { Family, FamilyFormData, ClassType, LanguageSpoken } from '@/types'
+import { Family, FamilyFormData, ClassType, LanguageSpoken, LocationInfo } from '@/types'
 import PageHeader from '@/components/PageHeader'
 import { useTranslation } from '@/hooks/useTranslation'
 import { detectLanguage, translateFamilyData } from '@/lib/translation'
@@ -108,8 +108,7 @@ export default function EditFamilyPage() {
           job_title: null,
           interested_in_connections: false,
           connection_types: null,
-          country: null,
-          city: null,
+          locations: [{ country: '', city: '' }],
           languages_spoken: null,
           email: null,
           whatsapp_number: null,
@@ -154,7 +153,7 @@ export default function EditFamilyPage() {
   const updateAdult = (
     index: number,
     field: string,
-    value: string | boolean | null | LanguageSpoken[],
+    value: string | boolean | null | LanguageSpoken[] | LocationInfo[],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -497,34 +496,19 @@ export default function EditFamilyPage() {
                       />
                     </div>
 
-                    <div>
+                    <div className='md:col-span-2'>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('forms.country')}
+                        Locations
                       </label>
-                      <CountrySelector
-                        value={adult.country}
-                        onChange={(country) =>
-                          updateAdult(index, 'country', country)
+                      <LocationSelector
+                        locations={adult.locations || []}
+                        onChange={(locations) =>
+                          updateAdult(index, 'locations', locations.length > 0 ? locations : null)
                         }
-                        placeholder={t('forms.selectCountry')}
                         className="w-full"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {t('forms.city')}
-                      </label>
-                      <input
-                        type="text"
-                        value={adult.city || ''}
-                        onChange={(e) =>
-                          updateAdult(index, 'city', e.target.value || null)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                        placeholder={t('forms.cityPlaceholder')}
-                      />
-                    </div>
                   </div>
 
                   {/* Languages Spoken Section */}

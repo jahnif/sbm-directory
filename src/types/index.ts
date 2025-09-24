@@ -16,6 +16,11 @@ export interface LanguageSpoken {
   proficiency: 'beginner' | 'intermediate' | 'fluent'
 }
 
+export interface LocationInfo {
+  country: string // Country code (e.g., 'US', 'ES', 'FR')
+  city: string    // City name
+}
+
 export interface Adult {
   id: string
   family_id: string
@@ -32,8 +37,8 @@ export interface Adult {
   email?: string | null
   whatsapp_number?: string | null
   show_contact_in_networking: boolean
-  country: string | null
-  city: string | null
+  locations: LocationInfo[] | null
+  locations_es?: LocationInfo[] | null
   languages_spoken: LanguageSpoken[] | null
   languages_spoken_es?: LanguageSpoken[] | null
   created_at: string

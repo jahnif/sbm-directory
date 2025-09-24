@@ -83,8 +83,10 @@ export default function Home() {
               adult.name.toLowerCase().includes(search) ||
               adult.industry?.toLowerCase().includes(search) ||
               adult.job_title?.toLowerCase().includes(search) ||
-              adult.city?.toLowerCase().includes(search) ||
-              adult.country?.toLowerCase().includes(search),
+              adult.locations?.some(location =>
+                location.city.toLowerCase().includes(search) ||
+                location.country.toLowerCase().includes(search)
+              ),
           ) ||
           family.children.some((child) =>
             child.name.toLowerCase().includes(search),

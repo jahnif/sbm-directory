@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Family } from '@/types'
-import { getCountryDisplay, getCountryName } from '@/components/CountrySelector'
+import { getLocationDisplay } from '@/components/LocationSelector'
 import {
   getLocalizedFamily,
   hasNetworkingContact,
@@ -128,11 +128,9 @@ export default function FamilyTableRow({
                     {adult.name}
                   </p>
 
-                  {(adult.country || adult.city) && (
+                  {adult.locations && adult.locations.length > 0 && (
                     <p className="text-xs text-gray-700">
-                      {adult.country && getCountryDisplay(adult.country)}{' '}
-                      {adult.country && getCountryName(adult.country)},{' '}
-                      {adult.city}
+                      {getLocationDisplay(adult.locations)}
                     </p>
                   )}
                   {adult.languages_spoken && adult.languages_spoken.length > 0 && (
@@ -140,7 +138,7 @@ export default function FamilyTableRow({
                       {adult.languages_spoken.map((lang, langIndex) => (
                         <span
                           key={langIndex}
-                          className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium"
+                          className="inline-flex items-center gap-1 bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full font-medium"
                           title={`${getLanguageName(lang.language)} - ${lang.proficiency}`}
                         >
                           {getLanguageFlag(lang.language)} {getLanguageName(lang.language)}
@@ -312,5 +310,5 @@ export default function FamilyTableRow({
   )
 }
 
-// TODO - Add "languages spoken" to parents
-// TODO - Add multiple countries of origin for parents
+// DONE - Add "languages spoken" to parents
+// DONE - Add multiple countries of origin for parents

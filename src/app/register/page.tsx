@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
-import CountrySelector from '@/components/CountrySelector'
+import LocationSelector from '@/components/LocationSelector'
 import LanguageSelector from '@/components/LanguageSelector'
 import { supabase } from '@/lib/supabase'
-import { FamilyFormData, ClassType, LanguageSpoken } from '@/types'
+import { FamilyFormData, ClassType, LanguageSpoken, LocationInfo } from '@/types'
 import { translateFamilyData, detectLanguage } from '@/lib/translation'
 import PageHeader from '@/components/PageHeader'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -35,8 +35,7 @@ export default function RegisterPage() {
         email: null,
         whatsapp_number: null,
         show_contact_in_networking: false,
-        country: null,
-        city: null,
+        locations: [{ country: '', city: '' }],
         languages_spoken: null,
       },
     ],
@@ -65,8 +64,7 @@ export default function RegisterPage() {
           email: null,
           whatsapp_number: null,
           show_contact_in_networking: false,
-          country: null,
-          city: null,
+          locations: [{ country: '', city: '' }],
           languages_spoken: null,
         },
       ],
@@ -108,7 +106,7 @@ export default function RegisterPage() {
   const updateAdult = (
     index: number,
     field: string,
-    value: string | boolean | null | LanguageSpoken[],
+    value: string | boolean | null | LanguageSpoken[] | LocationInfo[],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -431,34 +429,19 @@ export default function RegisterPage() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-900 mb-1">
-                        {t('forms.countryOrigin')}
+                        Country(s) of Origin
                       </label>
-                      <CountrySelector
-                        value={adult.country}
-                        onChange={(country) =>
-                          updateAdult(index, 'country', country)
+                      <LocationSelector
+                        locations={adult.locations || []}
+                        onChange={(locations) =>
+                          updateAdult(index, 'locations', locations.length > 0 ? locations : null)
                         }
-                        placeholder={t('forms.selectCountry')}
                         className="w-full"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-1">
-                        {t('forms.city')}
-                      </label>
-                      <input
-                        type="text"
-                        value={adult.city || ''}
-                        onChange={(e) =>
-                          updateAdult(index, 'city', e.target.value || null)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                        placeholder={t('forms.cityPlaceholder')}
-                      />
-                    </div>
                   </div>
 
                   {/* Languages Spoken Section */}
