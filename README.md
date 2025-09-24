@@ -68,6 +68,25 @@ npm run dev
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+## Code Formatting
+
+This project uses Prettier for code formatting to maintain consistent code style across the codebase.
+
+### Available Scripts
+
+- `npm run format` - Format all files in the project
+- `npm run format:check` - Check if files are properly formatted (useful for CI/CD)
+
+### Configuration
+
+Prettier is configured via `.prettierrc` with the following settings:
+- Semi-colons: enabled
+- Trailing commas: all
+- Single quotes: disabled (uses double quotes)
+- Print width: 80 characters
+- Tab width: 2 spaces
+- Use tabs: disabled (uses spaces)
+
 ## Database Schema
 
 ### Tables
