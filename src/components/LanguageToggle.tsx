@@ -1,28 +1,28 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
-type Locale = 'en' | 'es';
+type Locale = 'en' | 'es'
 
 export default function LanguageToggle() {
-  const [locale, setLocale] = useState<Locale>('en');
+  const [locale, setLocale] = useState<Locale>('en')
 
   useEffect(() => {
     // Get saved language from localStorage or default to English
-    const savedLocale = localStorage.getItem('locale') as Locale;
+    const savedLocale = localStorage.getItem('locale') as Locale
     if (savedLocale && ['en', 'es'].includes(savedLocale)) {
-      setLocale(savedLocale);
+      setLocale(savedLocale)
     }
-  }, []);
+  }, [])
 
   const toggleLanguage = () => {
-    const newLocale: Locale = locale === 'en' ? 'es' : 'en';
-    setLocale(newLocale);
-    localStorage.setItem('locale', newLocale);
+    const newLocale: Locale = locale === 'en' ? 'es' : 'en'
+    setLocale(newLocale)
+    localStorage.setItem('locale', newLocale)
 
     // Trigger a custom event to notify other components
-    window.dispatchEvent(new CustomEvent('localeChange', { detail: newLocale }));
-  };
+    window.dispatchEvent(new CustomEvent('localeChange', { detail: newLocale }))
+  }
 
   return (
     <button
@@ -33,30 +33,33 @@ export default function LanguageToggle() {
       <span className="text-base">{locale === 'en' ? '🇪🇸' : '🇬🇧'}</span>
       <span>{locale === 'en' ? 'Español' : 'English'}</span>
     </button>
-  );
+  )
 }
 
 // Hook for getting current locale in components
 export function useLocale() {
-  const [locale, setLocale] = useState<Locale>('en');
+  const [locale, setLocale] = useState<Locale>('en')
 
   useEffect(() => {
     // Get initial locale
-    const savedLocale = localStorage.getItem('locale') as Locale;
+    const savedLocale = localStorage.getItem('locale') as Locale
     if (savedLocale && ['en', 'es'].includes(savedLocale)) {
-      setLocale(savedLocale);
+      setLocale(savedLocale)
     }
 
     // Listen for locale changes
     const handleLocaleChange = (event: CustomEvent<Locale>) => {
-      setLocale(event.detail);
-    };
+      setLocale(event.detail)
+    }
 
-    window.addEventListener('localeChange', handleLocaleChange as EventListener);
+    window.addEventListener('localeChange', handleLocaleChange as EventListener)
     return () => {
-      window.removeEventListener('localeChange', handleLocaleChange as EventListener);
-    };
-  }, []);
+      window.removeEventListener(
+        'localeChange',
+        handleLocaleChange as EventListener,
+      )
+    }
+  }, [])
 
-  return locale;
+  return locale
 }

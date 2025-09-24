@@ -2,7 +2,11 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Family } from '@/types'
 import { getCountryDisplay } from '@/components/CountrySelector'
-import { getLocalizedFamily, hasNetworkingContact, getNetworkingContact } from '@/lib/localization'
+import {
+  getLocalizedFamily,
+  hasNetworkingContact,
+  getNetworkingContact,
+} from '@/lib/localization'
 import { useTranslation } from '@/hooks/useTranslation'
 
 interface FamilyCardProps {
@@ -10,17 +14,20 @@ interface FamilyCardProps {
   showNetworkingOnly?: boolean
 }
 
-export default function FamilyCard({ family, showNetworkingOnly = false }: FamilyCardProps) {
-  const { t, locale } = useTranslation();
-  const [showContactInfo, setShowContactInfo] = useState(false);
+export default function FamilyCard({
+  family,
+  showNetworkingOnly = false,
+}: FamilyCardProps) {
+  const { t, locale } = useTranslation()
+  const [showContactInfo, setShowContactInfo] = useState(false)
 
   // Get localized family data
-  const localizedFamily = getLocalizedFamily(family, locale);
+  const localizedFamily = getLocalizedFamily(family, locale)
 
   // Filter adults based on networking filter
   const displayedAdults = showNetworkingOnly
-    ? localizedFamily.adults.filter(adult => adult.interested_in_connections)
-    : localizedFamily.adults;
+    ? localizedFamily.adults.filter((adult) => adult.interested_in_connections)
+    : localizedFamily.adults
 
   // hasContactInfo removed - no longer needed as contact functionality is integrated with networking tags
   return (
@@ -31,7 +38,9 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
 
       {/* Adults */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">{t('family.adults')}</h4>
+        <h4 className="text-sm font-medium text-gray-900 mb-3">
+          {t('family.adults')}
+        </h4>
         <div className="grid grid-cols-2 gap-4">
           {displayedAdults.map((adult) => (
             <div key={adult.id} className="text-center">
@@ -59,7 +68,8 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
               )}
               {(adult.country || adult.city) && (
                 <p className="text-xs text-gray-700">
-                  {adult.country && getCountryDisplay(adult.country)} {adult.city}
+                  {adult.country && getCountryDisplay(adult.country)}{' '}
+                  {adult.city}
                 </p>
               )}
               {adult.interested_in_connections && (
@@ -69,7 +79,10 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
                       onClick={() => setShowContactInfo(!showContactInfo)}
                       className="inline-flex items-center gap-1 bg-green-100 hover:bg-green-200 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium transition-colors duration-200 cursor-pointer"
                     >
-                      🤝 {showContactInfo ? t('family.hideContactInfo') : t('family.networkingShowContact')}
+                      🤝{' '}
+                      {showContactInfo
+                        ? t('family.hideContactInfo')
+                        : t('family.networkingShowContact')}
                     </button>
                   ) : (
                     <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">
@@ -82,36 +95,43 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
                     </p>
                   )}
                   {/* Contact information - only shown when toggled and user has permitted */}
-                  {showContactInfo && hasNetworkingContact(adult) && (() => {
-                    const contactInfo = getNetworkingContact(adult);
-                    return contactInfo && (
-                      <div className="mt-2 bg-blue-50 p-2 rounded-lg">
-                        <div className="space-y-1">
-                          {contactInfo.email && (
-                            <div className="flex items-center gap-1 text-xs text-gray-700">
-                              <span>📧</span>
-                              <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600 underline">
-                                {contactInfo.email}
-                              </a>
+                  {showContactInfo &&
+                    hasNetworkingContact(adult) &&
+                    (() => {
+                      const contactInfo = getNetworkingContact(adult)
+                      return (
+                        contactInfo && (
+                          <div className="mt-2 bg-blue-50 p-2 rounded-lg">
+                            <div className="space-y-1">
+                              {contactInfo.email && (
+                                <div className="flex items-center gap-1 text-xs text-gray-700">
+                                  <span>📧</span>
+                                  <a
+                                    href={`mailto:${contactInfo.email}`}
+                                    className="hover:text-blue-600 underline"
+                                  >
+                                    {contactInfo.email}
+                                  </a>
+                                </div>
+                              )}
+                              {contactInfo.whatsapp_number && (
+                                <div className="flex items-center gap-1 text-xs text-gray-700">
+                                  <span>📱</span>
+                                  <a
+                                    href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-green-600 underline"
+                                  >
+                                    {contactInfo.whatsapp_number}
+                                  </a>
+                                </div>
+                              )}
                             </div>
-                          )}
-                          {contactInfo.whatsapp_number && (
-                            <div className="flex items-center gap-1 text-xs text-gray-700">
-                              <span>📱</span>
-                              <a
-                                href={`https://wa.me/${contactInfo.whatsapp_number.replace(/\D/g, '')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-green-600 underline"
-                              >
-                                {contactInfo.whatsapp_number}
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })()}
+                          </div>
+                        )
+                      )
+                    })()}
                 </div>
               )}
             </div>
@@ -121,7 +141,9 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
 
       {/* Children */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 mb-3">{t('family.children')}</h4>
+        <h4 className="text-sm font-medium text-gray-900 mb-3">
+          {t('family.children')}
+        </h4>
         <div className="grid grid-cols-2 gap-4">
           {localizedFamily.children.map((child) => (
             <div key={child.id} className="text-center">
@@ -141,11 +163,15 @@ export default function FamilyCard({ family, showNetworkingOnly = false }: Famil
                 )}
               </div>
               <p className="text-sm font-medium text-gray-900">{child.name}</p>
-              <span className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${
-                child.class === 'Pegasus' ? 'bg-red-100 text-red-800' :
-                child.class === 'Orion' ? 'bg-blue-100 text-blue-800' :
-                'bg-purple-100 text-purple-800'
-              }`}>
+              <span
+                className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${
+                  child.class === 'Pegasus'
+                    ? 'bg-red-100 text-red-800'
+                    : child.class === 'Orion'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-purple-100 text-purple-800'
+                }`}
+              >
                 {child.class}
               </span>
             </div>
