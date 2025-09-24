@@ -90,7 +90,7 @@ export default function FamilyTableRow({ family, showNetworkingOnly = false }: F
             {displayedAdults.map((adult) => (
               <div
                 key={adult.id}
-                className="flex items-center"
+                className="flex items-start shrink-1 grow-1 basis-px"
               >
                 <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
                   {adult.image_url ? (
