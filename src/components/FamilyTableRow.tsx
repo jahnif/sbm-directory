@@ -105,7 +105,7 @@ export default function FamilyTableRow({
           <div className="lg:hidden text-sm text-gray-500 text-center mb-4">
             {t('family.adults')}
           </div>
-          <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
+          <div className="flex flex-col flex-wrap gap-4 mb-4 justify-center max-w-md">
             {displayedAdults.map((adult) => (
               <div key={adult.id} className="flex items-start shrink-1 grow-1 basis-px mb-3">
                 <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
