@@ -103,8 +103,8 @@ export default function FamilyTableRow({
           </div>
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {displayedAdults.map((adult) => (
-              <div key={adult.id} className="flex items-center">
-                <div className="w-22 h-22 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
+              <div key={adult.id} className="flex items-start shrink-1 grow-1 basis-px">
+                <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
                   {adult.image_url ? (
                     <Image
                       src={adult.image_url}
@@ -119,7 +119,7 @@ export default function FamilyTableRow({
                     </div>
                   )}
                 </div>
-                <div className="w-64 flex flex-col justify-center">
+                <div className="flex flex-col grow-1 justify-center">
                   <p
                     className="text-md text-gray-900 font-bold"
                     title={adult.name}
