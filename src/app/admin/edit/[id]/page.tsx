@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import ImageUpload from '@/components/ImageUpload';
-import CountrySelector from '@/components/CountrySelector';
-import { supabase } from '@/lib/supabase';
-import { Family, FamilyFormData, ClassType } from '@/types';
-import PageHeader from '@/components/PageHeader';
-import { useTranslation } from '@/hooks/useTranslation';
-import { detectLanguage, translateFamilyData } from '@/lib/translation';
+import { useState, useEffect } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+import ImageUpload from '@/components/ImageUpload'
+import CountrySelector from '@/components/CountrySelector'
+import { supabase } from '@/lib/supabase'
+import { Family, FamilyFormData, ClassType } from '@/types'
+import PageHeader from '@/components/PageHeader'
+import { useTranslation } from '@/hooks/useTranslation'
+import { detectLanguage, translateFamilyData } from '@/lib/translation'
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
 export default function EditFamilyPage() {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const params = useParams();
-  const familyId = params.id as string;
+  const { t } = useTranslation()
+  const router = useRouter()
+  const params = useParams()
+  const familyId = params.id as string
 
-  const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [family, setFamily] = useState<Family | null>(null);
+  const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [family, setFamily] = useState<Family | null>(null)
 
   const [formData, setFormData] = useState<FamilyFormData>({
     family_name: '',
@@ -29,55 +29,70 @@ export default function EditFamilyPage() {
     original_language: 'en',
     adults: [],
     children: [],
-  });
+  })
 
   useEffect(() => {
     if (familyId) {
-      loadFamily();
+      loadFamily()
     }
-  }, [familyId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [familyId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadFamily = async () => {
     try {
-      const { data: familyData, error: familyError } = await supabase.from('families').select('*').eq('id', familyId).single();
+      const { data: familyData, error: familyError } = await supabase
+        .from('families')
+        .select('*')
+        .eq('id', familyId)
+        .single()
 
-      if (familyError) throw familyError;
+      if (familyError) throw familyError
 
-      const { data: adultsData, error: adultsError } = await supabase.from('adults').select('*').eq('family_id', familyId);
+      const { data: adultsData, error: adultsError } = await supabase
+        .from('adults')
+        .select('*')
+        .eq('family_id', familyId)
 
-      if (adultsError) throw adultsError;
+      if (adultsError) throw adultsError
 
-      const { data: childrenData, error: childrenError } = await supabase.from('children').select('*').eq('family_id', familyId);
+      const { data: childrenData, error: childrenError } = await supabase
+        .from('children')
+        .select('*')
+        .eq('family_id', familyId)
 
-      if (childrenError) throw childrenError;
+      if (childrenError) throw childrenError
 
       const loadedFamily: Family = {
         ...familyData,
         adults: adultsData || [],
         children: childrenData || [],
-      };
+      }
 
-      setFamily(loadedFamily);
+      setFamily(loadedFamily)
       setFormData({
         family_name: loadedFamily.family_name,
         description: loadedFamily.description,
         original_language: loadedFamily.original_language || 'en',
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        adults: loadedFamily.adults.map(({ id, family_id, created_at, ...adult }) => ({
-          ...adult,
-          email: adult.email || null,
-          whatsapp_number: adult.whatsapp_number || null,
-          show_contact_in_networking: adult.show_contact_in_networking || false,
-        })),
+        adults: loadedFamily.adults.map(
+          ({ id, family_id, created_at, ...adult }) => ({
+            ...adult,
+            email: adult.email || null,
+            whatsapp_number: adult.whatsapp_number || null,
+            show_contact_in_networking:
+              adult.show_contact_in_networking || false,
+          }),
+        ),
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        children: loadedFamily.children.map(({ id, family_id, created_at, ...child }) => child),
-      });
+        children: loadedFamily.children.map(
+          ({ id, family_id, created_at, ...child }) => child,
+        ),
+      })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load family');
+      setError(err instanceof Error ? err.message : 'Failed to load family')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const addAdult = () => {
     setFormData((prev) => ({
@@ -98,17 +113,17 @@ export default function EditFamilyPage() {
           show_contact_in_networking: false,
         },
       ],
-    }));
-  };
+    }))
+  }
 
   const removeAdult = (index: number) => {
     if (formData.adults.length > 1) {
       setFormData((prev) => ({
         ...prev,
         adults: prev.adults.filter((_, i) => i !== index),
-      }));
+      }))
     }
-  };
+  }
 
   const addChild = () => {
     setFormData((prev) => ({
@@ -121,44 +136,58 @@ export default function EditFamilyPage() {
           class: 'Pegasus' as ClassType,
         },
       ],
-    }));
-  };
+    }))
+  }
 
   const removeChild = (index: number) => {
     if (formData.children.length > 1) {
       setFormData((prev) => ({
         ...prev,
         children: prev.children.filter((_, i) => i !== index),
-      }));
+      }))
     }
-  };
+  }
 
-  const updateAdult = (index: number, field: string, value: string | boolean | null) => {
+  const updateAdult = (
+    index: number,
+    field: string,
+    value: string | boolean | null,
+  ) => {
     setFormData((prev) => ({
       ...prev,
-      adults: prev.adults.map((adult, i) => (i === index ? { ...adult, [field]: value } : adult)),
-    }));
-  };
+      adults: prev.adults.map((adult, i) =>
+        i === index ? { ...adult, [field]: value } : adult,
+      ),
+    }))
+  }
 
-  const updateChild = (index: number, field: string, value: string | ClassType | null) => {
+  const updateChild = (
+    index: number,
+    field: string,
+    value: string | ClassType | null,
+  ) => {
     setFormData((prev) => ({
       ...prev,
-      children: prev.children.map((child, i) => (i === index ? { ...child, [field]: value } : child)),
-    }));
-  };
+      children: prev.children.map((child, i) =>
+        i === index ? { ...child, [field]: value } : child,
+      ),
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
 
     try {
       // Detect language and translate content
-      const detectedLanguage = detectLanguage(formData.family_name + ' ' + formData.description);
-      const originalLanguage = detectedLanguage;
+      const detectedLanguage = detectLanguage(
+        formData.family_name + ' ' + formData.description,
+      )
+      const originalLanguage = detectedLanguage
 
       // Translate family data if we have content to translate
-      let translatedData = null;
+      let translatedData = null
       if (formData.family_name.trim() || formData.description.trim()) {
         translatedData = await translateFamilyData(
           {
@@ -166,10 +195,12 @@ export default function EditFamilyPage() {
             description: formData.description,
             adults: formData.adults
               .filter((adult) => adult.name.trim())
-              .map((adult) => ({ connection_types: adult.connection_types || undefined })),
+              .map((adult) => ({
+                connection_types: adult.connection_types || undefined,
+              })),
           },
-          originalLanguage
-        );
+          originalLanguage,
+        )
       }
 
       // Prepare family update with translations
@@ -179,30 +210,36 @@ export default function EditFamilyPage() {
         original_language: originalLanguage,
         updated_at: new Date().toISOString(),
         ...(translatedData && {
-          family_name_es: originalLanguage === 'en' ? translatedData.family_name_translated : formData.family_name,
-          description_es: originalLanguage === 'en' ? translatedData.description_translated : formData.description,
+          family_name_es:
+            originalLanguage === 'en'
+              ? translatedData.family_name_translated
+              : formData.family_name,
+          description_es:
+            originalLanguage === 'en'
+              ? translatedData.description_translated
+              : formData.description,
         }),
-      };
+      }
 
       // If original language is Spanish, store English translations in the base fields
       if (originalLanguage === 'es' && translatedData) {
-        familyUpdate.family_name = translatedData.family_name_translated;
-        familyUpdate.description = translatedData.description_translated;
-        familyUpdate.family_name_es = formData.family_name;
-        familyUpdate.description_es = formData.description;
+        familyUpdate.family_name = translatedData.family_name_translated
+        familyUpdate.description = translatedData.description_translated
+        familyUpdate.family_name_es = formData.family_name
+        familyUpdate.description_es = formData.description
       }
 
       // Update family
       const { error: familyError } = await supabase
         .from('families')
         .update(familyUpdate)
-        .eq('id', familyId);
+        .eq('id', familyId)
 
-      if (familyError) throw familyError;
+      if (familyError) throw familyError
 
       // Delete existing adults and children
-      await supabase.from('adults').delete().eq('family_id', familyId);
-      await supabase.from('children').delete().eq('family_id', familyId);
+      await supabase.from('adults').delete().eq('family_id', familyId)
+      await supabase.from('children').delete().eq('family_id', familyId)
 
       // Insert new adults with translations for connection_types only
       const adultsToInsert = formData.adults
@@ -211,25 +248,37 @@ export default function EditFamilyPage() {
           const adultData = {
             family_id: familyId,
             ...adult,
-          };
+          }
 
           // Add translated connection_types if available
-          if (translatedData && translatedData.adults_connection_types_translated[index]?.connection_types_translated) {
+          if (
+            translatedData &&
+            translatedData.adults_connection_types_translated[index]
+              ?.connection_types_translated
+          ) {
             if (originalLanguage === 'en') {
-              adultData.connection_types_es = translatedData.adults_connection_types_translated[index].connection_types_translated;
+              adultData.connection_types_es =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].connection_types_translated
             } else {
-              adultData.connection_types = translatedData.adults_connection_types_translated[index].connection_types_translated;
-              adultData.connection_types_es = adult.connection_types;
+              adultData.connection_types =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].connection_types_translated
+              adultData.connection_types_es = adult.connection_types
             }
           }
 
-          return adultData;
-        });
+          return adultData
+        })
 
       if (adultsToInsert.length > 0) {
-        const { error: adultsError } = await supabase.from('adults').insert(adultsToInsert);
+        const { error: adultsError } = await supabase
+          .from('adults')
+          .insert(adultsToInsert)
 
-        if (adultsError) throw adultsError;
+        if (adultsError) throw adultsError
       }
 
       // Insert new children
@@ -238,21 +287,23 @@ export default function EditFamilyPage() {
         .map((child) => ({
           family_id: familyId,
           ...child,
-        }));
+        }))
 
       if (childrenToInsert.length > 0) {
-        const { error: childrenError } = await supabase.from('children').insert(childrenToInsert);
+        const { error: childrenError } = await supabase
+          .from('children')
+          .insert(childrenToInsert)
 
-        if (childrenError) throw childrenError;
+        if (childrenError) throw childrenError
       }
 
-      router.push('/admin');
+      router.push('/admin')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -262,7 +313,7 @@ export default function EditFamilyPage() {
           <p className="text-gray-800">Loading family...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (!family) {
@@ -278,7 +329,7 @@ export default function EditFamilyPage() {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -293,13 +344,12 @@ export default function EditFamilyPage() {
       />
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow p-8">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-8"
-          >
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Family Information */}
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-gray-900">{t('forms.familyInformation')}</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {t('forms.familyInformation')}
+              </h2>
 
               <div>
                 <label
@@ -313,7 +363,12 @@ export default function EditFamilyPage() {
                   id="family_name"
                   required
                   value={formData.family_name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, family_name: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      family_name: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -330,7 +385,12 @@ export default function EditFamilyPage() {
                   required
                   rows={3}
                   value={formData.description}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder={t('forms.descriptionPlaceholder')}
                 />
@@ -340,14 +400,13 @@ export default function EditFamilyPage() {
             {/* Adults */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-900">{t('family.adults')}</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {t('family.adults')}
+                </h2>
               </div>
 
               {formData.adults.map((adult, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg p-4 bg-gray-50"
-                >
+                <div key={index} className="border rounded-lg p-4 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-900">
                       {t('forms.adult')} {index + 1}
@@ -365,61 +424,89 @@ export default function EditFamilyPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.name')} *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.name')} *
+                      </label>
                       <input
                         type="text"
                         required
                         value={adult.name}
-                        onChange={(e) => updateAdult(index, 'name', e.target.value)}
+                        onChange={(e) =>
+                          updateAdult(index, 'name', e.target.value)
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.photo')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.photo')}
+                      </label>
                       <ImageUpload
-                        onImageUploaded={(url) => updateAdult(index, 'image_url', url)}
+                        onImageUploaded={(url) =>
+                          updateAdult(index, 'image_url', url)
+                        }
                         currentImage={adult.image_url}
                         placeholder={t('forms.addPhoto')}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.industry')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.industry')}
+                      </label>
                       <input
                         type="text"
                         value={adult.industry || ''}
-                        onChange={(e) => updateAdult(index, 'industry', e.target.value || null)}
+                        onChange={(e) =>
+                          updateAdult(index, 'industry', e.target.value || null)
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.jobTitle')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.jobTitle')}
+                      </label>
                       <input
                         type="text"
                         value={adult.job_title || ''}
-                        onChange={(e) => updateAdult(index, 'job_title', e.target.value || null)}
+                        onChange={(e) =>
+                          updateAdult(
+                            index,
+                            'job_title',
+                            e.target.value || null,
+                          )
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.country')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.country')}
+                      </label>
                       <CountrySelector
                         value={adult.country}
-                        onChange={(country) => updateAdult(index, 'country', country)}
+                        onChange={(country) =>
+                          updateAdult(index, 'country', country)
+                        }
                         placeholder={t('forms.selectCountry')}
                         className="w-full"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.city')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.city')}
+                      </label>
                       <input
                         type="text"
                         value={adult.city || ''}
-                        onChange={(e) => updateAdult(index, 'city', e.target.value || null)}
+                        onChange={(e) =>
+                          updateAdult(index, 'city', e.target.value || null)
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder={t('forms.cityPlaceholder')}
                       />
@@ -432,7 +519,13 @@ export default function EditFamilyPage() {
                         type="checkbox"
                         id={`connections-${index}`}
                         checked={adult.interested_in_connections}
-                        onChange={(e) => updateAdult(index, 'interested_in_connections', e.target.checked)}
+                        onChange={(e) =>
+                          updateAdult(
+                            index,
+                            'interested_in_connections',
+                            e.target.checked,
+                          )
+                        }
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                       />
                       <label
@@ -446,10 +539,18 @@ export default function EditFamilyPage() {
                     {adult.interested_in_connections && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.connectionTypes')}</label>
+                          <label className="block text-sm font-medium text-gray-900 mb-1">
+                            {t('forms.connectionTypes')}
+                          </label>
                           <textarea
                             value={adult.connection_types || ''}
-                            onChange={(e) => updateAdult(index, 'connection_types', e.target.value || null)}
+                            onChange={(e) =>
+                              updateAdult(
+                                index,
+                                'connection_types',
+                                e.target.value || null,
+                              )
+                            }
                             rows={2}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder={t('forms.connectionTypesPlaceholder')}
@@ -458,22 +559,38 @@ export default function EditFamilyPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.email')}</label>
+                            <label className="block text-sm font-medium text-gray-900 mb-1">
+                              {t('forms.email')}
+                            </label>
                             <input
                               type="email"
                               value={adult.email || ''}
-                              onChange={(e) => updateAdult(index, 'email', e.target.value || null)}
+                              onChange={(e) =>
+                                updateAdult(
+                                  index,
+                                  'email',
+                                  e.target.value || null,
+                                )
+                              }
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                               placeholder={t('forms.emailPlaceholder')}
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-gray-900 mb-1">{t('forms.whatsapp')}</label>
+                            <label className="block text-sm font-medium text-gray-900 mb-1">
+                              {t('forms.whatsapp')}
+                            </label>
                             <input
                               type="tel"
                               value={adult.whatsapp_number || ''}
-                              onChange={(e) => updateAdult(index, 'whatsapp_number', e.target.value || null)}
+                              onChange={(e) =>
+                                updateAdult(
+                                  index,
+                                  'whatsapp_number',
+                                  e.target.value || null,
+                                )
+                              }
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                               placeholder={t('forms.whatsappPlaceholder')}
                             />
@@ -485,7 +602,13 @@ export default function EditFamilyPage() {
                             type="checkbox"
                             id={`share-contact-${index}`}
                             checked={adult.show_contact_in_networking || false}
-                            onChange={(e) => updateAdult(index, 'show_contact_in_networking', e.target.checked)}
+                            onChange={(e) =>
+                              updateAdult(
+                                index,
+                                'show_contact_in_networking',
+                                e.target.checked,
+                              )
+                            }
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                           />
                           <label
@@ -514,14 +637,13 @@ export default function EditFamilyPage() {
             {/* Children */}
             <div className="space-y-4">
               <div className="flex justify-start items-center">
-                <h2 className="text-xl font-semibold text-gray-800">{t('family.children')}</h2>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {t('family.children')}
+                </h2>
               </div>
 
               {formData.children.map((child, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg p-4 bg-gray-50"
-                >
+                <div key={index} className="border rounded-lg p-4 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-700">
                       {t('forms.child')} {index + 1}
@@ -539,22 +661,34 @@ export default function EditFamilyPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.name')} *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.name')} *
+                      </label>
                       <input
                         type="text"
                         required
                         value={child.name}
-                        onChange={(e) => updateChild(index, 'name', e.target.value)}
+                        onChange={(e) =>
+                          updateChild(index, 'name', e.target.value)
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.class')} *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.class')} *
+                      </label>
                       <select
                         required
                         value={child.class}
-                        onChange={(e) => updateChild(index, 'class', e.target.value as ClassType)}
+                        onChange={(e) =>
+                          updateChild(
+                            index,
+                            'class',
+                            e.target.value as ClassType,
+                          )
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="Pegasus">Pegasus</option>
@@ -565,9 +699,13 @@ export default function EditFamilyPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.photo')}</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {t('forms.photo')}
+                      </label>
                       <ImageUpload
-                        onImageUploaded={(url) => updateChild(index, 'image_url', url)}
+                        onImageUploaded={(url) =>
+                          updateChild(index, 'image_url', url)
+                        }
                         currentImage={child.image_url}
                         placeholder={t('forms.addPhoto')}
                       />
@@ -586,7 +724,11 @@ export default function EditFamilyPage() {
               </button>
             </div>
 
-            {error && <div className="text-red-600 bg-red-50 p-3 rounded-md">{error}</div>}
+            {error && (
+              <div className="text-red-600 bg-red-50 p-3 rounded-md">
+                {error}
+              </div>
+            )}
             <hr />
             <div className="flex justify-center space-x-4">
               <button
@@ -608,5 +750,5 @@ export default function EditFamilyPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

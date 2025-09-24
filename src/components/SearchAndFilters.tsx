@@ -1,31 +1,37 @@
-'use client';
+'use client'
 
-import { ClassType } from '@/types';
-import { useTranslation } from '@/hooks/useTranslation';
+import { ClassType } from '@/types'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface SearchAndFiltersProps {
-  onSearchChange: (search: string) => void;
-  onClassFilter: (classType: ClassType | 'all') => void;
-  onConnectionsFilter: (showConnections: boolean) => void;
-  currentSearch: string;
-  currentClassFilter: ClassType | 'all';
-  currentConnectionsFilter: boolean;
+  onSearchChange: (search: string) => void
+  onClassFilter: (classType: ClassType | 'all') => void
+  onConnectionsFilter: (showConnections: boolean) => void
+  currentSearch: string
+  currentClassFilter: ClassType | 'all'
+  currentConnectionsFilter: boolean
 }
 
-export default function SearchAndFilters({ onSearchChange, onClassFilter, onConnectionsFilter, currentSearch, currentClassFilter, currentConnectionsFilter }: SearchAndFiltersProps) {
-  const { t } = useTranslation();
+export default function SearchAndFilters({
+  onSearchChange,
+  onClassFilter,
+  onConnectionsFilter,
+  currentSearch,
+  currentClassFilter,
+  currentConnectionsFilter,
+}: SearchAndFiltersProps) {
+  const { t } = useTranslation()
   return (
     <div className="rounded-lg p-6 mb-6">
-      <div className="w-full text-xl mb-2 mx-auto text-center text-gray-500">{t('filters.title')}</div>
+      <div className="w-full text-xl mb-2 mx-auto text-center text-gray-500">
+        {t('filters.title')}
+      </div>
 
       <div className="flex flex-wrap lg:flex-row gap-2 lg:items-center justify-center">
         {/* Search */}
         {/* <div className="lg:flex-5/12 md:flex-1 grow min-w-xl"> */}
         <div className="lg:basis-3/5 basis-full grow">
-          <label
-            htmlFor="search"
-            className="sr-only"
-          >
+          <label htmlFor="search" className="sr-only">
             Search families
           </label>
           <input
@@ -41,10 +47,7 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
         {/* Class Filter */}
         {/* <div className="flex-1/12"> */}
         <div className="lg:basis-1/8">
-          <label
-            htmlFor="class-filter"
-            className="sr-only"
-          >
+          <label htmlFor="class-filter" className="sr-only">
             Filter by class
           </label>
           <select
@@ -80,12 +83,14 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
         </div>
 
         {/* Clear Filters */}
-        {(currentSearch || currentClassFilter !== 'all' || currentConnectionsFilter) && (
+        {(currentSearch ||
+          currentClassFilter !== 'all' ||
+          currentConnectionsFilter) && (
           <button
             onClick={() => {
-              onSearchChange('');
-              onClassFilter('all');
-              onConnectionsFilter(false);
+              onSearchChange('')
+              onClassFilter('all')
+              onConnectionsFilter(false)
             }}
             className="flex-shrink-0 px-4 py-2 text-sm text-gray-900 hover:text-gray-700 border border-gray-200 rounded-md hover:bg-gray-50 bg-white"
           >
@@ -94,5 +99,5 @@ export default function SearchAndFilters({ onSearchChange, onClassFilter, onConn
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -38,20 +38,22 @@ export default function GDPRConsent() {
               Privacy & Data Processing Notice
             </h3>
             <p className="text-sm text-gray-900 leading-relaxed">
-              We process personal data including names, photos, and professional information to operate this family directory. 
-              By using this service, you consent to data processing according to our privacy policy. 
-              You have the right to access, correct, or delete your data at any time.
+              We process personal data including names, photos, and professional
+              information to operate this family directory. By using this
+              service, you consent to data processing according to our privacy
+              policy. You have the right to access, correct, or delete your data
+              at any time.
             </p>
             <div className="mt-2">
-              <a 
-                href="/privacy-policy" 
+              <a
+                href="/privacy-policy"
                 className="text-blue-600 hover:text-blue-700 text-sm font-medium underline"
               >
                 Read our full Privacy Policy
               </a>
             </div>
           </div>
-          
+
           <div className="flex gap-3 flex-shrink-0">
             <button
               onClick={rejectAll}

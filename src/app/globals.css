@@ -21,21 +21,25 @@
   --color-sbm-highlight: var(--sbm-highlight);
 }
 
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-variation-settings: 'wdth' 100, 'YTLC' 500;
+  font-variation-settings:
+    'wdth' 100,
+    'YTLC' 500;
   /* Safari-specific fixes */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Safari-specific form element fixes */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -53,9 +57,9 @@ input, textarea, select, button {
 
 /* Safari mobile form field fixes */
 @supports (-webkit-touch-callout: none) {
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
   textarea,
   select {
     background-color: #ffffff;
@@ -64,9 +68,9 @@ input, textarea, select, button {
     color: #111827;
   }
 
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="tel"]:focus,
+  input[type='text']:focus,
+  input[type='email']:focus,
+  input[type='tel']:focus,
   textarea:focus,
   select:focus {
     outline: 2px solid #3b82f6;
@@ -92,13 +96,33 @@ input, textarea, select, button {
 }
 
 /* Staggered animation for family entries */
-.family-list > *:nth-child(1) { animation-delay: 0ms; }
-.family-list > *:nth-child(2) { animation-delay: 50ms; }
-.family-list > *:nth-child(3) { animation-delay: 100ms; }
-.family-list > *:nth-child(4) { animation-delay: 150ms; }
-.family-list > *:nth-child(5) { animation-delay: 200ms; }
-.family-list > *:nth-child(6) { animation-delay: 250ms; }
-.family-list > *:nth-child(7) { animation-delay: 300ms; }
-.family-list > *:nth-child(8) { animation-delay: 350ms; }
-.family-list > *:nth-child(9) { animation-delay: 400ms; }
-.family-list > *:nth-child(10) { animation-delay: 450ms; }
+.family-list > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.family-list > *:nth-child(2) {
+  animation-delay: 50ms;
+}
+.family-list > *:nth-child(3) {
+  animation-delay: 100ms;
+}
+.family-list > *:nth-child(4) {
+  animation-delay: 150ms;
+}
+.family-list > *:nth-child(5) {
+  animation-delay: 200ms;
+}
+.family-list > *:nth-child(6) {
+  animation-delay: 250ms;
+}
+.family-list > *:nth-child(7) {
+  animation-delay: 300ms;
+}
+.family-list > *:nth-child(8) {
+  animation-delay: 350ms;
+}
+.family-list > *:nth-child(9) {
+  animation-delay: 400ms;
+}
+.family-list > *:nth-child(10) {
+  animation-delay: 450ms;
+}

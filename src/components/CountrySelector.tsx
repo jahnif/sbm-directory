@@ -21,7 +21,7 @@ const COUNTRIES: Country[] = [
   { code: 'KM', name: 'Comoros', flag: '🇰🇲' },
   { code: 'CG', name: 'Congo', flag: '🇨🇬' },
   { code: 'CD', name: 'Congo (Democratic Republic)', flag: '🇨🇩' },
-  { code: 'CI', name: 'Côte d\'Ivoire', flag: '🇨🇮' },
+  { code: 'CI', name: "Côte d'Ivoire", flag: '🇨🇮' },
   { code: 'DJ', name: 'Djibouti', flag: '🇩🇯' },
   { code: 'EG', name: 'Egypt', flag: '🇪🇬' },
   { code: 'GQ', name: 'Equatorial Guinea', flag: '🇬🇶' },
@@ -224,8 +224,12 @@ interface CountrySelectorProps {
   className?: string
 }
 
-export default function CountrySelector({ value, onChange, placeholder = "Select country", className = "" }: CountrySelectorProps) {
-
+export default function CountrySelector({
+  value,
+  onChange,
+  placeholder = 'Select country',
+  className = '',
+}: CountrySelectorProps) {
   return (
     <select
       value={value || ''}
@@ -244,12 +248,12 @@ export default function CountrySelector({ value, onChange, placeholder = "Select
 
 export function getCountryDisplay(countryCode: string | null): string {
   if (!countryCode) return ''
-  const country = COUNTRIES.find(c => c.code === countryCode)
+  const country = COUNTRIES.find((c) => c.code === countryCode)
   return country ? country.flag : ''
 }
 
 export function getCountryName(countryCode: string | null): string {
   if (!countryCode) return ''
-  const country = COUNTRIES.find(c => c.code === countryCode)
+  const country = COUNTRIES.find((c) => c.code === countryCode)
   return country ? country.name : ''
 }

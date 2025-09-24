@@ -6,7 +6,7 @@ A Next.js web application that serves as an online yearbook and directory for pa
 
 - **Universal Password Protection**: Simple shared password access for all users
 - **Family Registration**: Easy-to-use form for adding family information
-- **Responsive Directory Display**: 
+- **Responsive Directory Display**:
   - Desktop: Tabular view with circular profile photos and expandable descriptions
   - Mobile: Card-based layout for better mobile experience
 - **Advanced Search & Filtering**:
@@ -30,25 +30,28 @@ A Next.js web application that serves as an online yearbook and directory for pa
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Supabase account
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <your-repo-url>
 cd sbm-yearbook
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
-Create a `.env.local` file in the root directory:
+   Create a `.env.local` file in the root directory:
+
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
@@ -62,6 +65,7 @@ NEXT_PUBLIC_SITE_PASSWORD=your_chosen_password
    - This will create the necessary tables, policies, and storage bucket
 
 5. Run the development server:
+
 ```bash
 npm run dev
 ```
@@ -80,6 +84,7 @@ This project uses Prettier for code formatting to maintain consistent code style
 ### Configuration
 
 Prettier is configured via `.prettierrc` with the following settings:
+
 - Semi-colons: enabled
 - Trailing commas: all
 - Single quotes: disabled (uses double quotes)
@@ -98,8 +103,9 @@ Prettier is configured via `.prettierrc` with the following settings:
 ### Classes
 
 The system supports three Montessori classes:
+
 - Pegasus
-- Orion  
+- Orion
 - Andromeda
 
 ## Usage
