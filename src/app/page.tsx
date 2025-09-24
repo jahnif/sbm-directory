@@ -1,98 +1,124 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
-import { Family, ClassType } from '@/types';
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+import { Family, ClassType } from '@/types'
 // import FamilyCard from '@/components/FamilyCard';
-import FamilyTableRow from '@/components/FamilyTableRow';
-import SearchAndFilters from '@/components/SearchAndFilters';
-import LanguageToggle from '@/components/LanguageToggle';
-import { useTranslation } from '@/hooks/useTranslation';
+import FamilyTableRow from '@/components/FamilyTableRow'
+import SearchAndFilters from '@/components/SearchAndFilters'
+import LanguageToggle from '@/components/LanguageToggle'
+import { useTranslation } from '@/hooks/useTranslation'
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
 export default function Home() {
-  const { t } = useTranslation();
-  const [families, setFamilies] = useState<Family[]>([]);
-  const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+  const { t } = useTranslation()
+  const [families, setFamilies] = useState<Family[]>([])
+  const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table')
 
   // Filter states
-  const [searchTerm, setSearchTerm] = useState('');
-  const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all');
-  const [connectionsFilter, setConnectionsFilter] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all')
+  const [connectionsFilter, setConnectionsFilter] = useState(false)
 
   useEffect(() => {
-    loadFamilies();
-  }, []);
+    loadFamilies()
+  }, [])
 
   useEffect(() => {
-    filterFamilies();
-  }, [families, searchTerm, classFilter, connectionsFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+    filterFamilies()
+  }, [families, searchTerm, classFilter, connectionsFilter]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadFamilies = async () => {
     try {
-      const { data: familiesData, error: familiesError } = await supabase.from('families').select('*').order('family_name');
+      const { data: familiesData, error: familiesError } = await supabase
+        .from('families')
+        .select('*')
+        .order('family_name')
 
-      if (familiesError) throw familiesError;
+      if (familiesError) throw familiesError
 
-      const { data: adultsData, error: adultsError } = await supabase.from('adults').select('*');
+      const { data: adultsData, error: adultsError } = await supabase
+        .from('adults')
+        .select('*')
 
-      if (adultsError) throw adultsError;
+      if (adultsError) throw adultsError
 
-      const { data: childrenData, error: childrenError } = await supabase.from('children').select('*');
+      const { data: childrenData, error: childrenError } = await supabase
+        .from('children')
+        .select('*')
 
-      if (childrenError) throw childrenError;
+      if (childrenError) throw childrenError
 
       const familiesWithMembers: Family[] = familiesData.map((family) => ({
         ...family,
         adults: adultsData.filter((adult) => adult.family_id === family.id),
         children: childrenData.filter((child) => child.family_id === family.id),
-      }));
+      }))
 
-      setFamilies(familiesWithMembers);
+      setFamilies(familiesWithMembers)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load families');
+      setError(err instanceof Error ? err.message : 'Failed to load families')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const filterFamilies = () => {
-    let filtered = families;
+    let filtered = families
 
     // Search filter
     if (searchTerm) {
-      const search = searchTerm.toLowerCase();
-      filtered = filtered.filter((family) => family.family_name.toLowerCase().includes(search) || family.description.toLowerCase().includes(search) || family.adults.some((adult) => adult.name.toLowerCase().includes(search) || adult.industry?.toLowerCase().includes(search) || adult.job_title?.toLowerCase().includes(search) || adult.city?.toLowerCase().includes(search) || adult.country?.toLowerCase().includes(search)) || family.children.some((child) => child.name.toLowerCase().includes(search)));
+      const search = searchTerm.toLowerCase()
+      filtered = filtered.filter(
+        (family) =>
+          family.family_name.toLowerCase().includes(search) ||
+          family.description.toLowerCase().includes(search) ||
+          family.adults.some(
+            (adult) =>
+              adult.name.toLowerCase().includes(search) ||
+              adult.industry?.toLowerCase().includes(search) ||
+              adult.job_title?.toLowerCase().includes(search) ||
+              adult.city?.toLowerCase().includes(search) ||
+              adult.country?.toLowerCase().includes(search),
+          ) ||
+          family.children.some((child) =>
+            child.name.toLowerCase().includes(search),
+          ),
+      )
     }
 
     // Class filter
     if (classFilter !== 'all') {
-      filtered = filtered.filter((family) => family.children.some((child) => child.class === classFilter));
+      filtered = filtered.filter((family) =>
+        family.children.some((child) => child.class === classFilter),
+      )
     }
 
     // Connections filter
     if (connectionsFilter) {
-      filtered = filtered.filter((family) => family.adults.some((adult) => adult.interested_in_connections));
+      filtered = filtered.filter((family) =>
+        family.adults.some((adult) => adult.interested_in_connections),
+      )
     }
 
-    setFilteredFamilies(filtered);
-  };
+    setFilteredFamilies(filtered)
+  }
 
   // Responsive view mode based on screen size
   useEffect(() => {
     const handleResize = () => {
-      setViewMode(window.innerWidth < 1024 ? 'table' : 'table');
-    };
+      setViewMode(window.innerWidth < 1024 ? 'table' : 'table')
+    }
 
-    handleResize(); // Set initial value
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    handleResize() // Set initial value
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   if (loading) {
     return (
@@ -103,7 +129,7 @@ export default function Home() {
           <p className="text-gray-600">{t('Loading Families...')}</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -121,7 +147,7 @@ export default function Home() {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -131,7 +157,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center flex-col lg:flex-row gap-4">
             <div className="lg:justify-start justify-start flex flex-col text-center lg:text-left">
-              <h1 className="text-2xl font-bold text-gray-900">{t('header.title')}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {t('header.title')}
+              </h1>
               <p className="text-gray-700 mt-1">{t('header.subtitle')}</p>
             </div>
             <div className="flex gap-3">
@@ -163,7 +191,9 @@ export default function Home() {
           />
           <p className="text-3xl font-bold pb-1">{t('directory.title')}</p>
 
-          <p className="font-light p-6 m-8 bg-amber-100 rounded-2xl max-w-[900px] mx-auto">{t('directory.description')}</p>
+          <p className="font-light p-6 m-8 bg-amber-100 rounded-2xl max-w-[900px] mx-auto">
+            {t('directory.description')}
+          </p>
 
           {/* Search and Filters */}
           <SearchAndFilters
@@ -174,13 +204,22 @@ export default function Home() {
             currentClassFilter={classFilter}
             currentConnectionsFilter={connectionsFilter}
           />
-          <p className="text-gray-800">{t('directory.showing', { count: filteredFamilies.length.toString(), total: families.length.toString() })}</p>
+          <p className="text-gray-800">
+            {t('directory.showing', {
+              count: filteredFamilies.length.toString(),
+              total: families.length.toString(),
+            })}
+          </p>
         </div>
 
         {/* Directory Display */}
         {filteredFamilies.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-lg font-bold mb-4">{families.length === 0 ? t('directory.noFamilies') : t('directory.noMatches')}</p>
+            <p className="text-lg font-bold mb-4">
+              {families.length === 0
+                ? t('directory.noFamilies')
+                : t('directory.noMatches')}
+            </p>
             {families.length === 0 && (
               <Link
                 href="/register"
@@ -226,7 +265,7 @@ export default function Home() {
         )}
       </main>
     </div>
-  );
+  )
 }
 
 // Task slist

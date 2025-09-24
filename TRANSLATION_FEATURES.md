@@ -5,12 +5,14 @@ This document outlines the new translation and networking features added to the 
 ## Features Added
 
 ### 1. DeepL Translation Integration
+
 - **Automatic Translation**: Family information is automatically translated between English and Spanish using DeepL's API
 - **Language Detection**: The system detects the language of submitted content
 - **Dual Storage**: Both original and translated versions are stored in the database
 - **Language Toggle**: Users can switch between English and Spanish views using the header toggle
 
 ### 2. Contact Information & Networking
+
 - **Email & WhatsApp Fields**: Adults can optionally provide email addresses and WhatsApp numbers
 - **Privacy Controls**: Users must explicitly opt-in to share contact information for networking
 - **Double Opt-in System**:
@@ -19,6 +21,7 @@ This document outlines the new translation and networking features added to the 
 - **Direct Contact Links**: Email links open mail client, WhatsApp links open WhatsApp
 
 ### 3. Enhanced Privacy Policy
+
 - Updated to cover translation services and contact data collection
 - Explains DeepL data processing and GDPR compliance
 - Details the double opt-in system for contact sharing
@@ -67,9 +70,11 @@ Get your DeepL API key from: https://www.deepl.com/account/summary
 ## API Endpoints
 
 ### POST /api/translate
+
 Translates text using DeepL API.
 
 **Request:**
+
 ```json
 {
   "text": "Hello, world!",
@@ -79,6 +84,7 @@ Translates text using DeepL API.
 ```
 
 **Response:**
+
 ```json
 {
   "translated_text": "¡Hola, mundo!",
@@ -104,16 +110,19 @@ Translates text using DeepL API.
 ## Technical Implementation
 
 ### Translation Service
+
 - **Location**: `/src/lib/translation.ts`
 - **Functions**: `translateText()`, `translateFamilyData()`, `detectLanguage()`
 - **API Route**: `/src/app/api/translate/route.ts`
 
 ### Contact Components
+
 - **Family Card**: Enhanced with contact visibility toggle
 - **Registration Form**: Added contact fields and privacy checkboxes
 - **Types**: Updated TypeScript interfaces
 
 ### Language Toggle
+
 - **Component**: `/src/components/LanguageToggle.tsx`
 - **Fixed**: Flag/language mismatch (now shows correct flags)
 - **Integration**: Connected to translation display system

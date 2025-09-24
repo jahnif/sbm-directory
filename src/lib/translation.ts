@@ -3,7 +3,7 @@ import { TranslationRequest, TranslationResponse } from '@/types'
 export async function translateText(
   text: string,
   sourceLang: 'en' | 'es',
-  targetLang: 'en' | 'es'
+  targetLang: 'en' | 'es',
 ): Promise<string> {
   if (!text || !text.trim()) {
     return text
@@ -17,7 +17,7 @@ export async function translateText(
     const request: TranslationRequest = {
       text,
       source_lang: sourceLang,
-      target_lang: targetLang
+      target_lang: targetLang,
     }
 
     const response = await fetch('/api/translate', {
@@ -25,7 +25,7 @@ export async function translateText(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     })
 
     if (!response.ok) {
@@ -46,11 +46,13 @@ export async function translateFamilyData(
     description: string
     adults: Array<{ connection_types?: string }>
   },
-  sourceLang: 'en' | 'es'
+  sourceLang: 'en' | 'es',
 ): Promise<{
   family_name_translated: string
   description_translated: string
-  adults_connection_types_translated: Array<{ connection_types_translated?: string }>
+  adults_connection_types_translated: Array<{
+    connection_types_translated?: string
+  }>
 }> {
   const targetLang = sourceLang === 'en' ? 'es' : 'en'
 
@@ -58,7 +60,7 @@ export async function translateFamilyData(
     // Translate family name and description
     const [familyNameTranslated, descriptionTranslated] = await Promise.all([
       translateText(familyData.family_name, sourceLang, targetLang),
-      translateText(familyData.description, sourceLang, targetLang)
+      translateText(familyData.description, sourceLang, targetLang),
     ])
 
     // Translate adult connection_types (professional interests) only
@@ -66,14 +68,14 @@ export async function translateFamilyData(
       familyData.adults.map(async (adult) => ({
         connection_types_translated: adult.connection_types
           ? await translateText(adult.connection_types, sourceLang, targetLang)
-          : undefined
-      }))
+          : undefined,
+      })),
     )
 
     return {
       family_name_translated: familyNameTranslated,
       description_translated: descriptionTranslated,
-      adults_connection_types_translated: adultsConnectionTypesTranslated
+      adults_connection_types_translated: adultsConnectionTypesTranslated,
     }
   } catch (error) {
     console.error('Family data translation error:', error)
@@ -81,9 +83,9 @@ export async function translateFamilyData(
     return {
       family_name_translated: familyData.family_name,
       description_translated: familyData.description,
-      adults_connection_types_translated: familyData.adults.map(adult => ({
-        connection_types_translated: adult.connection_types
-      }))
+      adults_connection_types_translated: familyData.adults.map((adult) => ({
+        connection_types_translated: adult.connection_types,
+      })),
     }
   }
 }
@@ -91,13 +93,46 @@ export async function translateFamilyData(
 export function detectLanguage(text: string): 'en' | 'es' {
   // Simple language detection based on common Spanish words
   const spanishWords = [
-    'el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'es', 'se', 'no', 'te', 'lo', 'le', 'da', 'su',
-    'por', 'son', 'con', 'para', 'está', 'tienen', 'del', 'han', 'una', 'ser', 'al', 'todo', 'como',
-    'familia', 'niños', 'padres', 'escuela', 'montessori'
+    'el',
+    'la',
+    'de',
+    'que',
+    'y',
+    'a',
+    'en',
+    'un',
+    'es',
+    'se',
+    'no',
+    'te',
+    'lo',
+    'le',
+    'da',
+    'su',
+    'por',
+    'son',
+    'con',
+    'para',
+    'está',
+    'tienen',
+    'del',
+    'han',
+    'una',
+    'ser',
+    'al',
+    'todo',
+    'como',
+    'familia',
+    'niños',
+    'padres',
+    'escuela',
+    'montessori',
   ]
 
   const words = text.toLowerCase().split(/\s+/)
-  const spanishWordCount = words.filter(word => spanishWords.includes(word)).length
+  const spanishWordCount = words.filter((word) =>
+    spanishWords.includes(word),
+  ).length
   const spanishRatio = spanishWordCount / words.length
 
   // If more than 20% of words are common Spanish words, assume it's Spanish

@@ -1,4 +1,8 @@
-export const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.8): Promise<File> => {
+export const compressImage = (
+  file: File,
+  maxWidth: number = 800,
+  quality: number = 0.8,
+): Promise<File> => {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
@@ -30,7 +34,7 @@ export const compressImage = (file: File, maxWidth: number = 800, quality: numbe
           }
         },
         'image/jpeg',
-        quality
+        quality,
       )
     }
 
@@ -55,7 +59,7 @@ export const validateImageFile = (file: File): string | null => {
 
 export const uploadImageToSupabase = async (file: File, path: string) => {
   const { supabase } = await import('@/lib/supabase')
-  
+
   const { error } = await supabase.storage
     .from('family-images')
     .upload(path, file, {
@@ -68,9 +72,9 @@ export const uploadImageToSupabase = async (file: File, path: string) => {
   }
 
   // Get public URL
-  const { data: { publicUrl } } = supabase.storage
-    .from('family-images')
-    .getPublicUrl(path)
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('family-images').getPublicUrl(path)
 
   return publicUrl
 }
