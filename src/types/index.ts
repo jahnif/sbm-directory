@@ -17,6 +17,8 @@ export interface Adult {
   name: string
   name_es?: string | null
   image_url: string | null
+  hobbies: string | null
+  hobbies_es?: string | null
   industry: string | null
   job_title: string | null
   interested_in_connections: boolean

@@ -44,15 +44,13 @@ export async function translateFamilyData(
   familyData: {
     family_name: string
     description: string
-    adults: Array<{ connection_types?: string }>
+    adults: Array<{ connection_types?: string; hobbies?: string }>
   },
   sourceLang: 'en' | 'es',
 ): Promise<{
   family_name_translated: string
   description_translated: string
-  adults_connection_types_translated: Array<{
-    connection_types_translated?: string
-  }>
+  adults_connection_types_translated: Array<{ connection_types_translated?: string; hobbies_translated?: string }>
 }> {
   const targetLang = sourceLang === 'en' ? 'es' : 'en'
 
@@ -63,13 +61,16 @@ export async function translateFamilyData(
       translateText(familyData.description, sourceLang, targetLang),
     ])
 
-    // Translate adult connection_types (professional interests) only
+    // Translate adult connection_types (professional interests) and hobbies
     const adultsConnectionTypesTranslated = await Promise.all(
       familyData.adults.map(async (adult) => ({
         connection_types_translated: adult.connection_types
           ? await translateText(adult.connection_types, sourceLang, targetLang)
           : undefined,
-      })),
+        hobbies_translated: adult.hobbies
+          ? await translateText(adult.hobbies, sourceLang, targetLang)
+          : undefined
+      }))
     )
 
     return {
@@ -83,9 +84,10 @@ export async function translateFamilyData(
     return {
       family_name_translated: familyData.family_name,
       description_translated: familyData.description,
-      adults_connection_types_translated: familyData.adults.map((adult) => ({
+      adults_connection_types_translated: familyData.adults.map(adult => ({
         connection_types_translated: adult.connection_types,
-      })),
+        hobbies_translated: adult.hobbies
+      }))
     }
   }
 }

@@ -26,6 +26,7 @@ export default function RegisterPage() {
       {
         name: '',
         image_url: null,
+        hobbies: null,
         industry: null,
         job_title: null,
         interested_in_connections: false,
@@ -54,6 +55,7 @@ export default function RegisterPage() {
         {
           name: '',
           image_url: null,
+          hobbies: null,
           industry: null,
           job_title: null,
           interested_in_connections: false,
@@ -145,11 +147,10 @@ export default function RegisterPage() {
           {
             family_name: formData.family_name,
             description: formData.description,
-            adults: formData.adults
-              .filter((adult) => adult.name.trim())
-              .map((adult) => ({
-                connection_types: adult.connection_types || undefined,
-              })),
+            adults: formData.adults.filter((adult) => adult.name.trim()).map((adult) => ({
+              connection_types: adult.connection_types || undefined,
+              hobbies: adult.hobbies || undefined
+            })),
           },
           originalLanguage,
         )
@@ -214,6 +215,16 @@ export default function RegisterPage() {
                   index
                 ].connection_types_translated
               adultData.connection_types_es = adult.connection_types
+            }
+          }
+
+          // Add translated hobbies if available
+          if (translatedData && translatedData.adults_connection_types_translated[index]?.hobbies_translated) {
+            if (originalLanguage === 'en') {
+              adultData.hobbies_es = translatedData.adults_connection_types_translated[index].hobbies_translated;
+            } else {
+              adultData.hobbies = translatedData.adults_connection_types_translated[index].hobbies_translated;
+              adultData.hobbies_es = adult.hobbies;
             }
           }
 
@@ -326,7 +337,10 @@ export default function RegisterPage() {
               </h2>
 
               {formData.adults.map((adult, index) => (
-                <div key={index} className="rounded-lg p-8 bg-gray-50/50">
+                <div
+                  key={index}
+                  className="rounded-lg p-8 bg-gray-50/50"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-900">
                       {t('forms.adult')} {index + 1}
@@ -368,6 +382,17 @@ export default function RegisterPage() {
                         }
                         currentImage={adult.image_url}
                         placeholder={t('forms.addPhoto')}
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-900 mb-1">Personal Interests & Hobbies</label>
+                      <textarea
+                        value={adult.hobbies || ''}
+                        onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
+                        rows={2}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="e.g., Reading, hiking, photography, cooking, music..."
                       />
                     </div>
 
@@ -566,7 +591,10 @@ export default function RegisterPage() {
               <h2 className="text-xl font-semibold text-gray-800">Children</h2>
 
               {formData.children.map((child, index) => (
-                <div key={index} className="rounded-lg p-8 bg-gray-50/50">
+                <div
+                  key={index}
+                  className="rounded-lg p-8 bg-gray-50/50"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-700">
                       Child {index + 1}

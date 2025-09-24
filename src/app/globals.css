@@ -11,7 +11,7 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap'); */
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -19,7 +19,7 @@
   --color-sbm-background: var(--sbm-background);
   --color-sbm-text: var(--sbm-text);
   --color-sbm-highlight: var(--sbm-highlight);
-}
+} */
 
 body {
   background: var(--background);
@@ -40,9 +40,12 @@ input,
 textarea,
 select,
 button {
+/* Safari-specific form element fixes - exclude checkboxes to preserve visibility */
+input:not([type="checkbox"]), textarea, select, button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
 }
 
 /* Force light mode only - no dark mode support */
@@ -53,6 +56,27 @@ button {
 /* Fix Safari background color rendering */
 .bg-sbm-background {
   background-color: var(--sbm-background) !important;
+}
+
+/* Cross-browser checkbox styling */
+input[type="checkbox"] {
+  /* Ensure checkboxes are visible and properly sized */
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 /* Safari mobile form field fixes */

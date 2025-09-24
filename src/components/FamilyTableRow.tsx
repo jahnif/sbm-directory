@@ -134,6 +134,14 @@ export default function FamilyTableRow({
                       {adult.city}
                     </p>
                   )}
+                  {adult.hobbies && (
+                    <p
+                      className="text-xs text-gray-800 mt-3"
+                      title={adult.hobbies}
+                    >
+                      <span className="font-bold">Hobbies:</span> {adult.hobbies}
+                    </p>
+                  )}
                   {adult.job_title && (
                     <p
                       className="text-xs text-gray-800 mt-3"

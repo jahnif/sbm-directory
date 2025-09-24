@@ -102,6 +102,7 @@ export default function EditFamilyPage() {
         {
           name: '',
           image_url: null,
+          hobbies: null,
           industry: null,
           job_title: null,
           interested_in_connections: false,
@@ -448,6 +449,17 @@ export default function EditFamilyPage() {
                         }
                         currentImage={adult.image_url}
                         placeholder={t('forms.addPhoto')}
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Personal Interests & Hobbies</label>
+                      <textarea
+                        value={adult.hobbies || ''}
+                        onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
+                        rows={2}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="e.g., Reading, hiking, photography, cooking, music..."
                       />
                     </div>
 
