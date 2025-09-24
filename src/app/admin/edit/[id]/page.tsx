@@ -372,7 +372,7 @@ export default function EditFamilyPage() {
                       family_name: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 />
               </div>
 
@@ -394,7 +394,7 @@ export default function EditFamilyPage() {
                       description: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   placeholder={t('forms.descriptionPlaceholder')}
                 />
               </div>
@@ -409,7 +409,7 @@ export default function EditFamilyPage() {
               </div>
 
               {formData.adults.map((adult, index) => (
-                <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                <div key={index} className="rounded-lg p-4 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-900">
                       {t('forms.adult')} {index + 1}
@@ -437,7 +437,7 @@ export default function EditFamilyPage() {
                         onChange={(e) =>
                           updateAdult(index, 'name', e.target.value)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -460,7 +460,7 @@ export default function EditFamilyPage() {
                         value={adult.hobbies || ''}
                         onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
                         rows={2}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         placeholder="e.g., Reading, hiking, photography, cooking, music..."
                       />
                     </div>
@@ -475,7 +475,7 @@ export default function EditFamilyPage() {
                         onChange={(e) =>
                           updateAdult(index, 'industry', e.target.value || null)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -493,7 +493,7 @@ export default function EditFamilyPage() {
                             e.target.value || null,
                           )
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -521,7 +521,7 @@ export default function EditFamilyPage() {
                         onChange={(e) =>
                           updateAdult(index, 'city', e.target.value || null)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         placeholder={t('forms.cityPlaceholder')}
                       />
                     </div>
@@ -580,7 +580,7 @@ export default function EditFamilyPage() {
                               )
                             }
                             rows={2}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                             placeholder={t('forms.connectionTypesPlaceholder')}
                           />
                         </div>
@@ -600,7 +600,7 @@ export default function EditFamilyPage() {
                                   e.target.value || null,
                                 )
                               }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                               placeholder={t('forms.emailPlaceholder')}
                             />
                           </div>
@@ -619,7 +619,7 @@ export default function EditFamilyPage() {
                                   e.target.value || null,
                                 )
                               }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                               placeholder={t('forms.whatsappPlaceholder')}
                             />
                           </div>
@@ -671,7 +671,7 @@ export default function EditFamilyPage() {
               </div>
 
               {formData.children.map((child, index) => (
-                <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                <div key={index} className="rounded-lg p-4 bg-gray-50">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="font-medium text-gray-700">
                       {t('forms.child')} {index + 1}
@@ -699,7 +699,7 @@ export default function EditFamilyPage() {
                         onChange={(e) =>
                           updateChild(index, 'name', e.target.value)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -717,7 +717,7 @@ export default function EditFamilyPage() {
                             e.target.value as ClassType,
                           )
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       >
                         <option value="Pegasus">Pegasus</option>
                         <option value="Lynx">Lynx</option>

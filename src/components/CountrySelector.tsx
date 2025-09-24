@@ -234,7 +234,7 @@ export default function CountrySelector({
     <select
       value={value || ''}
       onChange={(e) => onChange(e.target.value || null)}
-      className={`px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+      className={`px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white ${className}`}
     >
       <option value="">{placeholder}</option>
       {COUNTRIES.map((country) => (

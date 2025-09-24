@@ -305,7 +305,7 @@ export default function RegisterPage() {
                       family_name: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 />
               </div>
 
@@ -327,7 +327,7 @@ export default function RegisterPage() {
                       description: e.target.value,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   placeholder={t('forms.familyDescriptionPlaceholder')}
                 />
               </div>
@@ -371,7 +371,7 @@ export default function RegisterPage() {
                         onChange={(e) =>
                           updateAdult(index, 'name', e.target.value)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -394,7 +394,7 @@ export default function RegisterPage() {
                         value={adult.hobbies || ''}
                         onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
                         rows={2}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         placeholder="e.g., Reading, hiking, photography, cooking, music..."
                       />
                     </div>
@@ -409,7 +409,7 @@ export default function RegisterPage() {
                         onChange={(e) =>
                           updateAdult(index, 'industry', e.target.value || null)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -427,7 +427,7 @@ export default function RegisterPage() {
                             e.target.value || null,
                           )
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -455,7 +455,7 @@ export default function RegisterPage() {
                         onChange={(e) =>
                           updateAdult(index, 'city', e.target.value || null)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         placeholder={t('forms.cityPlaceholder')}
                       />
                     </div>
@@ -495,7 +495,7 @@ export default function RegisterPage() {
                           onChange={(e) =>
                             updateAdult(index, 'email', e.target.value || null)
                           }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                           placeholder={t('forms.emailPlaceholder')}
                         />
                       </div>
@@ -514,7 +514,7 @@ export default function RegisterPage() {
                               e.target.value || null,
                             )
                           }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                           placeholder={t('forms.whatsappPlaceholder')}
                         />
                       </div>
@@ -584,7 +584,7 @@ export default function RegisterPage() {
                             )
                           }
                           rows={2}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                           placeholder="e.g., Other parents in tech, small business owners, freelancers..."
                         />
                       </div>
@@ -639,7 +639,7 @@ export default function RegisterPage() {
                         onChange={(e) =>
                           updateChild(index, 'name', e.target.value)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       />
                     </div>
 
@@ -657,7 +657,7 @@ export default function RegisterPage() {
                             e.target.value as ClassType,
                           )
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                       >
                         <option value="Pegasus">{t('classes.Pegasus')}</option>
                         <option value="Lynx">{t('classes.Lynx')}</option>

@@ -84,7 +84,7 @@ export default function LanguageSelector({
             <select
               value={language.language}
               onChange={(e) => updateLanguage(index, 'language', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
               <option value="">Select language</option>
               {LANGUAGES.map((lang) => (
@@ -98,7 +98,7 @@ export default function LanguageSelector({
             <select
               value={language.proficiency}
               onChange={(e) => updateLanguage(index, 'proficiency', e.target.value as LanguageSpoken['proficiency'])}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
               {PROFICIENCY_LEVELS.map((level) => (
                 <option key={level.value} value={level.value}>
