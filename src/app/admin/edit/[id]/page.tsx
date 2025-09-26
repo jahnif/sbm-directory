@@ -199,6 +199,9 @@ export default function EditFamilyPage() {
               .filter((adult) => adult.name.trim())
               .map((adult) => ({
                 connection_types: adult.connection_types || undefined,
+                hobbies: adult.hobbies || undefined,
+                industry: adult.industry || undefined,
+                job_title: adult.job_title || undefined,
               })),
           },
           originalLanguage,
@@ -269,6 +272,66 @@ export default function EditFamilyPage() {
                   index
                 ].connection_types_translated
               adultData.connection_types_es = adult.connection_types
+            }
+          }
+
+          // Add translated hobbies if available
+          if (
+            translatedData &&
+            translatedData.adults_connection_types_translated[index]
+              ?.hobbies_translated
+          ) {
+            if (originalLanguage === 'en') {
+              adultData.hobbies_es =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].hobbies_translated
+            } else {
+              adultData.hobbies =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].hobbies_translated
+              adultData.hobbies_es = adult.hobbies
+            }
+          }
+
+          // Add translated industry if available
+          if (
+            translatedData &&
+            translatedData.adults_connection_types_translated[index]
+              ?.industry_translated
+          ) {
+            if (originalLanguage === 'en') {
+              adultData.industry_es =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].industry_translated
+            } else {
+              adultData.industry =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].industry_translated
+              adultData.industry_es = adult.industry
+            }
+          }
+
+          // Add translated job_title if available
+          if (
+            translatedData &&
+            translatedData.adults_connection_types_translated[index]
+              ?.job_title_translated
+          ) {
+            if (originalLanguage === 'en') {
+              adultData.job_title_es =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].job_title_translated
+            } else {
+              adultData.job_title =
+                translatedData.adults_connection_types_translated[
+                  index
+                ].job_title_translated
+              adultData.job_title_es = adult.job_title
             }
           }
 
@@ -454,7 +517,7 @@ export default function EditFamilyPage() {
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Personal Interests & Hobbies</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t('forms.hobbies')}</label>
                       <textarea
                         value={adult.hobbies || ''}
                         onChange={(e) => updateAdult(index, 'hobbies', e.target.value || null)}
@@ -498,7 +561,7 @@ export default function EditFamilyPage() {
 
                     <div className='md:col-span-2'>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Locations
+                        {t('forms.countriesOrigin')}
                       </label>
                       <LocationSelector
                         locations={adult.locations || []}

@@ -44,13 +44,13 @@ export async function translateFamilyData(
   familyData: {
     family_name: string
     description: string
-    adults: Array<{ connection_types?: string; hobbies?: string; languages_spoken?: LanguageSpoken[] | null }>
+    adults: Array<{ connection_types?: string; hobbies?: string; industry?: string; job_title?: string; languages_spoken?: LanguageSpoken[] | null }>
   },
   sourceLang: 'en' | 'es',
 ): Promise<{
   family_name_translated: string
   description_translated: string
-  adults_connection_types_translated: Array<{ connection_types_translated?: string; hobbies_translated?: string }>
+  adults_connection_types_translated: Array<{ connection_types_translated?: string; hobbies_translated?: string; industry_translated?: string; job_title_translated?: string }>
 }> {
   const targetLang = sourceLang === 'en' ? 'es' : 'en'
 
@@ -61,7 +61,7 @@ export async function translateFamilyData(
       translateText(familyData.description, sourceLang, targetLang),
     ])
 
-    // Translate adult connection_types (professional interests) and hobbies
+    // Translate adult connection_types (professional interests), hobbies, industry, and job_title
     const adultsConnectionTypesTranslated = await Promise.all(
       familyData.adults.map(async (adult) => ({
         connection_types_translated: adult.connection_types
@@ -69,6 +69,12 @@ export async function translateFamilyData(
           : undefined,
         hobbies_translated: adult.hobbies
           ? await translateText(adult.hobbies, sourceLang, targetLang)
+          : undefined,
+        industry_translated: adult.industry
+          ? await translateText(adult.industry, sourceLang, targetLang)
+          : undefined,
+        job_title_translated: adult.job_title
+          ? await translateText(adult.job_title, sourceLang, targetLang)
           : undefined
       }))
     )
@@ -86,7 +92,9 @@ export async function translateFamilyData(
       description_translated: familyData.description,
       adults_connection_types_translated: familyData.adults.map(adult => ({
         connection_types_translated: adult.connection_types,
-        hobbies_translated: adult.hobbies
+        hobbies_translated: adult.hobbies,
+        industry_translated: adult.industry,
+        job_title_translated: adult.job_title
       }))
     }
   }

@@ -46,6 +46,8 @@ export function getLocalizedAdult(adult: Adult, locale: Locale): Adult {
     ...adult,
     name: getLocalizedText(adult.name, adult.name_es, locale),
     hobbies: adult.hobbies ? getLocalizedText(adult.hobbies, adult.hobbies_es, locale) : adult.hobbies,
+    industry: adult.industry ? getLocalizedText(adult.industry, adult.industry_es, locale) : adult.industry,
+    job_title: adult.job_title ? getLocalizedText(adult.job_title, adult.job_title_es, locale) : adult.job_title,
     connection_types: adult.connection_types ? getLocalizedText(adult.connection_types, adult.connection_types_es, locale) : adult.connection_types,
   }
 }

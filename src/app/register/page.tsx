@@ -150,7 +150,9 @@ export default function RegisterPage() {
             description: formData.description,
             adults: formData.adults.filter((adult) => adult.name.trim()).map((adult) => ({
               connection_types: adult.connection_types || undefined,
-              hobbies: adult.hobbies || undefined
+              hobbies: adult.hobbies || undefined,
+              industry: adult.industry || undefined,
+              job_title: adult.job_title || undefined,
             })),
           },
           originalLanguage,
@@ -226,6 +228,26 @@ export default function RegisterPage() {
             } else {
               adultData.hobbies = translatedData.adults_connection_types_translated[index].hobbies_translated;
               adultData.hobbies_es = adult.hobbies;
+            }
+          }
+
+          // Add translated industry if available
+          if (translatedData && translatedData.adults_connection_types_translated[index]?.industry_translated) {
+            if (originalLanguage === 'en') {
+              adultData.industry_es = translatedData.adults_connection_types_translated[index].industry_translated;
+            } else {
+              adultData.industry = translatedData.adults_connection_types_translated[index].industry_translated;
+              adultData.industry_es = adult.industry;
+            }
+          }
+
+          // Add translated job_title if available
+          if (translatedData && translatedData.adults_connection_types_translated[index]?.job_title_translated) {
+            if (originalLanguage === 'en') {
+              adultData.job_title_es = translatedData.adults_connection_types_translated[index].job_title_translated;
+            } else {
+              adultData.job_title = translatedData.adults_connection_types_translated[index].job_title_translated;
+              adultData.job_title_es = adult.job_title;
             }
           }
 

@@ -30,7 +30,9 @@ export interface Adult {
   hobbies: string | null
   hobbies_es?: string | null
   industry: string | null
+  industry_es?: string | null
   job_title: string | null
+  job_title_es?: string | null
   interested_in_connections: boolean
   connection_types: string | null
   connection_types_es?: string | null
