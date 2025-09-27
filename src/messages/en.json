@@ -10,7 +10,8 @@
     "remove": "Remove",
     "search": "Search",
     "clear": "Clear",
-    "required": "Required"
+    "required": "Required",
+    "closePhoto": "Close photo"
   },
   "header": {
     "title": "SBM Family Directory",

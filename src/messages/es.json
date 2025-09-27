@@ -10,7 +10,8 @@
     "remove": "Quitar",
     "search": "Buscar",
     "clear": "Limpiar",
-    "required": "Requerido"
+    "required": "Requerido",
+    "closePhoto": "Cerrar foto"
   },
   "header": {
     "title": "Directorio de Familias SBM",

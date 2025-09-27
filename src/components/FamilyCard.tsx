@@ -9,6 +9,7 @@ import {
 } from '@/lib/localization'
 import { useTranslation } from '@/hooks/useTranslation'
 import { getLanguageName, getLanguageFlag, getProficiencyDots } from '@/components/LanguageSelector'
+import PhotoModal from '@/components/PhotoModal'
 
 interface FamilyCardProps {
   family: Family
@@ -21,6 +22,7 @@ export default function FamilyCard({
 }: FamilyCardProps) {
   const { t, locale } = useTranslation()
   const [showContactInfo, setShowContactInfo] = useState(false)
+  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null)
 
   // Get localized family data
   const localizedFamily = getLocalizedFamily(family, locale)
@@ -45,7 +47,10 @@ export default function FamilyCard({
         <div className="grid grid-cols-2 gap-4">
           {displayedAdults.map((adult) => (
             <div key={adult.id} className="text-center">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2">
+              <div
+                className={`w-16 h-16 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2 ${adult.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
+                onClick={() => adult.image_url && setSelectedPhoto({ url: adult.image_url, alt: adult.name })}
+              >
                 {adult.image_url ? (
                   <Image
                     src={adult.image_url}
@@ -163,7 +168,10 @@ export default function FamilyCard({
         <div className="grid grid-cols-2 gap-4">
           {localizedFamily.children.map((child) => (
             <div key={child.id} className="text-center">
-              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2">
+              <div
+                className={`w-12 h-12 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2 ${child.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
+                onClick={() => child.image_url && setSelectedPhoto({ url: child.image_url, alt: child.name })}
+              >
                 {child.image_url ? (
                   <Image
                     src={child.image_url}
@@ -203,6 +211,14 @@ export default function FamilyCard({
       </div>
 
       {/* Contact Information Toggle removed - now integrated with networking tags above */}
+
+      {/* Photo Modal */}
+      <PhotoModal
+        isOpen={selectedPhoto !== null}
+        onClose={() => setSelectedPhoto(null)}
+        imageUrl={selectedPhoto?.url || ''}
+        altText={selectedPhoto?.alt || ''}
+      />
     </div>
   )
 }

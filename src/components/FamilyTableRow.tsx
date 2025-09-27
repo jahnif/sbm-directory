@@ -11,6 +11,7 @@ import {
 } from '@/lib/localization'
 import { useTranslation } from '@/hooks/useTranslation'
 import { getLanguageName, getLanguageFlag, getProficiencyDots } from '@/components/LanguageSelector'
+import PhotoModal from '@/components/PhotoModal'
 
 interface FamilyTableRowProps {
   family: Family
@@ -24,6 +25,7 @@ export default function FamilyTableRow({
   const { t, locale } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
   const [showContactInfo, setShowContactInfo] = useState(false)
+  const [selectedPhoto, setSelectedPhoto] = useState<{ url: string; alt: string } | null>(null)
 
   // Get localized family data
   const localizedFamily = getLocalizedFamily(family, locale)
@@ -108,7 +110,10 @@ export default function FamilyTableRow({
           <div className="flex flex-col flex-wrap gap-4 mb-4 justify-center max-w-md">
             {displayedAdults.map((adult) => (
               <div key={adult.id} className="flex items-start shrink-1 grow-1 basis-px mb-3">
-                <div className="w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3">
+                <div
+                  className={`w-22 h-22 shrink-0 rounded-full overflow-hidden bg-gray-200 mb-2 shadow-sm mr-3 ${adult.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
+                  onClick={() => adult.image_url && setSelectedPhoto({ url: adult.image_url, alt: adult.name })}
+                >
                   {adult.image_url ? (
                     <Image
                       src={adult.image_url}
@@ -251,7 +256,10 @@ export default function FamilyTableRow({
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
             {localizedFamily.children.map((child) => (
               <div key={child.id} className="text-center">
-                <div className="w-22 h-22 rounded-full overflow-hidden bg-gray-200 mx-auto mb-1 shadow-sm">
+                <div
+                  className={`w-22 h-22 rounded-full overflow-hidden bg-gray-200 mx-auto mb-1 shadow-sm ${child.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
+                  onClick={() => child.image_url && setSelectedPhoto({ url: child.image_url, alt: child.name })}
+                >
                   {child.image_url ? (
                     <Image
                       src={child.image_url}
@@ -309,6 +317,14 @@ export default function FamilyTableRow({
           {/* Contact Information Toggle removed - now integrated with networking tags above */}
         </div>
       </div>
+
+      {/* Photo Modal */}
+      <PhotoModal
+        isOpen={selectedPhoto !== null}
+        onClose={() => setSelectedPhoto(null)}
+        imageUrl={selectedPhoto?.url || ''}
+        altText={selectedPhoto?.alt || ''}
+      />
     </div>
   )
 }
