@@ -226,7 +226,8 @@
     "Pegasus": "Pegasus",
     "Lynx": "Lynx",
     "Orion": "Orion",
-    "Andromeda": "Andromeda"
+    "Andromeda": "Andromeda",
+    "Other": "Otro"
   },
   "children": {
     "title": "Niños"

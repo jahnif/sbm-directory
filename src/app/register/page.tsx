@@ -669,6 +669,9 @@ export default function RegisterPage() {
                         <option value="Andromeda">
                           {t('classes.Andromeda')}
                         </option>
+                        <option value="Other">
+                          {t('classes.Other')}
+                        </option>
                       </select>
                     </div>
 

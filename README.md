@@ -108,6 +108,7 @@ The system supports three Montessori classes:
 - Orion
 - Andromeda
 - Lynx
+- Other (for non-SBM kids)
 
 ## Usage
 
