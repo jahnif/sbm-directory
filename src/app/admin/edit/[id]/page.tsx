@@ -770,6 +770,7 @@ export default function EditFamilyPage() {
                         <option value="Lynx">Lynx</option>
                         <option value="Orion">Orion</option>
                         <option value="Andromeda">Andromeda</option>
+                        <option value="Other">Other</option>
                       </select>
                     </div>
 

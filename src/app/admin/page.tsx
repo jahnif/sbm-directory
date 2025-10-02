@@ -198,7 +198,7 @@ export default function AdminPage() {
                             <div key={child.id} className="mb-1">
                               {child.name}
                               <span
-                                className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}
+                                className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : child.class === 'Andromeda' ? 'bg-green-100 text-green-800' : child.class === 'Lynx' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}
                               >
                                 {child.class}
                               </span>

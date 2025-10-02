@@ -282,7 +282,7 @@ export default function FamilyTableRow({
                     {child.name}
                   </p>
                   <span
-                    className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}
+                    className={`inline-block text-xs px-2 py-0.5 rounded-full font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : child.class === 'Andromeda' ? 'bg-green-100 text-green-800' : child.class === 'Lynx' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}
                   >
                     {child.class}
                   </span>
