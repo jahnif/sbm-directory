@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Family } from '@/types'
+import { Family, ClassType } from '@/types'
 import { getLocationDisplay } from '@/components/LocationSelector'
 import {
   getLocalizedFamily,
