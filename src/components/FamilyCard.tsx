@@ -14,13 +14,13 @@ import PhotoModal from '@/components/PhotoModal'
 interface FamilyCardProps {
   family: Family
   showNetworkingOnly?: boolean
-  classFilter?: ClassType | 'all'
+  // classFilter?: ClassType | 'all'
 }
 
 export default function FamilyCard({
   family,
   showNetworkingOnly = false,
-  classFilter = 'all',
+  // classFilter = 'all',
 }: FamilyCardProps) {
   const { t, locale } = useTranslation()
   const [showContactInfo, setShowContactInfo] = useState(false)
