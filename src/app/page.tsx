@@ -249,6 +249,7 @@ export default function Home() {
                   key={`${family.id}-${searchTerm}-${classFilter}-${connectionsFilter}-${index}`}
                   family={family}
                   showNetworkingOnly={connectionsFilter}
+                  classFilter={classFilter}
                 />
               ))}
             </div>

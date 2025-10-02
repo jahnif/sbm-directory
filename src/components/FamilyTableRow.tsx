@@ -16,11 +16,13 @@ import PhotoModal from '@/components/PhotoModal'
 interface FamilyTableRowProps {
   family: Family
   showNetworkingOnly?: boolean
+  classFilter?: ClassType | 'all'
 }
 
 export default function FamilyTableRow({
   family,
   showNetworkingOnly = false,
+  classFilter = 'all',
 }: FamilyTableRowProps) {
   const { t, locale } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
@@ -254,8 +256,10 @@ export default function FamilyTableRow({
           </div>
 
           <div className="flex lg:flex-col flex-wrap gap-4 mb-4 justify-center">
-            {localizedFamily.children.map((child) => (
-              <div key={child.id} className="text-center">
+            {localizedFamily.children.map((child) => {
+              const shouldDimChild = classFilter !== 'all' && child.class !== classFilter
+              return (
+              <div key={child.id} className={`text-center ${shouldDimChild ? 'opacity-30' : ''}`}>
                 <div
                   className={`w-22 h-22 rounded-full overflow-hidden bg-gray-200 mx-auto mb-1 shadow-sm ${child.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
                   onClick={() => child.image_url && setSelectedPhoto({ url: child.image_url, alt: child.name })}
@@ -288,7 +292,8 @@ export default function FamilyTableRow({
                   </span>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
