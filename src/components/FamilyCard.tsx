@@ -169,9 +169,9 @@ export default function FamilyCard({
         </h4>
         <div className="grid grid-cols-2 gap-4">
           {localizedFamily.children.map((child) => {
-            const shouldDimChild = classFilter !== 'all' && child.class !== classFilter
+            // const shouldDimChild = classFilter !== 'all' && child.class !== classFilter
             return (
-            <div key={child.id} className={`text-center ${shouldDimChild ? 'opacity-50' : ''}`}>
+            <div key={child.id} className={`text-center`}>
               <div
                 className={`w-12 h-12 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2 ${child.image_url ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''}`}
                 onClick={() => child.image_url && setSelectedPhoto({ url: child.image_url, alt: child.name })}
