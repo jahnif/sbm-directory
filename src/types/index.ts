@@ -52,7 +52,7 @@ export interface Child {
   name: string
   name_es?: string | null
   image_url: string | null
-  class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda'
+  class: 'Pegasus' | 'Lynx' | 'Orion' | 'Andromeda' | 'Other'
   created_at: string
 }
 
