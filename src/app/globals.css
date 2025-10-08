@@ -11,7 +11,7 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap'); */
 
-/* @theme inline {
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -19,7 +19,7 @@
   --color-sbm-background: var(--sbm-background);
   --color-sbm-text: var(--sbm-text);
   --color-sbm-highlight: var(--sbm-highlight);
-} */
+}
 
 body {
   background: var(--background);
