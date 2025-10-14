@@ -4,7 +4,11 @@
       "maxDuration": 60
     }
   },
-   "redirects": [
-    { "source": "https://sbm-directory.vercel.app", "destination": "https://sbm-directory.finnydesigns.com", "permanent": true }
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://sbm-directory.finnydesigns.com/:path*",
+      "permanent": true
+    }
   ]
 }
