@@ -2,6 +2,9 @@
   "functions": {
     "app/**/*": {
       "maxDuration": 60
-    }
+    },
+    "redirects": [
+    { "source": "/", "destination": "https://external-domain.com", "permanent": true }
+  ]
   }
 }
