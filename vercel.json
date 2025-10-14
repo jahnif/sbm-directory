@@ -2,9 +2,9 @@
   "functions": {
     "app/**/*": {
       "maxDuration": 60
-    },
-    "redirects": [
-    { "source": "/", "destination": "https://sbm-directory.finnydesigns.com", "permanent": true }
+    }
+  },
+   "redirects": [
+    { "source": "https://sbm-directory.vercel.app", "destination": "https://sbm-directory.finnydesigns.com", "permanent": true }
   ]
-  }
 }
