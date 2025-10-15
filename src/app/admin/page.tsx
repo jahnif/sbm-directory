@@ -144,93 +144,110 @@ export default function AdminPage() {
               </h2>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Family Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Adults
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Children
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Created
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {families.map((family) => (
-                    <tr key={family.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-bold text-gray-900">
-                            {family.family_name}
-                          </div>
-                          <div className="text-sm text-gray-700 max-w-xs truncate">
-                            {family.description}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {family.adults.map((adult) => (
-                            <div key={adult.id} className="mb-1">
-                              {adult.name}
-                              {adult.interested_in_connections && (
-                                <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                  🤝
-                                </span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {family.children.map((child) => (
-                            <div key={child.id} className="mb-1">
-                              {child.name}
-                              <span
-                                className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : child.class === 'Andromeda' ? 'bg-green-100 text-green-800' : child.class === 'Lynx' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}
-                              >
-                                {child.class}
+            {/* Sticky Headers - Desktop Only */}
+            <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 hidden lg:block">
+              <div className="grid lg:grid-cols-[2fr_3fr_3fr_2fr_2fr] gap-4 px-6 py-3 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                <div>Family Name</div>
+                <div>Adults</div>
+                <div>Children</div>
+                <div>Created</div>
+                <div>Actions</div>
+              </div>
+            </div>
+
+            {/* Family Rows */}
+            <div className="divide-y divide-gray-200">
+              {families.map((family) => (
+                <div key={family.id} className="hover:bg-gray-50 transition-colors">
+                  <div className="grid lg:grid-cols-[2fr_3fr_3fr_2fr_2fr] gap-4 px-6 py-6 lg:py-4">
+
+                    {/* Family Name */}
+                    <div className="flex flex-col">
+                      <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
+                        Family Name
+                      </div>
+                      <div className="text-sm font-bold text-gray-900">
+                        {family.family_name}
+                      </div>
+                      <div className="text-sm text-gray-700 lg:max-w-xs lg:truncate">
+                        {family.description}
+                      </div>
+                    </div>
+
+                    {/* Adults */}
+                    <div className="flex flex-col">
+                      <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
+                        Adults
+                      </div>
+                      <div className="text-sm text-gray-900">
+                        {family.adults.map((adult) => (
+                          <div key={adult.id} className="mb-1">
+                            {adult.name}
+                            {adult.interested_in_connections && (
+                              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                🤝
                               </span>
-                            </div>
-                          ))}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Children */}
+                    <div className="flex flex-col">
+                      <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
+                        Children
+                      </div>
+                      <div className="text-sm text-gray-900">
+                        {family.children.map((child) => (
+                          <div key={child.id} className="mb-1">
+                            {child.name}
+                            <span
+                              className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${child.class === 'Pegasus' ? 'bg-red-100 text-red-800' : child.class === 'Orion' ? 'bg-blue-100 text-blue-800' : child.class === 'Andromeda' ? 'bg-green-100 text-green-800' : child.class === 'Lynx' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}
+                            >
+                              {child.class}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Created Date */}
+                    <div className="flex flex-col">
+                      <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
+                        Created
+                      </div>
+                      <div className="text-sm text-gray-700">
                         {new Date(family.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <Link
-                            href={`/admin/edit/${family.id}`}
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => deleteFamily(family.id)}
-                            className={`${deleteConfirm === family.id ? 'text-red-800 bg-red-100 px-2 py-1 rounded' : 'text-red-600 hover:text-red-900'}`}
-                          >
-                            {deleteConfirm === family.id
-                              ? 'Confirm Delete?'
-                              : 'Delete'}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col">
+                      <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
+                        Actions
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-sm font-medium">
+                        <Link
+                          href={`/admin/edit/${family.id}`}
+                          className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => deleteFamily(family.id)}
+                          className={`px-3 py-1 rounded-md transition-colors ${deleteConfirm === family.id ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
+                        >
+                          {deleteConfirm === family.id
+                            ? 'Confirm Delete?'
+                            : 'Delete'}
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
