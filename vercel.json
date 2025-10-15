@@ -6,9 +6,15 @@
   },
   "redirects": [
     {
-      "source": "/:path*",
-      "destination": "https://sbm-directory.finnydesigns.com/:path*",
-      "permanent": true
+      "source": "/(.*)",
+      "destination": "https://sbm-directory.finnydesigns.com/$1",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "sbm-directory.vercel.app"
+        }
+      ]
     }
   ]
 }
