@@ -240,5 +240,32 @@
   "languages": {
     "selectLanguage": "Seleccionar idioma",
     "addLanguage": "Agregar Idioma"
+  },
+  "barrio": {
+    "select": "Seleccionar barrio",
+    "other": "Otro",
+    "otherPlaceholder": "Ingresa tu barrio",
+    "backToList": "Volver a la lista",
+    "label": "Barrio"
+  },
+  "postalCode": {
+    "label": "Código Postal",
+    "placeholder": "ej., 46001",
+    "invalid": "Código postal inválido (debe ser 5 dígitos comenzando con 46)",
+    "required": "El código postal es requerido para la búsqueda de proximidad"
+  },
+  "proximity": {
+    "title": "Encuentra familias cercanas",
+    "enterPostalCode": "Ingresa tu código postal para encontrar familias cercanas",
+    "radius": "Radio",
+    "km": "km",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "showingNearby": "Mostrando {count} familias dentro de {radius} km del {postalCode}",
+    "showingResults": "Mostrando familias dentro de {radius} km del {postalCode}",
+    "noNearbyFamilies": "No se encontraron familias dentro de {radius} km",
+    "distance": "Distancia"
   }
 }

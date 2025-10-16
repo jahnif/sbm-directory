@@ -104,6 +104,14 @@ export default function FamilyTableRow({
               )
             })}
           </div>
+
+          {(family.barrio || family.codigo_postal) && (
+            <div className="text-xs text-gray-600 text-center lg:text-left mt-1">
+              {family.barrio && <span>{family.barrio}</span>}
+              {family.barrio && family.codigo_postal && <span> • </span>}
+              {family.codigo_postal && <span>{family.codigo_postal}</span>}
+            </div>
+          )}
         </div>
 
         {/* Adults */}

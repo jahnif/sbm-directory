@@ -7,8 +7,10 @@ import { Family, ClassType } from '@/types'
 // import FamilyCard from '@/components/FamilyCard';
 import FamilyTableRow from '@/components/FamilyTableRow'
 import SearchAndFilters from '@/components/SearchAndFilters'
+import ProximitySearch from '@/components/ProximitySearch'
 import LanguageToggle from '@/components/LanguageToggle'
 import { useTranslation } from '@/hooks/useTranslation'
+import { calculateDistance, getPostalCodeCoordinates } from '@/lib/distance-calculator'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,13 +27,20 @@ export default function Home() {
   const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all')
   const [connectionsFilter, setConnectionsFilter] = useState(false)
 
+  // Proximity search states
+  const [proximitySearch, setProximitySearch] = useState<{
+    postalCode: string
+    radius: number
+    coordinates: { latitud: number; longitud: number } | null
+  } | null>(null)
+
   useEffect(() => {
     loadFamilies()
   }, [])
 
   useEffect(() => {
     filterFamilies()
-  }, [families, searchTerm, classFilter, connectionsFilter]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [families, searchTerm, classFilter, connectionsFilter, proximitySearch]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadFamilies = async () => {
     try {
@@ -68,8 +77,34 @@ export default function Home() {
     }
   }
 
-  const filterFamilies = () => {
+  const filterFamilies = async () => {
     let filtered = families
+
+    // Proximity filter (highest priority, should run first)
+    if (proximitySearch && proximitySearch.coordinates) {
+      const nearbyFamilies: Family[] = []
+
+      for (const family of families) {
+        // Check if the family has a postal code
+        if (family.codigo_postal) {
+          const familyCoords = await getPostalCodeCoordinates(family.codigo_postal)
+          if (familyCoords) {
+            const distance = calculateDistance(
+              proximitySearch.coordinates.latitud,
+              proximitySearch.coordinates.longitud,
+              familyCoords.latitud,
+              familyCoords.longitud
+            )
+
+            if (distance <= proximitySearch.radius) {
+              nearbyFamilies.push(family)
+            }
+          }
+        }
+      }
+
+      filtered = nearbyFamilies
+    }
 
     // Search filter
     if (searchTerm) {
@@ -109,6 +144,17 @@ export default function Home() {
     }
 
     setFilteredFamilies(filtered)
+  }
+
+  const handleProximitySearch = async (postalCode: string, radius: number) => {
+    const coordinates = await getPostalCodeCoordinates(postalCode)
+    if (coordinates) {
+      setProximitySearch({ postalCode, radius, coordinates })
+    }
+  }
+
+  const handleClearProximitySearch = () => {
+    setProximitySearch(null)
   }
 
   // Responsive view mode based on screen size
@@ -206,11 +252,29 @@ export default function Home() {
             currentClassFilter={classFilter}
             currentConnectionsFilter={connectionsFilter}
           />
-          <p className="text-gray-800">
-            {t('directory.showing', {
-              count: filteredFamilies.length.toString(),
-              total: families.length.toString(),
-            })}
+
+          {/* Proximity Search */}
+          <div className="max-w-2xl mx-auto mt-6">
+            <ProximitySearch
+              onSearch={handleProximitySearch}
+              onClear={handleClearProximitySearch}
+              isActive={proximitySearch !== null}
+            />
+          </div>
+
+          <p className="text-gray-800 mt-6">
+            {proximitySearch ? (
+              t('proximity.showingNearby', {
+                count: filteredFamilies.length.toString(),
+                radius: proximitySearch.radius.toString(),
+                postalCode: proximitySearch.postalCode,
+              })
+            ) : (
+              t('directory.showing', {
+                count: filteredFamilies.length.toString(),
+                total: families.length.toString(),
+              })
+            )}
           </p>
         </div>
 

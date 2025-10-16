@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import LocationSelector from '@/components/LocationSelector'
 import LanguageSelector from '@/components/LanguageSelector'
+import BarrioSelector from '@/components/BarrioSelector'
 import { supabase } from '@/lib/supabase'
 import { FamilyFormData, ClassType, LanguageSpoken, LocationInfo } from '@/types'
 import { translateFamilyData, detectLanguage } from '@/lib/translation'
@@ -23,6 +24,8 @@ export default function RegisterPage() {
     family_name: '',
     description: '',
     original_language: 'en',
+    barrio: null,
+    codigo_postal: null,
     adults: [
       {
         name: '',
@@ -350,6 +353,46 @@ export default function RegisterPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   placeholder={t('forms.familyDescriptionPlaceholder')}
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                    {t('barrio.label')}
+                  </label>
+                  <BarrioSelector
+                    barrio={formData.barrio}
+                    onChange={(barrio) =>
+                      setFormData((prev) => ({ ...prev, barrio: barrio || null }))
+                    }
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                    {t('postalCode.label')}
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.codigo_postal || ''}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      // Validate Valencia postal code format (46xxx) - allow progressive typing
+                      if (value === '' || /^4?6?\d{0,3}$/.test(value)) {
+                        setFormData((prev) => ({ ...prev, codigo_postal: value || null }))
+                      }
+                    }}
+                    maxLength={5}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    placeholder={t('postalCode.placeholder')}
+                  />
+                  {formData.codigo_postal && formData.codigo_postal.length === 5 && !/^46\d{3}$/.test(formData.codigo_postal) && (
+                    <p className="text-xs text-red-600 mt-1">
+                      {t('postalCode.invalid')}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 

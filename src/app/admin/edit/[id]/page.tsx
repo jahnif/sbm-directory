@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import ImageUpload from '@/components/ImageUpload'
 import LocationSelector from '@/components/LocationSelector'
 import LanguageSelector from '@/components/LanguageSelector'
+import BarrioSelector from '@/components/BarrioSelector'
 import { supabase } from '@/lib/supabase'
 import { Family, FamilyFormData, ClassType, LanguageSpoken, LocationInfo } from '@/types'
 import PageHeader from '@/components/PageHeader'
@@ -28,6 +29,8 @@ export default function EditFamilyPage() {
     family_name: '',
     description: '',
     original_language: 'en',
+    barrio: null,
+    codigo_postal: null,
     adults: [],
     children: [],
   })
@@ -73,6 +76,8 @@ export default function EditFamilyPage() {
         family_name: loadedFamily.family_name,
         description: loadedFamily.description,
         original_language: loadedFamily.original_language || 'en',
+        barrio: loadedFamily.barrio || null,
+        codigo_postal: loadedFamily.codigo_postal || null,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         adults: loadedFamily.adults.map(
           ({ id, family_id, created_at, ...adult }) => ({
@@ -213,6 +218,8 @@ export default function EditFamilyPage() {
         family_name: formData.family_name,
         description: formData.description,
         original_language: originalLanguage,
+        barrio: formData.barrio,
+        codigo_postal: formData.codigo_postal,
         updated_at: new Date().toISOString(),
         ...(translatedData && {
           family_name_es:
@@ -460,6 +467,52 @@ export default function EditFamilyPage() {
                   placeholder={t('forms.descriptionPlaceholder')}
                 />
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="barrio"
+                    className="block text-sm font-medium text-gray-900 mb-1"
+                  >
+                    {t('barrio.label')}
+                  </label>
+                  <BarrioSelector
+                    barrio={formData.barrio}
+                    onChange={(barrio) =>
+                      setFormData((prev) => ({ ...prev, barrio: barrio || null }))
+                    }
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="codigo_postal"
+                    className="block text-sm font-medium text-gray-900 mb-1"
+                  >
+                    {t('postalCode.label')}
+                  </label>
+                  <input
+                    id="codigo_postal"
+                    type="text"
+                    value={formData.codigo_postal || ''}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === '' || /^4?6?\d{0,3}$/.test(value)) {
+                        setFormData((prev) => ({ ...prev, codigo_postal: value || null }))
+                      }
+                    }}
+                    maxLength={5}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    placeholder={t('postalCode.placeholder')}
+                  />
+                  {formData.codigo_postal && formData.codigo_postal.length === 5 && !/^46\d{3}$/.test(formData.codigo_postal) && (
+                    <p className="text-xs text-red-600 mt-1">
+                      {t('postalCode.invalid')}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Adults */}
@@ -571,7 +624,6 @@ export default function EditFamilyPage() {
                         className="w-full"
                       />
                     </div>
-
                   </div>
 
                   {/* Languages Spoken Section */}

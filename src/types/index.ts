@@ -5,6 +5,8 @@ export interface Family {
   family_name_es?: string | null
   description_es?: string | null
   original_language: 'en' | 'es'
+  barrio: string | null
+  codigo_postal: string | null
   created_at: string
   updated_at: string
   adults: Adult[]
@@ -19,6 +21,13 @@ export interface LanguageSpoken {
 export interface LocationInfo {
   country: string // Country code (e.g., 'US', 'ES', 'FR')
   city: string    // City name
+}
+
+export interface PostalCode {
+  codigo_postal: string
+  localidad: string
+  latitud: number
+  longitud: number
 }
 
 export interface Adult {
@@ -62,6 +71,8 @@ export interface FamilyFormData {
   family_name: string
   description: string
   original_language: 'en' | 'es'
+  barrio: string | null
+  codigo_postal: string | null
   adults: Omit<Adult, 'id' | 'family_id' | 'created_at'>[]
   children: Omit<Child, 'id' | 'family_id' | 'created_at'>[]
 }

@@ -240,5 +240,32 @@
   "languages": {
     "selectLanguage": "Select language",
     "addLanguage": "Add Language"
+  },
+  "barrio": {
+    "select": "Select neighborhood",
+    "other": "Other",
+    "otherPlaceholder": "Enter your neighborhood",
+    "backToList": "Back to list",
+    "label": "Neighborhood"
+  },
+  "postalCode": {
+    "label": "Postal Code",
+    "placeholder": "e.g., 46001",
+    "invalid": "Invalid postal code (must be 5 digits starting with 46)",
+    "required": "Postal code is required for proximity search"
+  },
+  "proximity": {
+    "title": "Find families near you",
+    "enterPostalCode": "Enter your postal code to find nearby families",
+    "radius": "Radius",
+    "km": "km",
+    "search": "Search",
+    "clear": "Clear",
+    "show": "Show",
+    "hide": "Hide",
+    "showingNearby": "Showing {count} families within {radius} km of {postalCode}",
+    "showingResults": "Showing families within {radius} km of {postalCode}",
+    "noNearbyFamilies": "No families found within {radius} km",
+    "distance": "Distance"
   }
 }
