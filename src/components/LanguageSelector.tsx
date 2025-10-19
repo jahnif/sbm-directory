@@ -21,6 +21,7 @@ const LANGUAGES: Language[] = [
   { code: 'ja', name: 'Japanese', flag: '🇯🇵' },
   { code: 'ko', name: 'Korean', flag: '🇰🇷' },
   { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+  { code: 'ir', name: 'Farsi', flag: '🇮🇷'},
   { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
   { code: 'th', name: 'Thai', flag: '🇹🇭' },
   { code: 'vi', name: 'Vietnamese', flag: '🇻🇳' },

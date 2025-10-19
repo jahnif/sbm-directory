@@ -13,7 +13,7 @@ interface BarrioSelectorProps {
 const VALENCIA_BARRIOS = [
   // Valencia City Center - Ciutat Vella
   'Ciutat Vella',
-  'El Carme',
+  'El Carmen',
   'El Pilar',
   'La Seu',
   'La Xerea',
