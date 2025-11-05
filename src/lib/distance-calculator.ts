@@ -1,4 +1,3 @@
-import { supabase } from '@/lib/supabase'
 import { PostalCode } from '@/types'
 
 /**
@@ -48,17 +47,16 @@ export async function getPostalCodeCoordinates(
   codigoPostal: string
 ): Promise<{ latitud: number; longitud: number } | null> {
   try {
-    const { data, error } = await supabase
-      .from('codigos_postales')
-      .select('latitud, longitud')
-      .eq('codigo_postal', codigoPostal)
-      .single()
+    // Use API route for server-side query with service role key
+    // This bypasses RLS and ensures we can always access the postal codes table
+    const response = await fetch(`/api/postal-code-coordinates?codigo_postal=${encodeURIComponent(codigoPostal)}`)
 
-    if (error || !data) {
-      console.error('Postal code not found:', codigoPostal, error)
+    if (!response.ok) {
+      console.error(`Error fetching postal code coordinates: ${response.statusText}`)
       return null
     }
 
+    const data = await response.json()
     return data
   } catch (err) {
     console.error('Error fetching postal code coordinates:', err)
@@ -120,15 +118,14 @@ export function isValidValenciaPostalCode(codigoPostal: string): boolean {
  */
 export async function getAllPostalCodes(): Promise<PostalCode[]> {
   try {
-    const { data, error } = await supabase
-      .from('codigos_postales')
-      .select('codigo_postal, localidad, latitud, longitud')
+    const response = await fetch('/api/postal-codes')
 
-    if (error) {
-      console.error('Error fetching postal codes:', error)
+    if (!response.ok) {
+      console.error(`Error fetching postal codes: ${response.statusText}`)
       return []
     }
 
+    const data = await response.json()
     return data || []
   } catch (err) {
     console.error('Error fetching all postal codes:', err)
