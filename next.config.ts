@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -11,24 +12,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['@supabase/supabase-js'],
 
   // Production optimizations
-  productionBrowserSourceMaps: false, // Disable source maps to save memory
-
-  // Limit concurrent page compilations to reduce memory usage
-  onDemandEntries: {
-    maxInactiveAge: 60 * 1000, // Keep pages in memory for 60 seconds
-    pagesBufferLength: 2, // Only keep 2 pages in memory at a time
-  },
-
-  // Enable compression
+  productionBrowserSourceMaps: false,
   compress: true,
-
-  // Optimize output
-  experimental: {
-    optimizePackageImports: ['@supabase/supabase-js'],
-  },
 }
 
 export default nextConfig
