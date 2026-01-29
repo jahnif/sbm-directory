@@ -10,7 +10,8 @@ import SearchAndFilters from '@/components/SearchAndFilters'
 import ProximitySearch from '@/components/ProximitySearch'
 import LanguageToggle from '@/components/LanguageToggle'
 import { useTranslation } from '@/hooks/useTranslation'
-import { calculateDistance, getPostalCodeCoordinates } from '@/lib/distance-calculator'
+import { calculateDistance, getPostalCodeCoordinates, getAllPostalCodes } from '@/lib/distance-calculator'
+import type { PostalCode } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,9 +35,27 @@ export default function Home() {
     coordinates: { latitud: number; longitud: number } | null
   } | null>(null)
 
+  // Cache postal codes for faster proximity search
+  const [postalCodesCache, setPostalCodesCache] = useState<Map<string, { latitud: number; longitud: number }>>(new Map())
+
   useEffect(() => {
     loadFamilies()
+    loadPostalCodes()
   }, [])
+
+  // Load all postal codes once for caching
+  const loadPostalCodes = async () => {
+    try {
+      const postalCodes = await getAllPostalCodes()
+      const cache = new Map<string, { latitud: number; longitud: number }>()
+      postalCodes.forEach((pc: PostalCode) => {
+        cache.set(pc.codigo_postal, { latitud: pc.latitud, longitud: pc.longitud })
+      })
+      setPostalCodesCache(cache)
+    } catch (err) {
+      console.error('Error loading postal codes cache:', err)
+    }
+  }
 
   useEffect(() => {
     filterFamilies()
@@ -84,10 +103,11 @@ export default function Home() {
     if (proximitySearch && proximitySearch.coordinates) {
       const nearbyFamilies: Family[] = []
 
+      // Use cached postal codes instead of making API calls
       for (const family of families) {
         // Check if the family has a postal code
         if (family.codigo_postal) {
-          const familyCoords = await getPostalCodeCoordinates(family.codigo_postal)
+          const familyCoords = postalCodesCache.get(family.codigo_postal)
           if (familyCoords) {
             const distance = calculateDistance(
               proximitySearch.coordinates.latitud,
@@ -147,7 +167,8 @@ export default function Home() {
   }
 
   const handleProximitySearch = async (postalCode: string, radius: number) => {
-    const coordinates = await getPostalCodeCoordinates(postalCode)
+    // Use cached postal code coordinates instead of API call
+    const coordinates = postalCodesCache.get(postalCode)
     if (coordinates) {
       setProximitySearch({ postalCode, radius, coordinates })
     }

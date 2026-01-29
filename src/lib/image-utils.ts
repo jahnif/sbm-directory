@@ -8,6 +8,9 @@ export const compressImage = (
     const ctx = canvas.getContext('2d')!
     const img = new Image()
 
+    // Create object URL and store it for cleanup
+    const objectUrl = URL.createObjectURL(file)
+
     img.onload = () => {
       // Calculate new dimensions
       let { width, height } = img
@@ -23,6 +26,9 @@ export const compressImage = (
       ctx.drawImage(img, 0, 0, width, height)
       canvas.toBlob(
         (blob) => {
+          // Revoke object URL to prevent memory leak
+          URL.revokeObjectURL(objectUrl)
+
           if (blob) {
             const compressedFile = new File([blob], file.name, {
               type: 'image/jpeg',
@@ -38,7 +44,7 @@ export const compressImage = (
       )
     }
 
-    img.src = URL.createObjectURL(file)
+    img.src = objectUrl
   })
 }
 
