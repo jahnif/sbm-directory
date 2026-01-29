@@ -30,10 +30,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Create and set permissions for temp directories BEFORE switching users
-RUN mkdir -p /tmp/next-server /var/tmp && \
-    chown -R nextjs:nodejs /tmp /var/tmp && \
-    chmod -R 755 /tmp /var/tmp
+# Set permissions for temp directories (don't create next-server - Next.js needs it as a file)
+RUN chown -R nextjs:nodejs /tmp && \
+    chmod -R 1777 /tmp
 
 # Copy built assets
 COPY --from=builder /app/public ./public
