@@ -60,7 +60,6 @@ export default function FamilyCard({
                     width={64}
                     height={64}
                     className="w-full h-full object-cover"
-                    unoptimized={true}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium">
@@ -184,7 +183,6 @@ export default function FamilyCard({
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
-                    unoptimized={true}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-medium">

@@ -327,9 +327,9 @@ export default function Home() {
               </div>
             </div>
             <div className="divide-y divide-gray-200 family-list">
-              {filteredFamilies.map((family, index) => (
+              {filteredFamilies.map((family) => (
                 <FamilyTableRow
-                  key={`${family.id}-${searchTerm}-${classFilter}-${connectionsFilter}-${index}`}
+                  key={family.id}
                   family={family}
                   showNetworkingOnly={connectionsFilter}
                   classFilter={classFilter}

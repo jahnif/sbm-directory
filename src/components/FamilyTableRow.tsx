@@ -68,10 +68,9 @@ export default function FamilyTableRow({
                   key={adult.id}
                   src={adult.image_url}
                   alt={adult.name}
-                  width={20}
-                  height={20}
+                  width={40}
+                  height={40}
                   className="object-cover w-10 h-10 rounded-full mr-[-1em]"
-                  unoptimized={true}
                 />
               ) : (
                 <div
@@ -89,10 +88,9 @@ export default function FamilyTableRow({
                   key={child.id}
                   src={child.image_url}
                   alt={child.name}
-                  width={20}
-                  height={20}
+                  width={40}
+                  height={40}
                   className="object-cover w-10 h-10 rounded-full mr-[-1em]"
-                  unoptimized={true}
                 />
               ) : (
                 <div
@@ -133,7 +131,6 @@ export default function FamilyTableRow({
                       width={90}
                       height={90}
                       className="w-full h-full object-cover"
-                      unoptimized={true}
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium text-lg">
@@ -282,7 +279,6 @@ export default function FamilyTableRow({
                       width={90}
                       height={90}
                       className="w-full h-full object-cover"
-                      unoptimized={true}
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-medium">
