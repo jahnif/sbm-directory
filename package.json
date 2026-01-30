@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "NODE_OPTIONS='--max-old-space-size=1024 --max-semi-space-size=32' next start",
+    "start": "NODE_OPTIONS='--max-old-space-size=1024 --max-semi-space-size=32' node server.js",
+    "start:dev": "NODE_OPTIONS='--max-old-space-size=1024 --max-semi-space-size=32' next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

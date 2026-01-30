@@ -31,10 +31,11 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Create app-specific temp directory to avoid conflicts
-RUN mkdir -p /app/.next/cache /app/tmp && \
+RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/tmp && \
     chown -R nextjs:nodejs /app/.next/cache /app/tmp && \
     chown -R nextjs:nodejs /tmp && \
-    chmod -R 1777 /tmp /app/tmp
+    chmod -R 1777 /tmp /app/tmp && \
+    chmod -R 755 /app/.next/cache
 
 # Copy built assets
 COPY --from=builder /app/public ./public
