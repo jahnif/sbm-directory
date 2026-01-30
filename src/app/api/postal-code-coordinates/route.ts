@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSupabaseClient } from '@/lib/supabase-server'
 
+// Cache coordinates for 1 hour
+export const revalidate = 3600
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const codigoPostal = searchParams.get('codigo_postal')
@@ -45,7 +48,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    return NextResponse.json(data)
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    })
   } catch (err) {
     console.error('Unexpected error:', err)
     return NextResponse.json(

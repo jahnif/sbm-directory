@@ -30,8 +30,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Set permissions for temp directories (don't create next-server - Next.js needs it as a file)
-RUN chown -R nextjs:nodejs /tmp && \
+# Create app-specific temp directory to avoid conflicts
+RUN mkdir -p /app/.next/cache && \
+    chown -R nextjs:nodejs /app/.next/cache && \
+    chown -R nextjs:nodejs /tmp && \
     chmod -R 1777 /tmp
 
 # Copy built assets
@@ -50,5 +52,7 @@ ENV HOSTNAME="0.0.0.0"
 ENV TMPDIR=/tmp
 ENV TEMP=/tmp
 ENV TMP=/tmp
+# Use app-specific cache directory to avoid file locking issues
+ENV NEXT_PRIVATE_STANDALONE_CACHE_DIR=/app/.next/cache
 
 CMD ["node", "server.js"]

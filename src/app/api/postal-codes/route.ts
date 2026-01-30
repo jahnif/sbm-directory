@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 import { getServerSupabaseClient } from '@/lib/supabase-server'
 
+// Cache postal codes for 1 hour (they rarely change)
+export const revalidate = 3600
+export const dynamic = 'force-static'
+
 export async function GET() {
   try {
     // Use cached server-side Supabase client
@@ -18,7 +22,11 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json(data || [])
+    return NextResponse.json(data || [], {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+      },
+    })
   } catch (err) {
     console.error('Unexpected error:', err)
     return NextResponse.json(

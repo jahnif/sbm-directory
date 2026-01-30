@@ -13,8 +13,6 @@ import { useTranslation } from '@/hooks/useTranslation'
 import { calculateDistance, getPostalCodeCoordinates, getAllPostalCodes } from '@/lib/distance-calculator'
 import type { PostalCode } from '@/types'
 
-export const dynamic = 'force-dynamic'
-
 export default function Home() {
   const { t } = useTranslation()
   const [families, setFamilies] = useState<Family[]>([])
