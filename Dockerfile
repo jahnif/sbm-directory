@@ -37,7 +37,9 @@ RUN addgroup --system --gid 1001 nodejs && \
 RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/tmp && \
     chown -R nextjs:nodejs /app/.next/cache /app/tmp && \
     chmod -R 755 /app/.next/cache && \
-    chmod -R 1777 /app/tmp
+    chmod -R 1777 /app/tmp && \
+    chmod 1777 /tmp && \
+    chmod 1777 /var/tmp
 
 # Copy built assets
 COPY --from=builder /app/public ./public
@@ -58,6 +60,10 @@ ENV HOSTNAME="0.0.0.0"
 # Redirect temp directory to app-owned location to prevent ETXTBSY on /tmp
 ENV TMPDIR=/app/tmp
 ENV NEXT_SWC_TMPDIR=/app/tmp
+
+# Force Node.js to run single-threaded to prevent file contention
+ENV UV_THREADPOOL_SIZE=1
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "server.js"]

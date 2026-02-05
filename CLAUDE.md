@@ -131,3 +131,39 @@ All migrations should go in the `migrations` directory and be labeled incrementa
 - No Dokploy configuration changes needed (already using Dockerfile build type)
 - Changes are reversible via git if rollback needed
 - Success criteria: 24 hours with no ETXTBSY errors, stable CPU/RAM usage
+
+---
+
+### 2026-02-05 Update: Additional ETXTBSY Fix Required
+
+**Discovery**: After deploying Debian Slim, ETXTBSY errors persisted on `/tmp/nextjs` and `/tmp/grep`. Container verification showed Debian was running correctly, but errors continued.
+
+**Root Cause Refinement**: The issue was not solely Alpine/BusyBox. Next.js image optimization (Sharp) and SWC native binaries were still being extracted to system `/tmp` even on Debian, causing file locking conflicts under concurrent load.
+
+**Additional Fixes Applied**:
+1. **Disabled Next.js image optimization** (`unoptimized: true` in next.config.ts)
+   - Sharp library was extracting native binaries to `/tmp` during image processing
+   - Client-side compression already handles image optimization adequately
+   - Eliminates primary source of native binary extraction
+
+2. **Enforced TMPDIR redirection for SWC**
+   - Added `ENV TMPDIR=/app/tmp` and `ENV NEXT_SWC_TMPDIR=/app/tmp` to Dockerfile
+   - Forces SWC native binary extraction to app-owned directory
+   - Created `/app/tmp` with 1777 permissions (world-writable with sticky bit)
+
+3. **Added build-time TMPDIR**
+   - Set `TMPDIR=/tmp/build-tmp` during `npm run build` stage
+   - Prevents build-time file conflicts
+
+4. **Enhanced entrypoint cleanup**
+   - Added `rm -f /app/tmp/*` to remove stale files from previous runs
+   - Ensures clean state on container restart
+
+**Files Modified**:
+- `next.config.ts` - Disabled image optimization
+- `Dockerfile` - Added TMPDIR env vars, created /app/tmp directory
+- `docker-entrypoint.sh` - Added cleanup of /app/tmp
+
+**Trade-off**: Images are no longer server-side optimized (no WebP conversion, no responsive sizing). However, client-side compression in `src/lib/image-utils.ts` already reduces images to max 800px width at 0.8 JPEG quality before upload, so server-side optimization was redundant.
+
+**Commit**: `075fc06` - Disable image optimization and enforce TMPDIR for SWC binaries
