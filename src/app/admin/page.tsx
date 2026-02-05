@@ -5,8 +5,6 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Family } from '@/types'
 
-export const dynamic = 'force-dynamic'
-
 export default function AdminPage() {
   const [families, setFamilies] = useState<Family[]>([])
   const [loading, setLoading] = useState(true)

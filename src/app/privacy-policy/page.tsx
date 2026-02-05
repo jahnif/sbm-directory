@@ -4,8 +4,6 @@ import Link from 'next/link'
 import LanguageToggle from '@/components/LanguageToggle'
 import { useTranslation } from '@/hooks/useTranslation'
 
-export const dynamic = 'force-dynamic'
-
 export default function PrivacyPolicyPage() {
   const { t } = useTranslation()
 

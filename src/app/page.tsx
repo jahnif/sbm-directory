@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Family, ClassType } from '@/types'
@@ -16,13 +16,12 @@ import type { PostalCode } from '@/types'
 export default function Home() {
   const { t } = useTranslation()
   const [families, setFamilies] = useState<Family[]>([])
-  const [filteredFamilies, setFilteredFamilies] = useState<Family[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table')
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [classFilter, setClassFilter] = useState<ClassType | 'all'>('all')
   const [connectionsFilter, setConnectionsFilter] = useState(false)
 
@@ -35,6 +34,29 @@ export default function Home() {
 
   // Cache postal codes for faster proximity search
   const [postalCodesCache, setPostalCodesCache] = useState<Map<string, { latitud: number; longitud: number }>>(new Map())
+
+  // Debounce timer ref
+  const searchTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Debounced search handler
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchTerm(value) // Update UI immediately for responsiveness
+    if (searchTimerRef.current) {
+      clearTimeout(searchTimerRef.current)
+    }
+    searchTimerRef.current = setTimeout(() => {
+      setDebouncedSearchTerm(value)
+    }, 300)
+  }, [])
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     loadFamilies()
@@ -54,10 +76,6 @@ export default function Home() {
       console.error('Error loading postal codes cache:', err)
     }
   }
-
-  useEffect(() => {
-    filterFamilies()
-  }, [families, searchTerm, classFilter, connectionsFilter, proximitySearch]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadFamilies = async () => {
     try {
@@ -94,7 +112,8 @@ export default function Home() {
     }
   }
 
-  const filterFamilies = async () => {
+  // Memoized filtered families - replaces filterFamilies function and state
+  const filteredFamilies = useMemo(() => {
     let filtered = families
 
     // Proximity filter (highest priority, should run first)
@@ -124,9 +143,9 @@ export default function Home() {
       filtered = nearbyFamilies
     }
 
-    // Search filter
-    if (searchTerm) {
-      const search = searchTerm.toLowerCase()
+    // Search filter - use debounced search term
+    if (debouncedSearchTerm) {
+      const search = debouncedSearchTerm.toLowerCase()
       filtered = filtered.filter(
         (family) =>
           family.family_name.toLowerCase().includes(search) ||
@@ -161,8 +180,8 @@ export default function Home() {
       )
     }
 
-    setFilteredFamilies(filtered)
-  }
+    return filtered
+  }, [families, debouncedSearchTerm, classFilter, connectionsFilter, proximitySearch, postalCodesCache])
 
   const handleProximitySearch = async (postalCode: string, radius: number) => {
     // Use cached postal code coordinates instead of API call
@@ -175,17 +194,6 @@ export default function Home() {
   const handleClearProximitySearch = () => {
     setProximitySearch(null)
   }
-
-  // Responsive view mode based on screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setViewMode(window.innerWidth < 1024 ? 'table' : 'table')
-    }
-
-    handleResize() // Set initial value
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   if (loading) {
     return (
@@ -264,7 +272,7 @@ export default function Home() {
 
           {/* Search and Filters */}
           <SearchAndFilters
-            onSearchChange={setSearchTerm}
+            onSearchChange={handleSearchChange}
             onClassFilter={setClassFilter}
             onConnectionsFilter={setConnectionsFilter}
             currentSearch={searchTerm}
@@ -314,12 +322,11 @@ export default function Home() {
               </Link>
             )}
           </div>
-        ) : viewMode === 'table' ? (
+        ) : (
           <div className="bg-white rounded-lg shadow-xl/5">
             {/* Sticky Headers */}
             <div className="sticky top-0 z-10 bg-white border-b border-gray-200 hidden lg:block">
               <div className="grid lg:grid-cols-[3fr_4fr_4fr_3fr] gap-4 px-6 py-2 text-sm text-center">
-                {/* <div className="grid grid-cols-[3fr_4fr_4fr_3fr] gap-6 px-6 py-3 text-sm font-light text-gray-900 text-center"> */}
                 <div className="">{t('family.familyName')}</div>
                 <div className="">{t('family.adults')}</div>
                 <div className="">{t('family.children')}</div>
@@ -337,17 +344,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-        ) : (
-          // <div className="grid grid-cols-1 md:grid-cols-2 gap-6 family-list">
-          //   {filteredFamilies.map((family, index) => (
-          //     <FamilyCard
-          //       key={`${family.id}-${searchTerm}-${classFilter}-${connectionsFilter}-${index}`}
-          //       family={family}
-          //       showNetworkingOnly={connectionsFilter}
-          //     />
-          //   ))}
-          // </div>
-          <div></div>
         )}
       </main>
     </div>

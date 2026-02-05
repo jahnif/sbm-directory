@@ -12,8 +12,6 @@ import { translateFamilyData, detectLanguage } from '@/lib/translation'
 import PageHeader from '@/components/PageHeader'
 import { useTranslation } from '@/hooks/useTranslation'
 
-export const dynamic = 'force-dynamic'
-
 export default function RegisterPage() {
   const { t } = useTranslation()
   const router = useRouter()
