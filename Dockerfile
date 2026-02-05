@@ -16,6 +16,10 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Create temp directory for build process to prevent ETXTBSY
+RUN mkdir -p /tmp/build-tmp && chmod 1777 /tmp/build-tmp
+ENV TMPDIR=/tmp/build-tmp
+
 RUN npm run build
 
 # Stage 3: Runner
@@ -29,10 +33,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Create cache directories with correct permissions
-RUN mkdir -p /app/.next/cache /app/.next/cache/images && \
-    chown -R nextjs:nodejs /app/.next/cache && \
-    chmod -R 755 /app/.next/cache
+# Create cache and temp directories with correct permissions
+RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/tmp && \
+    chown -R nextjs:nodejs /app/.next/cache /app/tmp && \
+    chmod -R 755 /app/.next/cache && \
+    chmod -R 1777 /app/tmp
 
 # Copy built assets
 COPY --from=builder /app/public ./public
@@ -49,6 +54,10 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+
+# Redirect temp directory to app-owned location to prevent ETXTBSY on /tmp
+ENV TMPDIR=/app/tmp
+ENV NEXT_SWC_TMPDIR=/app/tmp
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "server.js"]
