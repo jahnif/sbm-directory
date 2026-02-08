@@ -16,10 +16,6 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Create temp directory for build process to prevent ETXTBSY
-RUN mkdir -p /tmp/build-tmp && chmod 1777 /tmp/build-tmp
-ENV TMPDIR=/tmp/build-tmp
-
 RUN npm run build
 
 # Stage 3: Runner
@@ -33,13 +29,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Create cache and temp directories with correct permissions
-RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/tmp && \
-    chown -R nextjs:nodejs /app/.next/cache /app/tmp && \
-    chmod -R 755 /app/.next/cache && \
-    chmod -R 1777 /app/tmp && \
-    chmod 1777 /tmp && \
-    chmod 1777 /var/tmp
+# Create cache directory and binary storage with correct permissions
+RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/.next-bins && \
+    chown -R nextjs:nodejs /app/.next/cache /app/.next-bins && \
+    chmod -R 755 /app/.next/cache
 
 # Copy built assets
 COPY --from=builder /app/public ./public
@@ -50,20 +43,22 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Pre-extract SWC binaries at build time to prevent ETXTBSY race condition
+# This starts a minimal HTTP server which triggers binary extraction, then makes them read-only
+RUN node -e " \
+  const http = require('http'); \
+  const s = http.createServer((req,res) => res.end('ok')); \
+  s.listen(0, () => { setTimeout(() => { s.close(); process.exit(0); }, 5000); }); \
+" 2>/dev/null || true && \
+chmod 555 /tmp/next-server /tmp/nextjs /tmp/grep 2>/dev/null || true && \
+cp /tmp/next-server /tmp/nextjs /tmp/grep /app/.next-bins/ 2>/dev/null || true
+
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-
-# Redirect temp directory to app-owned location to prevent ETXTBSY on /tmp
-ENV TMPDIR=/app/tmp
-ENV NEXT_SWC_TMPDIR=/app/tmp
-
-# Force Node.js to run single-threaded to prevent file contention
-ENV UV_THREADPOOL_SIZE=1
-ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "server.js"]

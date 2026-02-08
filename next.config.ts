@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
   // Production optimizations
   productionBrowserSourceMaps: false,
   compress: true,
+
+  // Experimental memory optimizations
+  experimental: {
+    preloadEntriesOnStart: false, // Prevents memory leaks in Next.js 15.x
+  },
 }
 
 export default nextConfig
