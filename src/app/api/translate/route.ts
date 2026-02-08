@@ -9,22 +9,11 @@ export async function POST(request: NextRequest) {
     const body: TranslationRequest = await request.json()
     const { text, source_lang, target_lang } = body
 
-    console.log('Translation request:', {
-      text: text.substring(0, 100) + '...',
-      source_lang,
-      target_lang,
-    })
-
     if (!text || !text.trim()) {
-      console.log('Translation error: Empty text provided')
       return NextResponse.json({ error: 'Text is required' }, { status: 400 })
     }
 
     if (!source_lang || !target_lang) {
-      console.log('Translation error: Missing language parameters', {
-        source_lang,
-        target_lang,
-      })
       return NextResponse.json(
         { error: 'Source and target languages are required' },
         { status: 400 },
@@ -32,7 +21,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (source_lang === target_lang) {
-      console.log('Translation skipped: Same source and target language')
       return NextResponse.json({
         translated_text: text,
         detected_source_lang: source_lang,
@@ -63,18 +51,11 @@ export async function POST(request: NextRequest) {
       targetLanguage = 'en-US' as deepl.TargetLanguageCode
     }
 
-    console.log('Calling DeepL API with:', { deeplSourceLang, targetLanguage })
-
     const result = await translator.translateText(
       text,
       deeplSourceLang,
       targetLanguage,
     )
-
-    console.log('DeepL API success:', {
-      originalLength: text.length,
-      translatedLength: result.text.length,
-    })
 
     const response: TranslationResponse = {
       translated_text: result.text,
@@ -83,11 +64,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (error) {
-    console.error('Translation error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      error: error,
-    })
+    console.error('Translation error:', error instanceof Error ? error.message : 'Unknown error')
 
     // Provide more specific error messages
     if (error instanceof Error) {

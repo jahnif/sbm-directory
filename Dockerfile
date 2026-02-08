@@ -29,9 +29,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Create cache directory with correct permissions
-RUN mkdir -p /app/.next/cache /app/.next/cache/images && \
-    chown -R nextjs:nodejs /app/.next/cache && \
+# Create cache directory and binary storage with correct permissions
+RUN mkdir -p /app/.next/cache /app/.next/cache/images /app/.next-bins && \
+    chown -R nextjs:nodejs /app/.next/cache /app/.next-bins && \
     chmod -R 755 /app/.next/cache
 
 # Copy built assets
@@ -42,6 +42,16 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy and set up entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Pre-extract SWC binaries at build time to prevent ETXTBSY race condition
+# This starts a minimal HTTP server which triggers binary extraction, then makes them read-only
+RUN node -e " \
+  const http = require('http'); \
+  const s = http.createServer((req,res) => res.end('ok')); \
+  s.listen(0, () => { setTimeout(() => { s.close(); process.exit(0); }, 5000); }); \
+" 2>/dev/null || true && \
+chmod 555 /tmp/next-server /tmp/nextjs /tmp/grep 2>/dev/null || true && \
+cp /tmp/next-server /tmp/nextjs /tmp/grep /app/.next-bins/ 2>/dev/null || true
 
 USER nextjs
 

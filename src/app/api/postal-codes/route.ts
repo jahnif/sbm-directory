@@ -3,7 +3,6 @@ import { getServerSupabaseClient } from '@/lib/supabase-server'
 
 // Cache postal codes for 1 hour (they rarely change)
 export const revalidate = 3600
-export const dynamic = 'force-static'
 
 export async function GET() {
   try {
