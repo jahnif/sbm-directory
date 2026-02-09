@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Check if user has entered the site password
   const sitePasswordCookie = request.cookies.get('site-access')
   const pathname = request.nextUrl.pathname
