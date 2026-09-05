@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Family } from '@/types'
@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [view, setView] = useState<'active' | 'archived'>('active')
   const [archiveConfirm, setArchiveConfirm] = useState<string | null>(null)
+  const archiveConfirmTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -34,7 +35,15 @@ export default function AdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view])
 
+  useEffect(() => {
+    return () => {
+      if (archiveConfirmTimer.current) clearTimeout(archiveConfirmTimer.current)
+    }
+  }, [])
+
   const loadFamilies = async () => {
+    setLoading(true)
+    setError(null)
     try {
       const { data: familiesData, error: familiesError } = await supabase
         .from('families')
@@ -100,9 +109,17 @@ export default function AdminPage() {
 
   const archiveFamily = async (familyId: string) => {
     if (archiveConfirm !== familyId) {
+      if (archiveConfirmTimer.current) clearTimeout(archiveConfirmTimer.current)
       setArchiveConfirm(familyId)
-      setTimeout(() => setArchiveConfirm(null), 5000)
+      archiveConfirmTimer.current = setTimeout(
+        () => setArchiveConfirm(null),
+        5000,
+      )
       return
+    }
+    if (archiveConfirmTimer.current) {
+      clearTimeout(archiveConfirmTimer.current)
+      archiveConfirmTimer.current = null
     }
     try {
       const { error } = await supabase

@@ -379,7 +379,9 @@ class. There is no bulk promotion and no re-confirmation campaign — the
 rollover is mostly removals plus a trickle of self-service edits.
 
 1. **Back up.** `node scripts/backup-supabase.js` — dumps the database and
-   downloads every photo to `~/backups/sbm-yearbook/<timestamp>/`.
+   downloads every photo to `~/backups/sbm-yearbook/<timestamp>/`. Requires
+   `SUPABASE_PASS` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`, plus
+   `pg_dump` installed and on PATH.
 2. **Archive departed families.** Go to `/admin`, click "Admin access", enter
    `ADMIN_PASSWORD`, then Archive each family that has left. Archiving is
    reversible: the family keeps its adults, children, and photos, and Restore
@@ -430,3 +432,9 @@ unreachable from IPv4-only networks. Use the session pooler instead:
 - **Server-enforced authorization.** See the admin access note above.
 - **Purging old archives.** `archived_at` exists to support this; no policy is
   defined yet.
+- **RLS still permits hard delete.** The policies in
+  `migrations/000_supabase-setup.sql` grant DELETE to everyone, not just
+  admins, so a user with dev tools can still hard-delete a family (and its
+  adults and children, via cascade) directly against Supabase. This branch
+  removed the delete BUTTON, not the underlying capability -- do not
+  over-trust the soft-archive fix as a data-loss safeguard.
