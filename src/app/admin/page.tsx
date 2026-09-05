@@ -282,7 +282,7 @@ export default function AdminPage() {
 
             {/* Sticky Headers - Desktop Only */}
             <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 hidden lg:block">
-              <div className="grid lg:grid-cols-[2fr_3fr_3fr_2fr_2fr] gap-4 px-6 py-3 text-xs font-medium text-gray-700 uppercase tracking-wider">
+              <div className="grid lg:grid-cols-[minmax(0,20fr)_minmax(0,25fr)_minmax(0,25fr)_minmax(0,15fr)_minmax(0,15fr)] gap-4 px-6 py-3 text-xs font-medium text-gray-700 uppercase tracking-wider">
                 <div>Family Name</div>
                 <div>Adults</div>
                 <div>Children</div>
@@ -298,7 +298,7 @@ export default function AdminPage() {
                   key={family.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <div className="grid lg:grid-cols-[2fr_3fr_3fr_2fr_2fr] gap-4 px-6 py-6 lg:py-4">
+                  <div className="grid lg:grid-cols-[minmax(0,20fr)_minmax(0,25fr)_minmax(0,25fr)_minmax(0,15fr)_minmax(0,15fr)] gap-4 px-6 py-6 lg:py-4">
                     {/* Family Name */}
                     <div className="flex flex-col">
                       <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
