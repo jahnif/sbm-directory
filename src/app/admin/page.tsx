@@ -9,17 +9,37 @@ export default function AdminPage() {
   const [families, setFamilies] = useState<Family[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [showPasswordField, setShowPasswordField] = useState(false)
+  const [passwordInput, setPasswordInput] = useState('')
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [view, setView] = useState<'active' | 'archived'>('active')
+  const [archiveConfirm, setArchiveConfirm] = useState<string | null>(null)
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const res = await fetch('/api/admin-auth')
+        const data = await res.json()
+        setIsAdmin(Boolean(data.isAdmin))
+      } catch {
+        setIsAdmin(false)
+      }
+    }
+    checkAdmin()
+  }, [])
 
   useEffect(() => {
     loadFamilies()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view])
 
   const loadFamilies = async () => {
     try {
       const { data: familiesData, error: familiesError } = await supabase
         .from('families')
         .select('*')
+        .eq('status', view)
         .order('family_name')
 
       if (familiesError) throw familiesError
@@ -50,25 +70,63 @@ export default function AdminPage() {
     }
   }
 
-  const deleteFamily = async (familyId: string) => {
-    if (deleteConfirm !== familyId) {
-      setDeleteConfirm(familyId)
-      setTimeout(() => setDeleteConfirm(null), 5000) // Auto-cancel after 5 seconds
+  const submitPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPasswordError(null)
+    try {
+      const res = await fetch('/api/admin-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        setPasswordError(data.error || 'Incorrect password')
+        return
+      }
+      setIsAdmin(true)
+      setShowPasswordField(false)
+      setPasswordInput('')
+    } catch {
+      setPasswordError('Could not verify password')
+    }
+  }
+
+  const signOutAdmin = async () => {
+    await fetch('/api/admin-auth', { method: 'DELETE' })
+    setIsAdmin(false)
+    setView('active')
+  }
+
+  const archiveFamily = async (familyId: string) => {
+    if (archiveConfirm !== familyId) {
+      setArchiveConfirm(familyId)
+      setTimeout(() => setArchiveConfirm(null), 5000)
       return
     }
-
     try {
       const { error } = await supabase
         .from('families')
-        .delete()
+        .update({ status: 'archived', archived_at: new Date().toISOString() })
         .eq('id', familyId)
-
       if (error) throw error
-
-      setFamilies(families.filter((f) => f.id !== familyId))
-      setDeleteConfirm(null)
+      setArchiveConfirm(null)
+      await loadFamilies()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete family')
+      setError(err instanceof Error ? err.message : 'Failed to archive family')
+    }
+  }
+
+  const restoreFamily = async (familyId: string) => {
+    try {
+      const { error } = await supabase
+        .from('families')
+        .update({ status: 'active', archived_at: null })
+        .eq('id', familyId)
+      if (error) throw error
+      await loadFamilies()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to restore family')
     }
   }
 
@@ -111,12 +169,70 @@ export default function AdminPage() {
                 Manage family directory entries
               </p>
             </div>
-            <Link
-              href="/"
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium"
-            >
-              Back to Directory
-            </Link>
+            <div className="flex items-center gap-3">
+              {isAdmin ? (
+                <>
+                  <div className="flex rounded-md border border-gray-300 overflow-hidden">
+                    <button
+                      onClick={() => setView('active')}
+                      className={`px-3 py-2 text-sm font-medium ${view === 'active' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                    >
+                      Active
+                    </button>
+                    <button
+                      onClick={() => setView('archived')}
+                      className={`px-3 py-2 text-sm font-medium ${view === 'archived' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                    >
+                      Archived
+                    </button>
+                  </div>
+                  <button
+                    onClick={signOutAdmin}
+                    className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    Exit admin
+                  </button>
+                </>
+              ) : showPasswordField ? (
+                <form
+                  onSubmit={submitPassword}
+                  className="flex items-center gap-2"
+                >
+                  <input
+                    type="password"
+                    autoFocus
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="Admin password"
+                    className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+                  >
+                    Unlock
+                  </button>
+                  {passwordError && (
+                    <span className="text-sm text-red-600">
+                      {passwordError}
+                    </span>
+                  )}
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowPasswordField(true)}
+                  className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Admin access
+                </button>
+              )}
+              <Link
+                href="/"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium"
+              >
+                Back to Directory
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -125,20 +241,25 @@ export default function AdminPage() {
         {families.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-800 text-lg mb-4">
-              No families have been added yet.
+              {view === 'archived'
+                ? 'No archived families.'
+                : 'No families have been added yet.'}
             </p>
-            <Link
-              href="/register"
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-            >
-              Add the first family
-            </Link>
+            {view === 'active' && (
+              <Link
+                href="/register"
+                className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+              >
+                Add the first family
+              </Link>
+            )}
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
-                All Families ({families.length})
+                {view === 'archived' ? 'Archived' : 'Active'} Families (
+                {families.length})
               </h2>
             </div>
 
@@ -156,9 +277,11 @@ export default function AdminPage() {
             {/* Family Rows */}
             <div className="divide-y divide-gray-200">
               {families.map((family) => (
-                <div key={family.id} className="hover:bg-gray-50 transition-colors">
+                <div
+                  key={family.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
                   <div className="grid lg:grid-cols-[2fr_3fr_3fr_2fr_2fr] gap-4 px-6 py-6 lg:py-4">
-
                     {/* Family Name */}
                     <div className="flex flex-col">
                       <div className="lg:hidden text-xs text-gray-500 mb-1 font-medium">
@@ -232,17 +355,26 @@ export default function AdminPage() {
                         >
                           Edit
                         </Link>
-                        <button
-                          onClick={() => deleteFamily(family.id)}
-                          className={`px-3 py-1 rounded-md transition-colors ${deleteConfirm === family.id ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
-                        >
-                          {deleteConfirm === family.id
-                            ? 'Confirm Delete?'
-                            : 'Delete'}
-                        </button>
+                        {isAdmin && view === 'active' && (
+                          <button
+                            onClick={() => archiveFamily(family.id)}
+                            className={`px-3 py-1 rounded-md transition-colors ${archiveConfirm === family.id ? 'bg-amber-600 text-white hover:bg-amber-700' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'}`}
+                          >
+                            {archiveConfirm === family.id
+                              ? 'Confirm Archive?'
+                              : 'Archive'}
+                          </button>
+                        )}
+                        {isAdmin && view === 'archived' && (
+                          <button
+                            onClick={() => restoreFamily(family.id)}
+                            className="px-3 py-1 bg-green-100 text-green-800 rounded-md hover:bg-green-200 transition-colors"
+                          >
+                            Restore
+                          </button>
+                        )}
                       </div>
                     </div>
-
                   </div>
                 </div>
               ))}
