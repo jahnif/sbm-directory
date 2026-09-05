@@ -18,6 +18,8 @@ export type Database = {
           family_name_es: string | null
           description_es: string | null
           original_language: string
+          status: 'active' | 'archived'
+          archived_at: string | null
           created_at: string
           updated_at: string
         }
@@ -28,6 +30,8 @@ export type Database = {
           family_name_es?: string | null
           description_es?: string | null
           original_language?: string
+          status?: 'active' | 'archived'
+          archived_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -38,6 +42,8 @@ export type Database = {
           family_name_es?: string | null
           description_es?: string | null
           original_language?: string
+          status?: 'active' | 'archived'
+          archived_at?: string | null
           updated_at?: string
         }
       }
