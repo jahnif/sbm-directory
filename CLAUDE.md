@@ -366,3 +366,75 @@ If binaries are **read-only and already present**, SWC extraction code sees they
 - Pro: Better performance, bug fixes, future-proofing
 - Con: Testing effort, potential regressions, new learning curve
 - Con: React 19 requires updating any third-party UI libraries
+
+---
+
+## School Year Transition Runbook
+
+Run at the start of each school year. Design rationale is in
+`docs/superpowers/specs/2026-09-05-school-year-transition-design.md`.
+
+Classes span multiple school years, so most returning children do not change
+class. There is no bulk promotion and no re-confirmation campaign — the
+rollover is mostly removals plus a trickle of self-service edits.
+
+1. **Back up.** `node scripts/backup-supabase.js` — dumps the database and
+   downloads every photo to `~/backups/sbm-yearbook/<timestamp>/`. Requires
+   `SUPABASE_PASS` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`, plus
+   `pg_dump` installed and on PATH.
+2. **Archive departed families.** Go to `/admin`, click "Admin access", enter
+   `ADMIN_PASSWORD`, then Archive each family that has left. Archiving is
+   reversible: the family keeps its adults, children, and photos, and Restore
+   brings it back intact.
+3. **Announce to parents.** New families register at `/register`. Existing
+   families whose child changed class, or who have a new sibling starting,
+   edit themselves at `/admin`.
+4. **Remove graduated children individually.** For families staying with a
+   younger sibling, open the family in the edit form and delete just the
+   departed child.
+5. **Spot-check** the directory count against the school roster.
+
+### Admin access
+
+Archive, restore, and the archived-families view are hidden behind
+`ADMIN_PASSWORD` (set in `.env.local` and in the Dokploy environment).
+
+**This gate controls rendering, not database access.** Writes go directly from
+the browser to Supabase under permissive RLS policies, so a user with dev tools
+could archive a family regardless of the UI. It prevents accidents by ordinary
+parents; it does not stop a determined attacker. Making it enforced would mean
+tightening RLS or routing writes through server-side routes.
+
+### Permanently deleting a family (GDPR erasure)
+
+Hard delete has no UI. To honor an erasure request:
+
+1. Delete the family row in the Supabase dashboard — this cascades to their
+   adults and children.
+2. Delete their photos from the `family-images` storage bucket. The app has
+   never done this automatically; it must be done by hand.
+
+### Database connection
+
+The direct host `db.eflfxgtcvmvszefuiznz.supabase.co` is IPv6-only and
+unreachable from IPv4-only networks. Use the session pooler instead:
+
+- Host: `aws-1-us-east-2.pooler.supabase.com` (note `aws-1`, not `aws-0`)
+- Port: `5432` (the session pooler — the transaction pooler on 6543 does not
+  support `pg_dump`)
+- User: `postgres.eflfxgtcvmvszefuiznz`
+
+### Known future work
+
+- **Orphaned photos.** Archived families' photos stay in `family-images`
+  indefinitely, and hard-deleted families already orphan theirs. Harmless now;
+  a real problem after several years.
+- **Server-enforced authorization.** See the admin access note above.
+- **Purging old archives.** `archived_at` exists to support this; no policy is
+  defined yet.
+- **RLS still permits hard delete.** The policies in
+  `migrations/000_supabase-setup.sql` grant DELETE to everyone, not just
+  admins, so a user with dev tools can still hard-delete a family (and its
+  adults and children, via cascade) directly against Supabase. This branch
+  removed the delete BUTTON, not the underlying capability -- do not
+  over-trust the soft-archive fix as a data-loss safeguard.

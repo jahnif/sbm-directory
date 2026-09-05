@@ -10,7 +10,11 @@ import SearchAndFilters from '@/components/SearchAndFilters'
 import ProximitySearch from '@/components/ProximitySearch'
 import LanguageToggle from '@/components/LanguageToggle'
 import { useTranslation } from '@/hooks/useTranslation'
-import { calculateDistance, getPostalCodeCoordinates, getAllPostalCodes } from '@/lib/distance-calculator'
+import {
+  calculateDistance,
+  getPostalCodeCoordinates,
+  getAllPostalCodes,
+} from '@/lib/distance-calculator'
 import type { PostalCode } from '@/types'
 
 export default function Home() {
@@ -33,7 +37,9 @@ export default function Home() {
   } | null>(null)
 
   // Cache postal codes for faster proximity search
-  const [postalCodesCache, setPostalCodesCache] = useState<Map<string, { latitud: number; longitud: number }>>(new Map())
+  const [postalCodesCache, setPostalCodesCache] = useState<
+    Map<string, { latitud: number; longitud: number }>
+  >(new Map())
 
   // Debounce timer ref
   const searchTimerRef = useRef<NodeJS.Timeout | null>(null)
@@ -69,7 +75,10 @@ export default function Home() {
       const postalCodes = await getAllPostalCodes()
       const cache = new Map<string, { latitud: number; longitud: number }>()
       postalCodes.forEach((pc: PostalCode) => {
-        cache.set(pc.codigo_postal, { latitud: pc.latitud, longitud: pc.longitud })
+        cache.set(pc.codigo_postal, {
+          latitud: pc.latitud,
+          longitud: pc.longitud,
+        })
       })
       setPostalCodesCache(cache)
     } catch (err) {
@@ -82,6 +91,7 @@ export default function Home() {
       const { data: familiesData, error: familiesError } = await supabase
         .from('families')
         .select('*')
+        .eq('status', 'active')
         .order('family_name')
 
       if (familiesError) throw familiesError
@@ -130,7 +140,7 @@ export default function Home() {
               proximitySearch.coordinates.latitud,
               proximitySearch.coordinates.longitud,
               familyCoords.latitud,
-              familyCoords.longitud
+              familyCoords.longitud,
             )
 
             if (distance <= proximitySearch.radius) {
@@ -155,9 +165,10 @@ export default function Home() {
               adult.name.toLowerCase().includes(search) ||
               adult.industry?.toLowerCase().includes(search) ||
               adult.job_title?.toLowerCase().includes(search) ||
-              adult.locations?.some(location =>
-                location.city.toLowerCase().includes(search) ||
-                location.country.toLowerCase().includes(search)
+              adult.locations?.some(
+                (location) =>
+                  location.city.toLowerCase().includes(search) ||
+                  location.country.toLowerCase().includes(search),
               ),
           ) ||
           family.children.some((child) =>
@@ -181,7 +192,14 @@ export default function Home() {
     }
 
     return filtered
-  }, [families, debouncedSearchTerm, classFilter, connectionsFilter, proximitySearch, postalCodesCache])
+  }, [
+    families,
+    debouncedSearchTerm,
+    classFilter,
+    connectionsFilter,
+    proximitySearch,
+    postalCodesCache,
+  ])
 
   const handleProximitySearch = async (postalCode: string, radius: number) => {
     // Use cached postal code coordinates instead of API call
@@ -290,18 +308,16 @@ export default function Home() {
           </div>
 
           <p className="text-gray-800 mt-6">
-            {proximitySearch ? (
-              t('proximity.showingNearby', {
-                count: filteredFamilies.length.toString(),
-                radius: proximitySearch.radius.toString(),
-                postalCode: proximitySearch.postalCode,
-              })
-            ) : (
-              t('directory.showing', {
-                count: filteredFamilies.length.toString(),
-                total: families.length.toString(),
-              })
-            )}
+            {proximitySearch
+              ? t('proximity.showingNearby', {
+                  count: filteredFamilies.length.toString(),
+                  radius: proximitySearch.radius.toString(),
+                  postalCode: proximitySearch.postalCode,
+                })
+              : t('directory.showing', {
+                  count: filteredFamilies.length.toString(),
+                  total: families.length.toString(),
+                })}
           </p>
         </div>
 

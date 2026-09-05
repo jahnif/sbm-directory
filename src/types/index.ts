@@ -7,6 +7,8 @@ export interface Family {
   original_language: 'en' | 'es'
   barrio: string | null
   codigo_postal: string | null
+  status: 'active' | 'archived'
+  archived_at: string | null
   created_at: string
   updated_at: string
   adults: Adult[]
@@ -20,7 +22,7 @@ export interface LanguageSpoken {
 
 export interface LocationInfo {
   country: string // Country code (e.g., 'US', 'ES', 'FR')
-  city: string    // City name
+  city: string // City name
 }
 
 export interface PostalCode {
